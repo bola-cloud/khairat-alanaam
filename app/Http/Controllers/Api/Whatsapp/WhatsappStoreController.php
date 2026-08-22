@@ -165,7 +165,6 @@ class WhatsappStoreController extends Controller
             'product_tags',
             'product_reviews',
             'product_reviews.user',
-            'comboItems',
         ])->available()->find($id);
 
         if (!$product) {

@@ -1,0 +1,1245 @@
+﻿<!DOCTYPE html>
+<html lang="fr" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>الرئيسية - خيرات الأنعام</title>
+    <meta name="description" content="الرئيسية لمتجر خيرات الأنعام المتخصص في بيع اللحوم الطازجة.">
+    <meta name="keywords" content="لحوم, طازجة, عمان, مسقط, غنم, بقر">
+    <link rel="icon" href="http://127.0.0.1:8000/uploaded_files/favicon/6a74cccf3d2441786039503.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="http://127.0.0.1:8000/v2_assets/css/style.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+</head>
+
+<body>
+        <!-- Top Announcement Bar -->
+    <div class="top-bar" style="overflow: hidden; white-space: nowrap; position: relative; display: flex;">
+        <div class="ticker-wrapper" style="display: flex; flex-shrink: 0; animation: ticker-ltr 45s linear infinite;">
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+        </div>
+        <div class="ticker-wrapper" style="display: flex; flex-shrink: 0; animation: ticker-ltr 45s linear infinite;">
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+            <div style="padding: 0 30px; display: inline-block;">🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥 Best Sellers: Chilled Australian Lamb Selection 🔥 Mega Promotions &amp; Discounts</div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes  ticker-ltr {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        @keyframes  ticker-rtl {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(100%); }
+        }
+        .top-bar:hover .ticker-wrapper {
+            animation-play-state: paused;
+        }
+    </style>
+
+    <!-- Main Header -->
+    <header class="v2-header">
+        <div class="v2-container header-inner">
+            <!-- Logo -->
+            <div class="logo">
+                <a href="http://127.0.0.1:8000">
+                    <img src="http://127.0.0.1:8000/uploaded_files/logo/6a74ccce720121786039502.png" alt="Khairat Al An'aam" style="max-height: 50px;">
+                </a>
+            </div>
+
+            <!-- Delivery Location -->
+            <div class="header-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="location-text">
+                    <span class="light">التسليم إلى <i></i></span>
+                    <strong>مسقط، عمان</strong>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="header-search">
+                <form action="http://127.0.0.1:8000/store" method="GET">
+                    <input type="text" name="q" placeholder="ابحث عن منتج، أو مجموعة..." value="">
+                    <button type="submit" style="z-index: 10; pointer-events: auto; cursor: pointer; height: 100%;"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <!-- Language Selector -->
+            <div class="header-lang" style="position: relative; display: inline-block;">
+                <div onclick="document.getElementById('lang-dropdown').classList.toggle('show-lang')" style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                    <i class="fas fa-globe"></i> 
+                    English 
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="lang-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 100; min-width: 120px;">
+                    <a href="http://127.0.0.1:8000/locale/ar" style="display: block; padding: 10px 15px; color: var(--text-color); text-decoration: none; border-bottom: 1px solid var(--border-color); ">العربية</a>
+                    <a href="http://127.0.0.1:8000/locale/en" style="display: block; padding: 10px 15px; color: var(--text-color); text-decoration: none; ">English</a>
+                </div>
+                <script>
+                    // Simple inline toggle script
+                    window.onclick = function(event) {
+                        if (!event.target.closest('.header-lang')) {
+                            var dropdowns = document.getElementsByClassName("show-lang");
+                            var i;
+                            for (i = 0; i < dropdowns.length; i++) {
+                                var openDropdown = dropdowns[i];
+                                if (openDropdown.style.display === 'block') {
+                                    openDropdown.style.display = 'none';
+                                }
+                            }
+                        }
+                    }
+                    document.querySelector('.header-lang > div').addEventListener('click', function(e) {
+                        var dropdown = document.getElementById('lang-dropdown');
+                        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                    });
+                </script>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div class="header-auth">
+                <a href="http://127.0.0.1:8000/login" class="btn-primary">سجل دخول</a>
+                <a href="http://127.0.0.1:8000/register" class="btn-outline">سجل الآن</a>
+            </div>
+        </div>
+
+        <!-- Lower Nav Menu -->
+        <div class="lower-nav">
+            <div class="v2-container nav-inner">
+                <ul class="nav-links">
+                    <li><a href="http://127.0.0.1:8000" class="active">الرئيسية</a></li>
+                    <li><a href="http://127.0.0.1:8000/store" class="">الفئات <i class="fas fa-chevron-down"></i></a></li>
+                    <li><a href="http://127.0.0.1:8000/user/about-us" class="">من نحن</a></li>
+                    <li><a href="http://127.0.0.1:8000/user/contact-us" class="">اتصل بنا</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <a href="http://127.0.0.1:8000/user/my-favorites" class="action-btn" style="position: relative;">
+                        <i class="far fa-heart"></i>
+                                                <span class="fav-badge badge" style="position: absolute; top: -5px; right: -8px; background: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 10px; font-weight: bold; display: none;">0</span>
+                    </a>
+                    <a href="http://127.0.0.1:8000/cart" class="action-btn has-badge" style="position: relative;">
+                        <i class="fas fa-shopping-cart"></i>
+                                                <span class="cart-badge badge" style="position: absolute; top: -5px; right: -8px; background: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 10px; font-weight: bold; display: none;">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+            <!-- Hero Section -->
+            <div class="hero-slider-container" style="position: relative; overflow: hidden; height: 500px;">
+                                            <section class="hero-section hero-slide" data-index="0"
+                    style="display: flex; background-image: url('http://127.0.0.1:8000/uploaded_files/promotion/6a75fbf7c85ca1786117111.jpg'); background-size: cover; background-position: center; position: absolute; inset: 0; text-align: right; color: #fff; align-items: center; transition: opacity 0.5s ease-in-out; opacity: 1; z-index: 1;">
+                    <!-- Overlay for dark contrast -->
+                    <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.8), transparent);"></div>
+
+                    <div class="v2-container" style="position: relative; z-index: 2; width: 100%;">
+                        <!-- Slider Arrows -->
+                        
+                        <div class="hero-content-box">
+                            <div style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block; font-size: 14px; margin-bottom: 20px;">
+                                                                تأسست عام 2015 - جودة موثوقة يومياً
+                            </div>
+
+                            <h1 class="hero-title" style="font-weight: 800; line-height: 1.2; margin-bottom: 20px;">
+                                خيرات الأنعام الطازجة <br>
+                                <span class="text-primary">بمعايير عالمية بين يديك</span>
+                            </h1>
+
+                            <p style="font-size: 18px; margin-bottom: 30px; line-height: 1.6;">
+                                نقدم لك أفضل ما في المزارع المحلية والعالمية، مقطوعة بحرفية لتكون المكون الأساسي لمائدتك اليومية ومناسباتك الخاصة.
+                            </p>
+
+                            <div style="display: flex; gap: 15px;">
+                                <a href="http://127.0.0.1:8000/store" class="btn-primary" style="padding: 12px 30px; font-size: 16px;">تسوق الآن</a>
+                                <a href="http://127.0.0.1:8000/user/about-us" class="btn-outline-white" style="padding: 12px 30px; font-size: 16px;">قصتنا</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                        
+                    </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const slides = document.querySelectorAll('.hero-slide');
+                const dots = document.querySelectorAll('.hero-dot');
+                const nextBtns = document.querySelectorAll('.hero-next');
+                const prevBtns = document.querySelectorAll('.hero-prev');
+                let currentSlide = 0;
+                let slideInterval;
+
+                if (slides.length <= 1) return;
+
+                function showSlide(index) {
+                    slides.forEach((slide, i) => {
+                        if (i === index) {
+                            slide.style.display = 'flex';
+                            setTimeout(() => {
+                                slide.style.opacity = '1';
+                                slide.style.zIndex = '1';
+                            }, 50);
+                        } else {
+                            slide.style.opacity = '0';
+                            slide.style.zIndex = '0';
+                            setTimeout(() => {
+                                if(currentSlide !== i) slide.style.display = 'none';
+                            }, 500);
+                        }
+                    });
+
+                    dots.forEach((dot, i) => {
+                        if (i === index) {
+                            dot.style.width = '30px';
+                            dot.style.background = 'var(--primary-color)';
+                        } else {
+                            dot.style.width = '10px';
+                            dot.style.background = 'rgba(255,255,255,0.5)';
+                        }
+                    });
+                    
+                    currentSlide = index;
+                }
+
+                function nextSlide() {
+                    let next = (currentSlide + 1) % slides.length;
+                    showSlide(next);
+                }
+
+                function prevSlide() {
+                    let prev = (currentSlide - 1 + slides.length) % slides.length;
+                    showSlide(prev);
+                }
+
+                nextBtns.forEach(btn => btn.addEventListener('click', () => {
+                    nextSlide();
+                    resetInterval();
+                }));
+                
+                prevBtns.forEach(btn => btn.addEventListener('click', () => {
+                    prevSlide();
+                    resetInterval();
+                }));
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        showSlide(index);
+                        resetInterval();
+                    });
+                });
+
+                function startInterval() {
+                    slideInterval = setInterval(nextSlide, 5000);
+                }
+
+                function resetInterval() {
+                    clearInterval(slideInterval);
+                    startInterval();
+                }
+
+                startInterval();
+            });
+        </script>
+    
+    <!-- Features Section -->
+        <section class="features-section" style="padding: 100px 0 50px 0; background-color: var(--bg-color);">
+        <div class="v2-container">
+            <div class="grid-features">
+                                                                                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #f9f9f9;">
+                            <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                                <i class="fas fa-truck-fast"></i>
+                            </div>
+                            <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">توصيل خلال ساعتين</h4>
+                            <p style="margin: 0; color: #888; font-size: 13px;">توصيل طازج خلال ساعتين</p>
+                        </div>
+                                                                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #f9f9f9;">
+                            <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">معتمد حلال ١٠٠٪</h4>
+                            <p style="margin: 0; color: #888; font-size: 13px;">معتمد وقابل للتتبع</p>
+                        </div>
+                                                                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #f9f9f9;">
+                            <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                                <i class="fas fa-ribbon"></i>
+                            </div>
+                            <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">جودة مضمونة</h4>
+                            <p style="margin: 0; color: #888; font-size: 13px;">إرجاع واستبدال مجاني</p>
+                        </div>
+                                                                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid #f9f9f9;">
+                            <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                                <i class="far fa-clock"></i>
+                            </div>
+                            <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">توصيل طازج</h4>
+                            <p style="margin: 0; color: #888; font-size: 13px;">بتحكم بدرجة حرارته</p>
+                        </div>
+                                                </div>
+        </div>
+    </section>
+
+    <!-- Category Swiper -->
+    <section class="home-categories" style="padding: 40px 0; background: var(--bg-color); overflow: hidden;">
+        <div class="v2-container" style="position: relative;">
+            <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=2" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/6a773a643b19f1786198628.png" alt="محاصيل القهوة" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">محاصيل القهوة</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=1" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/6a773a4bdb8cc1786198603.jpg" alt="لحم بقر برازيلي" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">لحم بقر برازيلي</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=6" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68a16a.jpg" alt="تشاك" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">تشاك</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=3" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a682e17.png" alt="لوازم التخييم" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">لوازم التخييم</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=7" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68bf88.png" alt="لحم الصدر" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">لحم الصدر</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=4" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a6862bd.png" alt="البقالة اليومية" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">البقالة اليومية</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=8" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68df2f.jpg" alt="T-Bone" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">T-Bone</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=5" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a688049.jpg" alt="احتياجات الشواء" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">احتياجات الشواء</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=9" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68fd14.png" alt="لحم السيرلوين" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">لحم السيرلوين</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=10" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a691e89.png" alt="لحم الضلع" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">لحم الضلع</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=11" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a694b03.png" alt="لحم الخاصرة" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">لحم الخاصرة</h3>
+                        </a>
+                    </div>
+                                    </div>
+            </div>
+            
+            <!-- Custom Swiper Navigation -->
+                        <div class="category-button-next" style="position: absolute; left: -20px; top: 40%; transform: translateY(-50%); width: 40px; height: 40px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: var(--primary-color);"><i class="fas fa-chevron-left"></i></div>
+            <div class="category-button-prev" style="position: absolute; right: -20px; top: 40%; transform: translateY(-50%); width: 40px; height: 40px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: var(--primary-color);"><i class="fas fa-chevron-right"></i></div>
+                    </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="home-products" id="discover-products" style="padding: 60px 0; background: #fff;">
+        <div class="v2-container">
+            <!-- Header -->
+            <div class="products-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+                <div>
+                    <h2 style="margin: 0 0 15px 0; font-size: 28px; font-weight: 800; color: #333;">اكتشف منتجاتنا</h2>
+                                        <div class="products-tabs" style="display: flex; gap: 10px;">
+                        <a href="http://127.0.0.1:8000?tab=best_seller#discover-products" class="product-tab" style="padding: 8px 20px; background: #e32636; color: #fff; border: 1px solid #e32636; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">الأكثر مبيعاً</a>
+                        
+                        <a href="http://127.0.0.1:8000?tab=new_arrival#discover-products" class="product-tab" style="padding: 8px 20px; background: #fff; color: #e32636; border: 1px solid #ffb3b3; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">وصل حديثاً</a>
+                        
+                        <a href="http://127.0.0.1:8000?tab=trending#discover-products" class="product-tab" style="padding: 8px 20px; background: #fff; color: #e32636; border: 1px solid #ffb3b3; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: 600;">الرائج</a>
+                    </div>
+                </div>
+                <a href="http://127.0.0.1:8000/store" style="color: #e32636; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                    عرض الكل <i class="fas fa-chevron-right" style="font-size: 12px;"></i>
+                </a>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid-products">
+                <!-- Product Card (Static for design matching) -->
+                                <div class="product-card" style="background:#fff; border: 1px solid #eee; border-radius:12px; padding:15px; transition: 0.3s; position: relative; display: flex; flex-direction: column; height: 100%;">
+                    <!-- Wishlist Icon -->
+                    <button type="button" style="position: absolute; top: 25px; left: 25px; width: 35px; height: 35px; background: #fff; border: 1px solid #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;">
+                        <i class="far fa-heart" style="font-size: 16px; color: #555;"></i>
+                    </button>
+                    <!-- Stock Status Badge -->
+                                        
+                    <a href="http://127.0.0.1:8000/product/weekly-essentials" style="display:block; position: relative; margin-bottom: 15px; flex-shrink: 0;">
+                        <img src="http://127.0.0.1:8000/uploaded_files/product_image/pkg_6a7cab888ab46.png" alt="الأساسيات الأسبوعية" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+                    </a>
+                    
+                    <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: #888;">
+                            <span>(0) <i class="fas fa-star" style="color: #e32636;"></i>(5.0)</span>
+                        </div>
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700; color: #333;"><a href="http://127.0.0.1:8000/product/weekly-essentials" style="color: inherit; text-decoration: none;">الأساسيات الأسبوعية</a></h4>
+                        <p style="margin: 0 0 15px 0; font-size: 13px; color: #888;"></p>
+                        
+                        <div style="margin-top: auto;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div style="font-size: 18px; font-weight: 800; color: #333;">
+                                    200.000 ريال                                </div>
+                                                                <div style="display: flex; gap: 8px; font-size: 12px; color: #999;">
+                                    <span style="text-decoration: line-through;">205 ريال</span>
+                                </div>
+                                                            </div>
+                            <button style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">أضف إلى السلة</button>
+                        </div>
+                    </div>
+                </div>
+                                <div class="product-card" style="background:#fff; border: 1px solid #eee; border-radius:12px; padding:15px; transition: 0.3s; position: relative; display: flex; flex-direction: column; height: 100%;">
+                    <!-- Wishlist Icon -->
+                    <button type="button" style="position: absolute; top: 25px; left: 25px; width: 35px; height: 35px; background: #fff; border: 1px solid #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;">
+                        <i class="far fa-heart" style="font-size: 16px; color: #555;"></i>
+                    </button>
+                    <!-- Stock Status Badge -->
+                                        
+                    <a href="http://127.0.0.1:8000/product/family-feast" style="display:block; position: relative; margin-bottom: 15px; flex-shrink: 0;">
+                        <img src="http://127.0.0.1:8000/uploaded_files/product_image/pkg_6a7cab88877ef.png" alt="وليمة العائلة" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+                    </a>
+                    
+                    <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: #888;">
+                            <span>(0) <i class="fas fa-star" style="color: #e32636;"></i>(5.0)</span>
+                        </div>
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700; color: #333;"><a href="http://127.0.0.1:8000/product/family-feast" style="color: inherit; text-decoration: none;">وليمة العائلة</a></h4>
+                        <p style="margin: 0 0 15px 0; font-size: 13px; color: #888;"></p>
+                        
+                        <div style="margin-top: auto;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div style="font-size: 18px; font-weight: 800; color: #333;">
+                                    500.000 ريال                                </div>
+                                                                <div style="display: flex; gap: 8px; font-size: 12px; color: #999;">
+                                    <span style="text-decoration: line-through;">505 ريال</span>
+                                </div>
+                                                            </div>
+                            <button style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">أضف إلى السلة</button>
+                        </div>
+                    </div>
+                </div>
+                                <div class="product-card" style="background:#fff; border: 1px solid #eee; border-radius:12px; padding:15px; transition: 0.3s; position: relative; display: flex; flex-direction: column; height: 100%;">
+                    <!-- Wishlist Icon -->
+                    <button type="button" style="position: absolute; top: 25px; left: 25px; width: 35px; height: 35px; background: #fff; border: 1px solid #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;">
+                        <i class="far fa-heart" style="font-size: 16px; color: #555;"></i>
+                    </button>
+                    <!-- Stock Status Badge -->
+                                        
+                    <a href="http://127.0.0.1:8000/product/grill-master-package" style="display:block; position: relative; margin-bottom: 15px; flex-shrink: 0;">
+                        <img src="http://127.0.0.1:8000/uploaded_files/product_image/pkg_6a7cab8883d86.png" alt="حزمة سيد الشواء" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+                    </a>
+                    
+                    <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: #888;">
+                            <span>(0) <i class="fas fa-star" style="color: #e32636;"></i>(5.0)</span>
+                        </div>
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700; color: #333;"><a href="http://127.0.0.1:8000/product/grill-master-package" style="color: inherit; text-decoration: none;">حزمة سيد الشواء</a></h4>
+                        <p style="margin: 0 0 15px 0; font-size: 13px; color: #888;"></p>
+                        
+                        <div style="margin-top: auto;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div style="font-size: 18px; font-weight: 800; color: #333;">
+                                    350.000 ريال                                </div>
+                                                                <div style="display: flex; gap: 8px; font-size: 12px; color: #999;">
+                                    <span style="text-decoration: line-through;">355 ريال</span>
+                                </div>
+                                                            </div>
+                            <button style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">أضف إلى السلة</button>
+                        </div>
+                    </div>
+                </div>
+                                <div class="product-card" style="background:#fff; border: 1px solid #eee; border-radius:12px; padding:15px; transition: 0.3s; position: relative; display: flex; flex-direction: column; height: 100%;">
+                    <!-- Wishlist Icon -->
+                    <button type="button" style="position: absolute; top: 25px; left: 25px; width: 35px; height: 35px; background: #fff; border: 1px solid #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2;">
+                        <i class="far fa-heart" style="font-size: 16px; color: #555;"></i>
+                    </button>
+                    <!-- Stock Status Badge -->
+                                        
+                    <a href="http://127.0.0.1:8000/product/australian-lamb-chops-500g-117" style="display:block; position: relative; margin-bottom: 15px; flex-shrink: 0;">
+                        <img src="http://127.0.0.1:8000/uploaded_files/product_image/prod_6a7c91a6b1a7b.png" alt="ريش غنم أسترالي مبرد 500 جرام" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+                    </a>
+                    
+                    <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; color: #888;">
+                            <span>(0) <i class="fas fa-star" style="color: #e32636;"></i>(5.0)</span>
+                        </div>
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700; color: #333;"><a href="http://127.0.0.1:8000/product/australian-lamb-chops-500g-117" style="color: inherit; text-decoration: none;">ريش غنم أسترالي مبرد 500 جرام</a></h4>
+                        <p style="margin: 0 0 15px 0; font-size: 13px; color: #888;">الوصف هنا</p>
+                        
+                        <div style="margin-top: auto;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div style="font-size: 18px; font-weight: 800; color: #333;">
+                                    35.000 ريال                                </div>
+                                                                <div style="display: flex; gap: 8px; font-size: 12px; color: #999;">
+                                    <span style="text-decoration: line-through;">40 ريال</span>
+                                </div>
+                                                            </div>
+                            <button style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">أضف إلى السلة</button>
+                        </div>
+                    </div>
+                </div>
+                            </div>
+        </div>
+    </section>
+
+    <!-- Occasions -->
+    <section class="home-occasions" style="padding: 60px 0; background: var(--bg-color); text-align: center;">
+        <div class="v2-container">
+            <h2 style="margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color: #333;">تسوق حسب المناسبة</h2>
+            <p style="margin: 0 0 40px 0; font-size: 15px; color: #666;">اختياراتنا المنسقة لتسهل عليك التحضير لكل لحظة خاصة.</p>
+            
+            <div class="swiper occasion-swiper" style="padding: 20px 0;">
+                <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=3" style="text-decoration: none; display: block; text-align: center; cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a682e17.png" alt="لوازم التخييم" style="width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: 700; color: #333;">لوازم التخييم</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=4" style="text-decoration: none; display: block; text-align: center; cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a6862bd.png" alt="البقالة اليومية" style="width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: 700; color: #333;">البقالة اليومية</h3>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="http://127.0.0.1:8000/store?category%5B%5D=5" style="text-decoration: none; display: block; text-align: center; cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a688049.jpg" alt="احتياجات الشواء" style="width: 100%; height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                            <h3 style="margin: 0 0 5px 0; font-size: 18px; font-weight: 700; color: #333;">احتياجات الشواء</h3>
+                        </a>
+                    </div>
+                                    </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bundles -->
+    <section class="home-bundles" style="padding: 20px 0 80px 0; background: linear-gradient(to bottom, var(--bg-color), #fcf0f0); text-align: center;">
+        <div class="v2-container">
+            <div style="display: inline-block; padding: 6px 15px; border: 1px solid #ffb3b3; color: #e32636; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 20px; background: rgba(227,38,54,0.05);">
+                <i class="fas fa-percentage"></i> عروض محدودة الوقت            </div>
+            <h2 style="margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color: #333;">مجموعة مختارة من الحزم</h2>
+            <p style="margin: 0 0 50px 0; font-size: 15px; color: #666;">اختيارات مصنوعة باحتراف توفر لك الوقت والمال. جودة ممتازة تلتقي بقيمة استثنائية.</p>
+
+            <div class="swiper packages-swiper" style="text-align: right; padding: 20px 0;">
+                <div class="swiper-wrapper">
+                                        <div class="swiper-slide" style="height: auto;">
+                        <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #eee; height: 100%; display: flex; flex-direction: column;">
+                            <img src="http://127.0.0.1:8000/uploaded_files/product_image/pkg_6a7cab888ab46.png" alt="الأساسيات الأسبوعية" style="width: 100%; height: 220px; object-fit: cover;">
+                            <div style="padding: 25px; flex-grow: 1; display: flex; flex-direction: column;">
+                                                                <h3 style="margin: 0 0 5px 0; font-size: 20px; font-weight: 800; color: #333;">
+                                    <a href="http://127.0.0.1:8000/product/weekly-essentials" style="color: inherit; text-decoration: none;">الأساسيات الأسبوعية</a>
+                                </h3>
+                                <p style="margin: 0 0 20px 0; font-size: 13px; color: #888;"></p>
+                                
+                                <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px;">
+                                    <div style="font-size: 28px; font-weight: 800; color: #333;">
+                                        <i class="fas fa-box" style="font-size:18px; color:#555;"></i> 200.000
+                                    </div>
+                                                                    </div>
+
+                                <div class="package-description" style="font-size: 13px; color: #555; line-height: 2; margin-bottom: 25px; flex-grow: 1;">
+                                    <ul><li>١ كيلو مكعبات لحم بقر</li><li>١ كيلو مفروم</li><li>نصف كيلو كبدة طازجة</li></ul>
+                                </div>
+
+                                <button style="width: 100%; padding: 15px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 15px;">أضف إلى السلة</button>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide" style="height: auto;">
+                        <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #eee; height: 100%; display: flex; flex-direction: column;">
+                            <img src="http://127.0.0.1:8000/uploaded_files/product_image/pkg_6a7cab88877ef.png" alt="وليمة العائلة" style="width: 100%; height: 220px; object-fit: cover;">
+                            <div style="padding: 25px; flex-grow: 1; display: flex; flex-direction: column;">
+                                                                <div style="display: inline-block; padding: 4px 10px; background: #e8f5e9; color: #2ecc71; border-radius: 4px; font-size: 11px; font-weight: 700; margin-bottom: 10px; width: fit-content;">Save 15.00%</div>
+                                                                <h3 style="margin: 0 0 5px 0; font-size: 20px; font-weight: 800; color: #333;">
+                                    <a href="http://127.0.0.1:8000/product/family-feast" style="color: inherit; text-decoration: none;">وليمة العائلة</a>
+                                </h3>
+                                <p style="margin: 0 0 20px 0; font-size: 13px; color: #888;"></p>
+                                
+                                <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px;">
+                                    <div style="font-size: 28px; font-weight: 800; color: #333;">
+                                        <i class="fas fa-box" style="font-size:18px; color:#555;"></i> 425.000
+                                    </div>
+                                                                        <div style="margin-right: 15px; margin-left: 15px; font-size: 14px; color: #999; text-decoration: line-through;">
+                                        <i class="fas fa-box" style="font-size:12px;"></i> 500.000
+                                    </div>
+                                                                    </div>
+
+                                <div class="package-description" style="font-size: 13px; color: #555; line-height: 2; margin-bottom: 25px; flex-grow: 1;">
+                                    <ul><li>٣ كيلو لحم مشكل</li><li>٢ كيلو مفروم صافي</li><li>تشكيلة بهارات شواء مجانية</li></ul>
+                                </div>
+
+                                <button style="width: 100%; padding: 15px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 15px;">أضف إلى السلة</button>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide" style="height: auto;">
+                        <div style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #eee; height: 100%; display: flex; flex-direction: column;">
+                            <img src="http://127.0.0.1:8000/uploaded_files/product_image/pkg_6a7cab8883d86.png" alt="حزمة سيد الشواء" style="width: 100%; height: 220px; object-fit: cover;">
+                            <div style="padding: 25px; flex-grow: 1; display: flex; flex-direction: column;">
+                                                                <div style="display: inline-block; padding: 4px 10px; background: #e8f5e9; color: #2ecc71; border-radius: 4px; font-size: 11px; font-weight: 700; margin-bottom: 10px; width: fit-content;">Save 10.00%</div>
+                                                                <h3 style="margin: 0 0 5px 0; font-size: 20px; font-weight: 800; color: #333;">
+                                    <a href="http://127.0.0.1:8000/product/grill-master-package" style="color: inherit; text-decoration: none;">حزمة سيد الشواء</a>
+                                </h3>
+                                <p style="margin: 0 0 20px 0; font-size: 13px; color: #888;"></p>
+                                
+                                <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px;">
+                                    <div style="font-size: 28px; font-weight: 800; color: #333;">
+                                        <i class="fas fa-box" style="font-size:18px; color:#555;"></i> 315.000
+                                    </div>
+                                                                        <div style="margin-right: 15px; margin-left: 15px; font-size: 14px; color: #999; text-decoration: line-through;">
+                                        <i class="fas fa-box" style="font-size:12px;"></i> 350.000
+                                    </div>
+                                                                    </div>
+
+                                <div class="package-description" style="font-size: 13px; color: #555; line-height: 2; margin-bottom: 25px; flex-grow: 1;">
+                                    <ul><li>٢ كيلو ريش ضأن</li><li>١ كيلو كباب بلدي</li><li>نصف كيلو كفتة مبهرة</li></ul>
+                                </div>
+
+                                <button style="width: 100%; padding: 15px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 15px;">أضف إلى السلة</button>
+                            </div>
+                        </div>
+                    </div>
+                                    </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Cuts -->
+    <section class="home-cuts" style="padding: 60px 0; background: #faf4e1; text-align: center;">
+        <div class="v2-container">
+            <div style="display: inline-block; padding: 4px 15px; background: rgba(227,38,54,0.1); color: #e32636; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 15px;">سيد الجزارة</div>
+            <h2 style="margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color: #333;">تسوق حسب قطع اللحوم ذات الجودة الممتازة</h2>
+            <p style="margin: 0 0 40px 0; font-size: 15px; color: #666;">قطع لحم مختارة بعناية فائقة من قبل حرفيينا المهرة. كل قطعة مختارة يدوياً لجودتها الاستثنائية ونكهتها المميزة.</p>
+
+            <div class="grid-cuts">
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 160px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='http://127.0.0.1:8000/store?category[]=6'">
+                                        <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68a16a.jpg" alt="تشاك" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position: absolute; inset:0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #fff; text-align: right;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700;">تشاك</h4>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.8;">مثالي للشواء</p>
+                        <span style="font-size: 10px; margin-top: 5px;">0 منتجاً</span>
+                    </div>
+                </div>
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 160px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='http://127.0.0.1:8000/store?category[]=7'">
+                                        <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68bf88.png" alt="لحم الصدر" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position: absolute; inset:0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #fff; text-align: right;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700;">لحم الصدر</h4>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.8;">مثالي للطهي البطيء</p>
+                        <span style="font-size: 10px; margin-top: 5px;">0 منتجاً</span>
+                    </div>
+                </div>
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 160px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='http://127.0.0.1:8000/store?category[]=8'">
+                                        <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68df2f.jpg" alt="T-Bone" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position: absolute; inset:0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #fff; text-align: right;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700;">T-Bone</h4>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.8;">قطعتان في واحدة</p>
+                        <span style="font-size: 10px; margin-top: 5px;">0 منتجاً</span>
+                    </div>
+                </div>
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 160px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='http://127.0.0.1:8000/store?category[]=9'">
+                                        <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a68fd14.png" alt="لحم السيرلوين" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position: absolute; inset:0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #fff; text-align: right;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700;">لحم السيرلوين</h4>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.8;">خالي من الدهون ولذيذ</p>
+                        <span style="font-size: 10px; margin-top: 5px;">0 منتجاً</span>
+                    </div>
+                </div>
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 160px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='http://127.0.0.1:8000/store?category[]=10'">
+                                        <span style="position:absolute; top:10px; left:10px; background:#e32636; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; z-index:2;">شائع</span>
+                                        <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a691e89.png" alt="لحم الضلع" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position: absolute; inset:0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #fff; text-align: right;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700;">لحم الضلع</h4>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.8;">توزيع دهني غني ونكهة مميزة</p>
+                        <span style="font-size: 10px; margin-top: 5px;">0 منتجاً</span>
+                    </div>
+                </div>
+                                <div style="position: relative; border-radius: 12px; overflow: hidden; height: 160px; transition: 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="window.location.href='http://127.0.0.1:8000/store?category[]=11'">
+                                        <span style="position:absolute; top:10px; left:10px; background:#e32636; color:#fff; font-size:10px; padding:2px 8px; border-radius:10px; z-index:2;">شائع</span>
+                                        <img src="http://127.0.0.1:8000/uploaded_files/category_image/cat_6a7c91a694b03.png" alt="لحم الخاصرة" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="position: absolute; inset:0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: flex-end; padding: 15px; color: #fff; text-align: right;">
+                        <h4 style="margin: 0 0 5px 0; font-size: 16px; font-weight: 700;">لحم الخاصرة</h4>
+                        <p style="margin: 0; font-size: 11px; opacity: 0.8;">أكثر قطع اللحم طراوة</p>
+                        <span style="font-size: 10px; margin-top: 5px;">0 منتجاً</span>
+                    </div>
+                </div>
+                            </div>
+            
+            <div style="margin-top: 30px;">
+                <a href="http://127.0.0.1:8000/store?category%5B0%5D=6&amp;category%5B1%5D=7&amp;category%5B2%5D=8&amp;category%5B3%5D=9&amp;category%5B4%5D=10&amp;category%5B5%5D=11" style="color: #e32636; text-decoration: none; font-size: 15px; font-weight: 700;">عرض جميع القطع <i class="fas fa-chevron-right" style="font-size:12px; margin-right:5px; margin-left:5px;"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="home-testimonials" style="padding: 80px 0; background: #fff; text-align: center;">
+        <div class="v2-container">
+            <h2 style="margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color: #333;">ماذا يقول عملاؤنا</h2>
+            <p style="margin: 0 0 40px 0; font-size: 15px; color: #666;">تجارب حقيقية من عشاق اللحوم الفاخرة</p>
+
+            <div class="grid-testimonials">
+                <!-- Review 1 -->
+                <div style="border: 1px solid #eee; border-radius: 12px; padding: 30px; text-align: left;">
+                    <div style="color: #f1c40f; font-size: 14px; margin-bottom: 15px;">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p style="color: #555; font-size: 14px; line-height: 1.8; margin-bottom: 25px; min-height: 70px;">"خدمة العملاء ممتازة وسرعة في التوصيل. جودة اللحوم واضحة من لونها ورائحتها. سأعتمد عليكم دائماً."</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888;">ع</div>
+                        <div>
+                            <h5 style="margin: 0; font-size: 14px; font-weight: 700;">عبدالله خ.</h5>
+                            <span style="font-size: 12px; color: #999;">مشتري موثق</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 2 -->
+                <div style="border: 1px solid #eee; border-radius: 12px; padding: 30px; text-align: left;">
+                    <div style="color: #f1c40f; font-size: 14px; margin-bottom: 15px;">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p style="color: #555; font-size: 14px; line-height: 1.8; margin-bottom: 25px; min-height: 70px;">"لحم الضأن كان استثنائياً، التقطيع دقيق ومرتب. استخدمنا الوصفة الموجودة في الموقع وكانت النتيجة رائعة. شكراً لكم!"</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <img src="http://127.0.0.1:8000/assets/images/placeholder.png" alt="User" style="width: 40px; height: 40px; border-radius: 50%;">
+                        <div>
+                            <h5 style="margin: 0; font-size: 14px; font-weight: 700;">سارة م.</h5>
+                            <span style="font-size: 12px; color: #999;">مشتري موثق</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 3 -->
+                <div style="border: 1px solid #eee; border-radius: 12px; padding: 30px; text-align: left;">
+                    <div style="color: #f1c40f; font-size: 14px; margin-bottom: 15px;">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p style="color: #555; font-size: 14px; line-height: 1.8; margin-bottom: 25px; min-height: 70px;">"أفضل تجربة شراء لحوم على الإطلاق. التغليف كان ممتازاً ووصل اللحم بارداً جداً وكأنه خرج من الثلاجة للتو. جودة الواغيو لا يُعلى عليها."</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <img src="http://127.0.0.1:8000/assets/images/placeholder.png" alt="User" style="width: 40px; height: 40px; border-radius: 50%;">
+                        <div>
+                            <h5 style="margin: 0; font-size: 14px; font-weight: 700;">أحمد س.</h5>
+                            <span style="font-size: 12px; color: #999;">مشتري موثق</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farm Section -->
+            <section class="home-farm" style="padding: 60px 0; background: var(--bg-color);">
+        <div class="v2-container">
+            <div class="grid-farm">
+                <!-- Image Side -->
+                <div style="position: relative;">
+                    <img src="http://127.0.0.1:8000/uploaded_files/promotion/6a7bd415e5d181786500117.jpg" alt="من خيرات الأرض والبحر لمائدتك" style="width: 100%; height: 500px; object-fit: cover; border-radius: 20px;">
+                    
+                                                                <img src="http://127.0.0.1:8000/uploaded_files/promotion/6a7c900d687b51786548237.jpg" alt="Meat" style="position: absolute; bottom: -30px; right: -30px; width: 280px; height: 280px; object-fit: cover; border-radius: 20px; border: 12px solid var(--bg-color); box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                    </div>
+
+                <!-- Text Side -->
+                <div>
+                    <h2 style="margin: 0 0 20px 0; font-size: 32px; font-weight: 800; color: #333;">من خيرات الأرض والبحر لمائدتك</h2>
+                    <p style="margin: 0 0 40px 0; font-size: 15px; color: #666; line-height: 1.8;">نلتزم بأعلى معايير الجودة العالمية في اختيار المنتجات. يتم توريد لحومنا من أفضل المزارع التي تتبع أساليب التربية الطبيعية والمستدامة لضمان نكهة غنية وجودة لا تضاهى.</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 30px;">
+                                                                                                                    <div style="display: flex; gap: 20px;">
+                                    <div style="width: 50px; height: 50px; background: #fff5f5; color: #e32636; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #333;">شهادة حلال موثوقة</h4>
+                                        <p style="margin: 0; font-size: 13px; color: #777; line-height: 1.6;">جميع منتجاتنا مذبوحة ومجهزة وفقاً للشريعة الإسلامية ومعتمدة من جهات موثوقة.</p>
+                                    </div>
+                                </div>
+                                                                                                                            <div style="display: flex; gap: 20px;">
+                                    <div style="width: 50px; height: 50px; background: #fff5f5; color: #e32636; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #333;">مزارع مختارة بعناية</h4>
+                                        <p style="margin: 0; font-size: 13px; color: #777; line-height: 1.6;">نضمن أن مصادرنا من مزارع مختارة وموثوقة تتبع أساليب الزراعة والتربية الطبيعية الخالية من الهرمونات والمبيدات.</p>
+                                    </div>
+                                </div>
+                                                                                                                            <div style="display: flex; gap: 20px;">
+                                    <div style="width: 50px; height: 50px; background: #fff5f5; color: #e32636; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                                        <i class="fas fa-truck-fast"></i>
+                                    </div>
+                                    <div>
+                                        <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #333;">سلسلة تبريد متكاملة</h4>
+                                        <p style="margin: 0; font-size: 13px; color: #777; line-height: 1.6;">نظام لوجستي متطور يحافظ على درجة حرارة مثالية من لحظة الحصاد والتجهيز حتى وصولها لباب منزلك.</p>
+                                    </div>
+                                </div>
+                                                                                                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Recipes -->
+    <section class="home-recipes" style="padding: 100px 0 80px 0; background: #fff; text-align: center;">
+        <div class="v2-container">
+            <div style="display: inline-block; padding: 4px 15px; border: 1px solid #ffb3b3; color: #e32636; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 15px;">
+                <i class="fas fa-hat-chef"></i> إلهام الطهي            </div>
+            <h2 style="margin: 0 0 40px 0; font-size: 28px; font-weight: 800; color: #333;">وصفات ونصائح الشيف</h2>
+
+            <div class="grid-recipes" style="text-align: left;">
+                                    <div style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                        <div style="position: relative; height: 220px; cursor: pointer;" onclick="openRecipeModal({&amp;quot;title&amp;quot;:&amp;quot;\u0641\u064a\u0644\u064a\u0647 \u0627\u0644\u0633\u0644\u0645\u0648\u0646 \u0628\u0635\u0644\u0635\u0629 \u0627\u0644\u0634\u0628\u062a \u0648\u0627\u0644\u0644\u064a\u0645\u0648\u0646&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;\u0637\u0631\u064a\u0642\u0629 \u062a\u062d\u0636\u064a\u0631 \u0641\u064a\u0644\u064a\u0647 \u0627\u0644\u0633\u0644\u0645\u0648\u0646 \u0627\u0644\u063a\u0646\u064a \u0628\u0627\u0644\u0623\u0648\u0645\u064a\u062c\u0627 3 \u0645\u0639 \u0635\u0644\u0635\u0629 \u0627\u0644\u0634\u0628\u062a \u0627\u0644\u0644\u0630\u064a\u0630\u0629 \u0644\u0648\u062c\u0628\u0629 \u0635\u062d\u064a\u0629.&amp;quot;,&amp;quot;image&amp;quot;:&amp;quot;http:\/\/127.0.0.1:8000\/uploaded_files\/recipes\/recipe_6a7cab8892f8f.png&amp;quot;,&amp;quot;difficulty&amp;quot;:&amp;quot;\u0645\u062a\u0648\u0633\u0637&amp;quot;,&amp;quot;time&amp;quot;:15,&amp;quot;timeText&amp;quot;:&amp;quot;\u062f\u0642\u064a\u0642\u0629&amp;quot;})">
+                                                            <img src="http://127.0.0.1:8000/uploaded_files/recipes/recipe_6a7cab8892f8f.png" alt="فيليه السلمون بصلصة الشبت والليمون" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <div style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: #333; ">
+                                                                    متوسط                                                                &bull; <i class="far fa-clock" style="color: #e32636;"></i> 15 دقيقة                            </div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 700; color: #333;">فيليه السلمون بصلصة الشبت والليمون</h3>
+                            <p style="margin: 0 0 20px 0; font-size: 13px; color: #777; line-height: 1.6;">طريقة تحضير فيليه السلمون الغني بالأوميجا 3 مع صلصة الشبت اللذيذة لوجبة صحية.</p>
+                            <a href="javascript:void(0)" onclick="openRecipeModal({&amp;quot;title&amp;quot;:&amp;quot;\u0641\u064a\u0644\u064a\u0647 \u0627\u0644\u0633\u0644\u0645\u0648\u0646 \u0628\u0635\u0644\u0635\u0629 \u0627\u0644\u0634\u0628\u062a \u0648\u0627\u0644\u0644\u064a\u0645\u0648\u0646&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;\u0637\u0631\u064a\u0642\u0629 \u062a\u062d\u0636\u064a\u0631 \u0641\u064a\u0644\u064a\u0647 \u0627\u0644\u0633\u0644\u0645\u0648\u0646 \u0627\u0644\u063a\u0646\u064a \u0628\u0627\u0644\u0623\u0648\u0645\u064a\u062c\u0627 3 \u0645\u0639 \u0635\u0644\u0635\u0629 \u0627\u0644\u0634\u0628\u062a \u0627\u0644\u0644\u0630\u064a\u0630\u0629 \u0644\u0648\u062c\u0628\u0629 \u0635\u062d\u064a\u0629.&amp;quot;,&amp;quot;image&amp;quot;:&amp;quot;http:\/\/127.0.0.1:8000\/uploaded_files\/recipes\/recipe_6a7cab8892f8f.png&amp;quot;,&amp;quot;difficulty&amp;quot;:&amp;quot;\u0645\u062a\u0648\u0633\u0637&amp;quot;,&amp;quot;time&amp;quot;:15,&amp;quot;timeText&amp;quot;:&amp;quot;\u062f\u0642\u064a\u0642\u0629&amp;quot;})" style="color: #e32636; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">عرض تفاصيل الوصفة <i class="fas fa-chevron-right" style="font-size:10px;"></i></a>
+                        </div>
+                    </div>
+                                    <div style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                        <div style="position: relative; height: 220px; cursor: pointer;" onclick="openRecipeModal({&amp;quot;title&amp;quot;:&amp;quot;\u062f\u062c\u0627\u062c \u0645\u0634\u0648\u064a \u0628\u0627\u0644\u0623\u0639\u0634\u0627\u0628 \u0648\u0627\u0644\u0644\u064a\u0645\u0648\u0646&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;\u0648\u0635\u0641\u0629 \u0643\u0644\u0627\u0633\u064a\u0643\u064a\u0629 \u062a\u0628\u0631\u0632 \u0646\u0643\u0647\u0629 \u0627\u0644\u062f\u062c\u0627\u062c \u0627\u0644\u0637\u0627\u0632\u062c \u0645\u0639 \u062a\u062a\u0628\u064a\u0644\u0629 \u0627\u0644\u0623\u0639\u0634\u0627\u0628 \u0648\u0627\u0644\u0644\u064a\u0645\u0648\u0646 \u0627\u0644\u0645\u0646\u0639\u0634\u0629.&amp;quot;,&amp;quot;image&amp;quot;:&amp;quot;http:\/\/127.0.0.1:8000\/uploaded_files\/recipes\/recipe_6a7cab889077e.png&amp;quot;,&amp;quot;difficulty&amp;quot;:&amp;quot;\u0633\u0647\u0644&amp;quot;,&amp;quot;time&amp;quot;:25,&amp;quot;timeText&amp;quot;:&amp;quot;\u062f\u0642\u064a\u0642\u0629&amp;quot;})">
+                                                            <img src="http://127.0.0.1:8000/uploaded_files/recipes/recipe_6a7cab889077e.png" alt="دجاج مشوي بالأعشاب والليمون" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <div style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: #333; ">
+                                                                    سهل                                                                &bull; <i class="far fa-clock" style="color: #e32636;"></i> 25 دقيقة                            </div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 700; color: #333;">دجاج مشوي بالأعشاب والليمون</h3>
+                            <p style="margin: 0 0 20px 0; font-size: 13px; color: #777; line-height: 1.6;">وصفة كلاسيكية تبرز نكهة الدجاج الطازج مع تتبيلة الأعشاب والليمون المنعشة.</p>
+                            <a href="javascript:void(0)" onclick="openRecipeModal({&amp;quot;title&amp;quot;:&amp;quot;\u062f\u062c\u0627\u062c \u0645\u0634\u0648\u064a \u0628\u0627\u0644\u0623\u0639\u0634\u0627\u0628 \u0648\u0627\u0644\u0644\u064a\u0645\u0648\u0646&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;\u0648\u0635\u0641\u0629 \u0643\u0644\u0627\u0633\u064a\u0643\u064a\u0629 \u062a\u0628\u0631\u0632 \u0646\u0643\u0647\u0629 \u0627\u0644\u062f\u062c\u0627\u062c \u0627\u0644\u0637\u0627\u0632\u062c \u0645\u0639 \u062a\u062a\u0628\u064a\u0644\u0629 \u0627\u0644\u0623\u0639\u0634\u0627\u0628 \u0648\u0627\u0644\u0644\u064a\u0645\u0648\u0646 \u0627\u0644\u0645\u0646\u0639\u0634\u0629.&amp;quot;,&amp;quot;image&amp;quot;:&amp;quot;http:\/\/127.0.0.1:8000\/uploaded_files\/recipes\/recipe_6a7cab889077e.png&amp;quot;,&amp;quot;difficulty&amp;quot;:&amp;quot;\u0633\u0647\u0644&amp;quot;,&amp;quot;time&amp;quot;:25,&amp;quot;timeText&amp;quot;:&amp;quot;\u062f\u0642\u064a\u0642\u0629&amp;quot;})" style="color: #e32636; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">عرض تفاصيل الوصفة <i class="fas fa-chevron-right" style="font-size:10px;"></i></a>
+                        </div>
+                    </div>
+                                    <div style="border: 1px solid #eee; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+                        <div style="position: relative; height: 220px; cursor: pointer;" onclick="openRecipeModal({&amp;quot;title&amp;quot;:&amp;quot;\u062a\u0646\u062f\u0631\u0644\u0648\u064a\u0646 \u0627\u0644\u0628\u0642\u0631 \u0627\u0644\u0641\u0627\u062e\u0631&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;\u062f\u0644\u064a\u0644\u0643 \u0627\u0644\u0634\u0627\u0645\u0644 \u0644\u0637\u0647\u064a \u0623\u0641\u062e\u0631 \u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u0644\u062d\u0648\u0645 \u0628\u062f\u0631\u062c\u0629 \u0627\u0633\u062a\u0648\u0627\u0621 \u0645\u062b\u0627\u0644\u064a\u0629 \u0641\u064a \u0627\u0644\u0645\u0646\u0632\u0644&amp;quot;,&amp;quot;image&amp;quot;:&amp;quot;http:\/\/127.0.0.1:8000\/uploaded_files\/recipes\/recipe_6a7cab888d95c.png&amp;quot;,&amp;quot;difficulty&amp;quot;:&amp;quot;\u0645\u062a\u0648\u0633\u0637&amp;quot;,&amp;quot;time&amp;quot;:20,&amp;quot;timeText&amp;quot;:&amp;quot;\u062f\u0642\u064a\u0642\u0629&amp;quot;})">
+                                                            <img src="http://127.0.0.1:8000/uploaded_files/recipes/recipe_6a7cab888d95c.png" alt="تندرلوين البقر الفاخر" style="width: 100%; height: 100%; object-fit: cover;">
+                                                        <div style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; color: #333; ">
+                                                                    متوسط                                                                &bull; <i class="far fa-clock" style="color: #e32636;"></i> 20 دقيقة                            </div>
+                        </div>
+                        <div style="padding: 25px;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 700; color: #333;">تندرلوين البقر الفاخر</h3>
+                            <p style="margin: 0 0 20px 0; font-size: 13px; color: #777; line-height: 1.6;">دليلك الشامل لطهي أفخر أنواع اللحوم بدرجة استواء مثالية في المنزل</p>
+                            <a href="javascript:void(0)" onclick="openRecipeModal({&amp;quot;title&amp;quot;:&amp;quot;\u062a\u0646\u062f\u0631\u0644\u0648\u064a\u0646 \u0627\u0644\u0628\u0642\u0631 \u0627\u0644\u0641\u0627\u062e\u0631&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;\u062f\u0644\u064a\u0644\u0643 \u0627\u0644\u0634\u0627\u0645\u0644 \u0644\u0637\u0647\u064a \u0623\u0641\u062e\u0631 \u0623\u0646\u0648\u0627\u0639 \u0627\u0644\u0644\u062d\u0648\u0645 \u0628\u062f\u0631\u062c\u0629 \u0627\u0633\u062a\u0648\u0627\u0621 \u0645\u062b\u0627\u0644\u064a\u0629 \u0641\u064a \u0627\u0644\u0645\u0646\u0632\u0644&amp;quot;,&amp;quot;image&amp;quot;:&amp;quot;http:\/\/127.0.0.1:8000\/uploaded_files\/recipes\/recipe_6a7cab888d95c.png&amp;quot;,&amp;quot;difficulty&amp;quot;:&amp;quot;\u0645\u062a\u0648\u0633\u0637&amp;quot;,&amp;quot;time&amp;quot;:20,&amp;quot;timeText&amp;quot;:&amp;quot;\u062f\u0642\u064a\u0642\u0629&amp;quot;})" style="color: #e32636; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;">عرض تفاصيل الوصفة <i class="fas fa-chevron-right" style="font-size:10px;"></i></a>
+                        </div>
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+    <!-- FAQs -->
+    <section class="home-faq" style="padding: 60px 0 100px 0; background: var(--bg-color); text-align: center;">
+        <div class="v2-container" style="max-width: 800px; margin: 0 auto;">
+            <h2 style="margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color: #333;">الأسئلة الشائعة</h2>
+            <p style="margin: 0 0 40px 0; font-size: 15px; color: #666;">نجيب على أهم استفساراتكم لضمان تجربة تسوق مريحة وشفافة</p>
+
+            <div style="text-align: left;">
+                                <div class="faq-item" style="background: #fff; border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div class="faq-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; color: #333; font-size: 16px;">
+                        <span>كيف يتم شحن اللحوم الطازجة؟</span>
+                        <i class="fas fa-chevron-down faq-icon" style="color: #999; font-size: 12px; transition: transform 0.3s ease;"></i>
+                    </div>
+                    <div class="faq-body" style="display: none; padding: 0 20px 20px 20px; font-size: 14px; color: #666; line-height: 1.6; border-top: 1px solid #f9f9f9; padding-top: 15px;">
+                        نقوم بتغليف اللحوم الطازجة في صناديق مبردة مخصصة مع ثلج جاف لضمان وصولها إليك بأعلى درجات الجودة والبرودة.
+                    </div>
+                </div>
+                                <div class="faq-item" style="background: #fff; border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div class="faq-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; color: #333; font-size: 16px;">
+                        <span>What is the shelf life of the meat upon delivery?</span>
+                        <i class="fas fa-chevron-down faq-icon" style="color: #999; font-size: 12px; transition: transform 0.3s ease;"></i>
+                    </div>
+                    <div class="faq-body" style="display: none; padding: 0 20px 20px 20px; font-size: 14px; color: #666; line-height: 1.6; border-top: 1px solid #f9f9f9; padding-top: 15px;">
+                        Our fresh meat has a shelf life of 3 to 5 days in the refrigerator, and up to 6 months if frozen immediately upon delivery.
+                    </div>
+                </div>
+                                <div class="faq-item" style="background: #fff; border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div class="faq-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; color: #333; font-size: 16px;">
+                        <span>Is all the meat Halal?</span>
+                        <i class="fas fa-chevron-down faq-icon" style="color: #999; font-size: 12px; transition: transform 0.3s ease;"></i>
+                    </div>
+                    <div class="faq-body" style="display: none; padding: 0 20px 20px 20px; font-size: 14px; color: #666; line-height: 1.6; border-top: 1px solid #f9f9f9; padding-top: 15px;">
+                        Yes, we guarantee that all offered meats are slaughtered according to Islamic Sharia and are documented with official Halal certificates.
+                    </div>
+                </div>
+                                <div class="faq-item" style="background: #fff; border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                    <div class="faq-header" style="padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; color: #333; font-size: 16px;">
+                        <span>Where is the Wagyu meat imported from?</span>
+                        <i class="fas fa-chevron-down faq-icon" style="color: #999; font-size: 12px; transition: transform 0.3s ease;"></i>
+                    </div>
+                    <div class="faq-body" style="display: none; padding: 0 20px 20px 20px; font-size: 14px; color: #666; line-height: 1.6; border-top: 1px solid #f9f9f9; padding-top: 15px;">
+                        We import premium Wagyu meat from top certified farms in Australia and Japan to ensure superior quality and perfect marbling.
+                    </div>
+                </div>
+                            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqHeaders = document.querySelectorAll('.faq-header');
+            
+            faqHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const body = this.nextElementSibling;
+                    const icon = this.querySelector('.faq-icon');
+                    const isOpen = body.style.display === 'block';
+                    
+                    // Close all FAQs
+                    document.querySelectorAll('.faq-body').forEach(b => b.style.display = 'none');
+                    document.querySelectorAll('.faq-icon').forEach(i => {
+                        i.style.transform = 'rotate(0deg)';
+                        i.style.color = '#999';
+                        i.classList.remove('fa-chevron-up');
+                        i.classList.add('fa-chevron-down');
+                    });
+                    
+                    // Toggle current FAQ
+                    if (!isOpen) {
+                        body.style.display = 'block';
+                        icon.style.transform = 'rotate(180deg)';
+                        icon.style.color = '#e32636';
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                });
+            });
+        });
+    </script>
+    
+        </main>
+
+    <footer style="background-color: #212936; color: #fff; padding-top: 50px; margin-top: 60px;">
+        <div class="v2-container">
+            <!-- Newsletter Section -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 40px; gap: 20px;">
+                <div style="max-width: 500px;">
+                    <h2 style="font-size: 24px; font-weight: 700; margin: 0 0 10px; color: #fff;">اشترك ليصلك كل جديد</h2>
+                    <p style="margin: 0; color: #a0aebc; font-size: 14px;">انضم لقائمتنا البريدية للحصول على عروض أسبوعية وتنبيهات بتوفر قطع اللحم النادرة.</p>
+                </div>
+                <div style="display: flex; gap: 10px; flex: 1; max-width: 450px;">
+                    <input type="text" placeholder="أدخل بريدك الإلكتروني أو رقم الجوال..." style="flex: 1; padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #fff; outline: none; text-align: right; font-family: inherit;">
+                    <button style="background: #e32636; color: #fff; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: inherit;">
+                        اشترك <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Links Section -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 25px;">
+                <!-- Column 1 (Logo & Info - spans more space on large screens) -->
+                <div style="grid-column: span 2;">
+                    <a href="http://127.0.0.1:8000" style="display: inline-block; margin-bottom: 15px;">
+                        <img src="http://127.0.0.1:8000/uploaded_files/logo/6a74cccf3a3d21786039503.png" alt="Logo" style="height: 50px; filter: brightness(0) invert(1);">
+                    </a>
+                    <p style="color: #a0aebc; font-size: 13px; line-height: 1.8; margin-bottom: 20px; max-width: 400px;">مصدر موثوق لك من اللحوم الطازجة الممتازة. والماشية، والبقالة. نحن نوصل الجودة والانتعاش إلى باب منزلك.</p>
+                    <div style="display: flex; gap: 20px; font-size: 13px; color: #a0aebc; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-map-marker-alt" style="color: #fff;"></i> مسقط، عمان                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <i class="far fa-envelope" style="color: #fff;"></i> info@khairat-alanaam.com
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;" dir="ltr">
+                            <i class="fas fa-phone-alt" style="color: #fff;"></i> +968 1234 5678
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2 -->
+                <div>
+                    <h3 style="color: #fff; font-size: 16px; font-weight: 700; margin: 0 0 20px;">عن خيرات الأنعام</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
+                        <li style="margin-bottom: 12px;"><a href="http://127.0.0.1:8000/user/about-us" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">معلومات عنا</a></li>
+                        <li><a href="http://127.0.0.1:8000/user/contact-us" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">اتصل بنا</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3 -->
+                <div>
+                    <h3 style="color: #fff; font-size: 16px; font-weight: 700; margin: 0 0 20px;">السياسات</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
+                        <li style="margin-bottom: 12px;"><a href="http://127.0.0.1:8000/privacy/policy" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">سياسة الخصوصية</a></li>
+                        <li style="margin-bottom: 12px;"><a href="http://127.0.0.1:8000/terms/conditions" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">شروط الخدمة</a></li>
+                        <li style="margin-bottom: 12px;"><a href="#" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">سياسة الكوكيز</a></li>
+                        <li><a href="#" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">أمان الدفع</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4 -->
+                <div>
+                    <h3 style="color: #fff; font-size: 16px; font-weight: 700; margin: 0 0 20px;">خدمة العملاء</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px;">
+                        <li style="margin-bottom: 12px;"><a href="http://127.0.0.1:8000/faq" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">الأسئلة الشائعة</a></li>
+                        <li style="margin-bottom: 12px;"><a href="http://127.0.0.1:8000/shipping/return" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">معلومات الشحن</a></li>
+                        <li style="margin-bottom: 12px;"><a href="http://127.0.0.1:8000/refund/policy" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">المرتجعات والاسترداد</a></li>
+                        <li><a href="#" style="color: #a0aebc; text-decoration: none; transition: 0.2s;">تتبع الطلب</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright & Social Section -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-bottom: 25px; font-size: 13px; color: #a0aebc; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span>طرق الدفع:</span>
+                    <div style="display: flex; gap: 8px;">
+                        <!-- Payment Icons -->
+                        <div style="width: 35px; height: 22px; background: #fff; border-radius: 3px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-cc-mastercard" style="color: #eb001b; font-size: 16px;"></i></div>
+                        <div style="width: 35px; height: 22px; background: #fff; border-radius: 3px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-cc-visa" style="color: #1a1f71; font-size: 16px;"></i></div>
+                        <div style="width: 35px; height: 22px; background: #fff; border-radius: 3px; display: flex; align-items: center; justify-content: center;"><i class="fab fa-cc-paypal" style="color: #003087; font-size: 16px;"></i></div>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    &copy; 2026  خيرات الأنعام. جميع الحقوق محفوظة.                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span>تابعنا:</span>
+                    <div style="display: flex; gap: 15px; font-size: 16px;">
+                        <a href="#" style="color: #fff; transition: 0.2s;"><i class="fab fa-youtube"></i></a>
+                        <a href="#" style="color: #fff; transition: 0.2s;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="color: #fff; transition: 0.2s;"><i class="fab fa-instagram"></i></a>
+                        <a href="#" style="color: #fff; transition: 0.2s;"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Global Success Modal -->
+    <div id="cartSuccessModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div style="background: #fff; width: 90%; max-width: 400px; border-radius: 16px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; animation: slideUp 0.3s ease-out;">
+            <button onclick="closeCartModal()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; font-size: 20px; color: #999; cursor: pointer; transition: 0.2s;"><i class="fas fa-times"></i></button>
+            
+            <div style="width: 70px; height: 70px; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="fas fa-check" style="font-size: 30px; color: #4caf50;"></i>
+            </div>
+            
+            <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 800; color: #333;">تمت الإضافة بنجاح!</h3>
+            <p style="margin: 0 0 25px; color: var(--text-light); font-size: 15px; line-height: 1.5;">لقد تمت إضافة المنتج إلى سلة التسوق الخاصة بك بنجاح.</p>
+            
+            <div style="display: flex; gap: 10px; flex-direction: column;">
+                <a href="http://127.0.0.1:8000/cart" class="btn-primary" style="padding: 12px; border-radius: 8px; font-weight: 700; text-decoration: none; display: block; width: 100%;">عرض السلة وإتمام الطلب</a>
+                <button onclick="closeCartModal()" style="padding: 12px; background: #f9f9f9; color: #333; border: 1px solid #eee; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; font-family: inherit;">متابعة التسوق</button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes  slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function openCartModal(cartCount) {
+            if(cartCount !== undefined) {
+                // Update badge if you have a class for it
+                $('.cart-badge').text(cartCount).show(); 
+            }
+            document.getElementById('cartSuccessModal').style.display = 'flex';
+        }
+        
+        function closeCartModal() {
+            document.getElementById('cartSuccessModal').style.display = 'none';
+        }
+        
+        function addToCart(productId, price) {
+            $.ajax({
+                url: "http://127.0.0.1:8000/cart/add",
+                type: "POST",
+                data: {
+                    product_id: productId,
+                    quantity: 1,
+                    price: price,
+                    _token: "f4ThlxPHForQutj85COgbwZEXFjmNAZygmrIAL0m"
+                },
+                success: function(data) {
+                    openCartModal(data[0]);
+                },
+                error: function(xhr) {
+                    if(xhr.responseJSON && xhr.responseJSON.error) {
+                        alert(xhr.responseJSON.error);
+                    } else {
+                        alert("حدث خطأ، يرجى المحاولة مرة أخرى");
+                    }
+                }
+            });
+        }
+    </script>
+    <script src="http://127.0.0.1:8000/v2_assets/js/main.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <style>
+        .package-description ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .package-description ul li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 8px;
+        }
+        html[dir="rtl"] .package-description ul li {
+            padding-left: 0;
+            padding-right: 25px;
+        }
+        .package-description ul li::before {
+            content: '\f00c';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #e32636;
+        }
+        html[dir="rtl"] .package-description ul li::before {
+            left: auto;
+            right: 0;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if(document.querySelector('.category-swiper')) {
+                new Swiper('.category-swiper', {
+                    slidesPerView: 2,
+                    spaceBetween: 15,
+                    navigation: {
+                        nextEl: '.category-button-next',
+                        prevEl: '.category-button-prev',
+                    },
+                    breakpoints: {
+                        576: { slidesPerView: 3, spaceBetween: 20 },
+                        768: { slidesPerView: 4, spaceBetween: 20 },
+                        1024: { slidesPerView: 5, spaceBetween: 25 },
+                    }
+                });
+            }
+            if(document.querySelector('.occasion-swiper')) {
+                new Swiper('.occasion-swiper', {
+                    slidesPerView: 1.2,
+                    spaceBetween: 15,
+                    pagination: {
+                        el: '.occasion-swiper .swiper-pagination',
+                        clickable: true,
+                    },
+                    breakpoints: {
+                        576: { slidesPerView: 2, spaceBetween: 20 },
+                        768: { slidesPerView: 3, spaceBetween: 20 },
+                        1024: { slidesPerView: 3, spaceBetween: 25 },
+                    }
+                });
+            }
+            if(document.querySelector('.packages-swiper')) {
+                new Swiper('.packages-swiper', {
+                    slidesPerView: 1.2,
+                    spaceBetween: 15,
+                    pagination: {
+                        el: '.packages-swiper .swiper-pagination',
+                        clickable: true,
+                    },
+                    breakpoints: {
+                        576: { slidesPerView: 2, spaceBetween: 20 },
+                        768: { slidesPerView: 2, spaceBetween: 20 },
+                        1024: { slidesPerView: 3, spaceBetween: 25 },
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: #fff; border-radius: 20px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; display: flex; flex-direction: column;">
+            
+            <!-- Close Button -->
+            <button onclick="closeRecipeModal()" style="position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.5); color: #fff; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 16px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Image Header -->
+            <div style="position: relative; height: 350px; border-radius: 20px 20px 0 0; overflow: hidden;">
+                <img id="modalRecipeImage" src="" alt="Recipe" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);"></div>
+                
+                <div style="position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; color: #fff; padding: 0 20px;">
+                    <div style="display: inline-block; background: rgba(255,255,255,0.9); padding: 5px 15px; border-radius: 20px; font-size: 13px; font-weight: 700; color: #333; margin-bottom: 15px;">
+                        <span id="modalRecipeDifficulty"></span> &bull; <i class="far fa-clock" style="color: #e32636;"></i> <span id="modalRecipeTime"></span> <span id="modalRecipeTimeText"></span>
+                    </div>
+                    <h2 id="modalRecipeTitle" style="margin: 0; font-size: 32px; font-weight: 800; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.5);"></h2>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div style="padding: 40px;">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <h3 style="font-size: 20px; font-weight: 800; color: #333; margin: 0 0 10px 0;">v2_home.description</h3>
+                    <div style="width: 50px; height: 3px; background: #e32636; margin: 0 auto; border-radius: 2px;"></div>
+                </div>
+                <div id="modalRecipeDesc" style="font-size: 15px; color: #555; line-height: 1.8; text-align: center; white-space: pre-line;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRecipeModal(data) {
+            document.getElementById('modalRecipeImage').src = data.image;
+            document.getElementById('modalRecipeTitle').innerText = data.title;
+            document.getElementById('modalRecipeDifficulty').innerText = data.difficulty;
+            document.getElementById('modalRecipeTime').innerText = data.time;
+            document.getElementById('modalRecipeTimeText').innerText = data.timeText;
+            document.getElementById('modalRecipeDesc').innerText = data.description;
+            
+            document.getElementById('recipeModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRecipeModal() {
+            document.getElementById('recipeModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Close on outside click
+        document.getElementById('recipeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRecipeModal();
+            }
+        });
+    </script>
+    </body>
+
+</html>

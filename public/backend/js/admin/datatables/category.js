@@ -31,10 +31,6 @@
                     name: 'order'
                 },
                 {
-                    data: 'show_on_home',
-                    name: 'show_on_home'
-                },
-                {
                     data: 'action',
                     name: 'action',
                     orderable: false

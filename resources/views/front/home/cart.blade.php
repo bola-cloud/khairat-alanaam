@@ -172,10 +172,7 @@
                             <span>{{ __('new_design.cart_page.summary_subtotal') }}</span>
                             <span class="font-extrabold text-[#1A4231]" x-text="subtotal.toFixed(2) + ' ' + currencySymbol"></span>
                         </div>
-                        <div class="flex justify-between items-center text-sm lg:text-base font-bold text-gray-500">
-                            <span>{{ __('new_design.cart_page.summary_shipping') }}</span>
-                            <span class="font-extrabold text-[#1A4231]" x-text="shipping.toFixed(2) + ' ' + currencySymbol"></span>
-                        </div>
+
                         <div class="flex justify-between items-center text-sm lg:text-base font-bold text-gray-500">
                             <span>{{ __('new_design.cart_page.summary_tax') }} (<span x-text="(taxRate * 100).toFixed(0) + '%'"></span>)</span>
                             <span class="font-extrabold text-[#1A4231]" x-text="tax.toFixed(2) + ' ' + currencySymbol"></span>
@@ -263,7 +260,7 @@
             taxRate: {{ floatval($taxRate) }},
             subscriptionDiscountPercent: {{ floatval($subDiscountPercent) }},
             subscriptionDiscount: {{ floatval($subDiscountAmount) }},
-            shipping: 25.00, 
+            shipping: 0.00, 
             discountCode: '{{ session("couponCode", "") }}',
             discountAmount: {{ floatval(session("CouponAmount", 0)) }},
             currencySymbol: '{{ __('new_design.coffee_crops.currency') }}',

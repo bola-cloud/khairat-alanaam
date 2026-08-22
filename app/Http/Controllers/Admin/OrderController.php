@@ -338,22 +338,11 @@ class OrderController extends Controller
      */
     private function subQtyProduct($product_id, $qty)
     {
-        $product = \App\Models\Admin\Product::with('comboItems')->whereId($product_id)->first();
+        $product = \App\Models\Admin\Product::find($product_id);
         if (!$product) return;
 
-        if (($product->product_type === 'Combo' || $product->product_type === 'تجميعي') && $product->comboItems && $product->comboItems->isNotEmpty()) {
-            foreach ($product->comboItems as $component) {
-                $qtyToDeduct = $component->pivot->quantity * $qty;
-                $componentObj = \App\Models\Admin\Product::find($component->id);
-                if ($componentObj) {
-                    $new_comp_qty = max(0, $componentObj->Quantity - $qtyToDeduct);
-                    $componentObj->update(['Quantity' => $new_comp_qty]);
-                }
-            }
-        } else {
-            $new_qty = max(0, $product->Quantity - $qty);
-            $product->update(['Quantity' => $new_qty]);
-        }
+        $new_qty = max(0, $product->Quantity - $qty);
+        $product->update(['Quantity' => $new_qty]);
     }
     public function orders(Request $request, $status)
     {

@@ -196,9 +196,11 @@ class AuthController extends Controller
         }
         
         $data['title'] = __('Verify Your Account');
-        $data['target'] = session('verify_target');
+        $data['targetPhone'] = session('verify_target');
+        $data['postRoute'] = route('user.verify.email.post');
         $data['method'] = session('verification_method');
-        return view('front.auth.newdesign_verify_email', $data);
+        
+        return view('v2.auth.otp', $data);
     }
 
     public function verifyEmailPost(Request $request)
@@ -308,73 +310,120 @@ class AuthController extends Controller
     public function userForgetPasswordGet()
     {
         $seo = SeoSetting::where('slug', 'forget-password')->first();
-        $data['title'] = $seo->title;
-        $data['description'] = $seo->description;
-        $data['keywords'] = $seo->keywords;
-        return view('front.auth.newdesign_forget_password', $data);
+        $data['title'] = $seo ? $seo->title : 'Forget Password';
+        $data['description'] = $seo ? $seo->description : '';
+        $data['keywords'] = $seo ? $seo->keywords : '';
+        return view('v2.auth.forget_password_email', $data);
     }
+
     public function userForgetPasswordPost(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users',
+            'email' => 'required|email|exists:users,email',
         ]);
 
-        $token = Str::random(64);
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Delete old tokens for this email to prevent multiple valid links
         DB::table('password_resets')->where('email', $request->email)->delete();
 
         DB::table('password_resets')->insert([
             'email' => $request->email,
-            'token' => $token,
+            'token' => $otp,
             'created_at' => Carbon::now()
         ]);
 
         $appName = config('app.name', 'HiSpeed');
-        Mail::send('front.auth.mail_form', ['token' => $token], function ($message) use ($request, $appName) {
-            $message->to($request->email);
-            $message->subject($appName . ' - Password Reset Request');
-        });
+        try {
+            Mail::send('emails.otp_reset', ['otp' => $otp], function ($message) use ($request, $appName) {
+                $message->to($request->email);
+                $message->subject($appName . ' - Password Reset OTP');
+            });
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('OTP Reset Email failed: ' . $e->getMessage());
+        }
 
-        return back()->with('success', __('We have e-mailed your password reset link!'));
+        session(['reset_email' => $request->email]);
+
+        return redirect()->route('forget.password.otp')->with('success', __('We have e-mailed your password reset OTP!'));
     }
-    public function userShowResetPasswordForm($token)
+
+    public function userForgetPasswordOtp()
     {
-        $seo = SeoSetting::where('slug', 'reset-password')->first();
-        $data['title'] = $seo->title;
-        $data['description'] = $seo->description;
-        $data['keywords'] = $seo->keywords;
-        $data['token'] = $token;
-        return view('front.auth.newdesign_reset_password', $data);
+        if (!session('reset_email')) {
+            return redirect()->route('forget.password.get');
+        }
+        $data['title'] = __('Verify OTP');
+        $data['email'] = session('reset_email');
+        return view('v2.auth.forget_password_otp', $data);
     }
+
+    public function userForgetPasswordOtpVerify(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|digits:6',
+        ]);
+
+        $email = session('reset_email');
+        if (!$email) {
+            return redirect()->route('forget.password.get');
+        }
+
+        $resetRecord = DB::table('password_resets')
+            ->where('email', $email)
+            ->where('token', $request->otp)
+            ->first();
+
+        if (!$resetRecord) {
+            return back()->with('error', __('Invalid OTP. Please try again.'));
+        }
+
+        // Set verified session flag
+        session(['otp_verified' => true]);
+
+        return redirect()->route('reset.password.get')->with('success', __('OTP Verified. Please set a new password.'));
+    }
+
+    public function userShowResetPasswordForm()
+    {
+        if (!session('reset_email') || !session('otp_verified')) {
+            return redirect()->route('forget.password.get');
+        }
+
+        $seo = SeoSetting::where('slug', 'reset-password')->first();
+        $data['title'] = $seo ? $seo->title : 'Reset Password';
+        $data['description'] = $seo ? $seo->description : '';
+        $data['keywords'] = $seo ? $seo->keywords : '';
+        return view('v2.auth.forget_password_reset', $data);
+    }
+
     public function submitResetPasswordForm(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required|string|min:6|confirmed',
-            'password_confirmation' => 'required'
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $updatePassword = DB::table('password_resets')
-            ->where([
-                'email' => $request->email,
-                'token' => $request->token
-            ])
-            ->first();
-
-        if (!$updatePassword) {
-            return back()->withInput()->with('error', __('The link is invalid or has expired.'));
+        $email = session('reset_email');
+        if (!$email || !session('otp_verified')) {
+            return redirect()->route('forget.password.get');
         }
 
-        $userUpdate = User::where('email', $request->email)
+        $userUpdate = User::where('email', $email)
             ->update(['password' => Hash::make($request->password)]);
 
         if ($userUpdate) {
-            DB::table('password_resets')->where(['email' => $request->email])->delete();
-            return redirect()->route('login')->with('success', __('Success! Your password has been changed. You can now sign in.'));
+            DB::table('password_resets')->where(['email' => $email])->delete();
+            session()->forget(['reset_email', 'otp_verified']);
+            return redirect()->route('reset.password.success');
         }
 
         return redirect()->back()->with('error', __('Your password could not be changed. Please try again.'));
+    }
+
+    public function userResetPasswordSuccess()
+    {
+        $data['title'] = __('Password Reset Successfully');
+        return view('v2.auth.forget_password_success', $data);
     }
 
     public function redirectToGoogle()
@@ -455,7 +504,7 @@ class AuthController extends Controller
 
 
         // Generate a random 6-digit OTP
-        $otp = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
         // Store OTP in session for later verification
         session(['whatsapp_otp' => $otp]);
@@ -489,14 +538,17 @@ class AuthController extends Controller
         $data['country_code'] = $request->country_code;
         $data['name'] = $request->name;
 
-        return view('front.auth.otp_form', $data);
+        $data['targetPhone'] = $request->phone_number;
+        $data['postRoute'] = route('user.otp.verify');
+
+        return view('v2.auth.otp', $data);
     }
 
     public function otpVerifyPost(Request $request)
     {
         $request->validate([
             'phone_number' => 'required',
-            'otp' => 'required|digits:5',
+            'otp' => 'required|digits:6',
             'name' => 'required',
         ]);
 

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Admin\Advertise;
+use Illuminate\Database\Seeder;
 
 class HeroAdvertiseSeeder extends Seeder
 {
@@ -14,38 +14,26 @@ class HeroAdvertiseSeeder extends Seeder
      */
     public function run()
     {
-        // Create three hero slides referencing the public new-design image
-        $common = [
-            'image' => 'new-design/images/bannar-big.png',
-            'status' => 1,
+        // Remove old advertises (optional if we want to clear all, but the user requested "remove existing data")
+        Advertise::truncate();
+
+        // Seed the new hero advertise based on the design text
+        \Illuminate\Support\Facades\DB::table('advertises')->insert([
             'location' => 'hero',
-        ];
-
-        Advertise::create(array_merge($common, [
-            'en_title' => 'Fresh & Healthy',
-            'en_subtitle' => 'Organic Food',
-            'link' => '#',
-            'display_order' => 0,
-            'Image_One' => '',
-            'Image_Two' => ''
-        ]));
-
-        Advertise::create(array_merge($common, [
-            'en_title' => 'Seasonal Picks',
-            'en_subtitle' => 'Best Quality',
-            'link' => '#',
+            'status' => 1,
             'display_order' => 1,
-            'Image_One' => '',
-            'Image_Two' => ''
-        ]));
-
-        Advertise::create(array_merge($common, [
-            'en_title' => 'Fresh Arrivals',
-            'en_subtitle' => 'New Collections',
+            'image' => 'hero-bg.jpg', // No specific image was provided, so we use the default hero-bg
+            'Image_One' => 'hero-bg.jpg', // Required field
+            'Image_Two' => 'hero-bg.jpg', // Required field
+            'ar_title' => 'خيرات الأنعام الطازجة',
+            'ar_subtitle' => 'بمعايير عالمية بين يديك',
+            'ar_small_description' => 'نقدم لك أفضل ما في المزارع المحلية والعالمية، مقطوعة بحرفية لتكون المكون الأساسي لمائدتك اليومية ومناسباتك الخاصة.',
+            'en_title' => 'Fresh Khairat Al-An\'aam',
+            'en_subtitle' => 'Global Standards at Your Fingertips',
+            'en_small_description' => 'We offer you the best of local and international farms, expertly cut to be the essential ingredient for your daily table and special occasions.',
             'link' => '#',
-            'display_order' => 2,
-            'Image_One' => '',
-            'Image_Two' => ''
-        ]));
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

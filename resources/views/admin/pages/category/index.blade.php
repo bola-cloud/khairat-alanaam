@@ -39,7 +39,6 @@
                                 <th>{{ __('Icon')}}</th>
                                 <th>{{ __('Status')}}</th>
                                 <th>{{ __('Order')}}</th>
-                                <th>{{ __('Show on Home')}}</th>
                                 <th>{{ __('Action')}}</th>
                             </tr>
                         </thead>

@@ -116,6 +116,14 @@
                                                 @enderror
                                             </div>
 
+                                            <div class="input__group mb-25" style="display: flex; gap: 20px; align-items: flex-start; border: 1px solid #eee; padding: 10px; border-radius: 8px;">
+                                                <div>
+                                                    <input type="checkbox" id="is_package" name="is_package" value="1" {{ old('is_package') ? 'checked' : '' }}>
+                                                    <label for="is_package" style="display: inline-block; margin-bottom: 0; margin-left: 5px; font-weight: bold;">{{ __('Show as Package on Homepage') }}</label>
+                                                    <p style="font-size: 11px; color: #777; margin-top: 5px;">{{ __('Displays this product in the "Featured Bundles" slider on the homepage.') }}</p>
+                                                </div>
+                                            </div>
+
                                             {{-- <div class="input__group mb-25">
                                                 <label for="select2Multiple">{{ __('Product Color') }}</label>
                                                 <select class="select2-multiple form-control tag_two" name="color[]"
@@ -140,15 +148,6 @@
                                                 @error('size')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @enderror
-                                            </div> --}}
-                                            <!-- <div class="input__group mb-25">
-                                                    <label>{{ __('Product Weight') }}</label>
-                                                    <div id="weight-container">
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary" id="add-weight-btn">اضافة
-                                                        وزن</button>
-                                                </div> -->
-
                                             <div class="input__group mb-25">
                                                 <label>{{ __('Product Option') }}</label>
                                                 <div id="size-container">
@@ -156,6 +155,7 @@
                                                 </div>
                                                 <button type="button" class="btn btn-primary" id="add-size-btn">اضافة
                                                     خيار</button>
+                                                <small class="text-info d-block mt-2"><i class="fas fa-info-circle"></i> يرجى التأكد من إدخال السعر الخاص بكل خيار/حجم تقوم بإضافته لتجنب أي أخطاء أثناء الحفظ.</small>
                                             </div>
 
 
@@ -286,8 +286,25 @@
                                                 @enderror
                                             </div>
 
-
-                                        </div>
+                                            <div class="input__group mb-25">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" value="1"
+                                                        {{ old('status', 1) == 1 ? 'checked' : '' }} name="status"
+                                                        class="custom-control-input" id="customSwitch1">
+                                                    <label class="custom-control-label"
+                                                        for="customSwitch1">{{ __('Active') }}</label>
+                                                </div>
+                                            </div>
+                                            <div class="input__group mb-25">
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" value="1"
+                                                        {{ old('today_special') == 1 ? 'checked' : '' }}
+                                                        name="today_special" class="custom-control-input"
+                                                        id="customSwitchTodaySpecial">
+                                                    <label class="custom-control-label"
+                                                        for="customSwitchTodaySpecial">{{ __('Today Special') }}</label>
+                                                </div>
+                                            </div>                                        </div>
                                     </div>
                                     <div class="col-xxl-6">
                                         <div class="form-vertical__item bg-style">
@@ -426,17 +443,18 @@
                                                                                                                                          <label for="size-${sizeCounter}"> الخيار:</label>
                                                         <select class="form-control" name="size[]" id="size-${sizeCounter}">
                                                                                                                                             @foreach (productSize() as $item)
-                                                                                                                                                <option value="{{ $item->id }}" ${sizeId === {{ $item->id }} ? 'selected' : ''}>{{ $item->Size_ar }}</option>
+                                                                                                                                                <option value="{{ $item->id }}" ${sizeId == {{ $item->id }} ? 'selected' : ''}>{{ $item->Size_ar }}</option>
                                                                                                                                             @endforeach
                                                                                                                                         </select>
                                                                                                                                     </div>
-                                                                                                                                     <div class="col-md-5">
+                                                                                                                                     <div class="col-md-6">
                                                                                                                                                      <label for="price-${sizeCounter}">السعر:</label>
 
-                                                                                                                                        <input type="text" class="form-control" required name="size_price[]"  id="price-${sizeCounter}" placeholder="ادخل السعر" value="${price || ''}">
+                                                                                                                                        <input type="number" step="0.01" class="form-control" required name="size_price[]"  id="price-${sizeCounter}" placeholder="ادخل السعر" value="${price || ''}">
                                                                                                                                     </div>
 
                                                                                                                                     <div class="col-md-1">
+                                                                                                                                        <label class="d-block">&nbsp;</label>
                                                                                                                                         <button type="button" class="btn btn-danger remove-size-row" data-row-id="size-row-${sizeCounter}">
                                                                                                                                             <i class="fa fa-times"></i>
                                                                                                                                         </button>

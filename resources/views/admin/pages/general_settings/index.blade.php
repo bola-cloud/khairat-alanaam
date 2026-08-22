@@ -33,7 +33,7 @@
                                         <div class="item-top mb-30">
                                             <h2>{{ __('Basic Info') }}</h2>
                                         </div>
-                                        <form enctype="multipart/form-data" method="POST"
+                                        <form method="POST"
                                             action="{{ route('admin.general.settings.update_settings') }}">
                                             @csrf
                                             <div class="input__group mb-25">
@@ -116,6 +116,20 @@
                                                     <span style="word-break: break-all; display: block; margin-top: 2px;">https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115918.42398539268!2d46.72186835!3d24.81381395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e91f55!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2ssa!4v1680000000000!5m2!1sen!2ssa</span>
                                                 </small>
                                             </div>
+                                            
+                                            <!-- Top Bar Announcements -->
+                                            <div class="input__group mb-25" style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 20px;">
+                                                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 15px;">{{ __('Top Bar Announcement') }}</h4>
+                                                <label for="top_bar_announcement_ar">{{ __('Announcement (Arabic)') }}</label>
+                                                <input type="text" class="form-control" id="top_bar_announcement_ar" name="top_bar_announcement_ar"
+                                                    value="{{ @$allsettings['top_bar_announcement_ar'] }}" placeholder="مثال: 🔥 عرض خاص: شحن مجاني للطلبات فوق 50 ريال 🔥">
+                                            </div>
+                                            <div class="input__group mb-25">
+                                                <label for="top_bar_announcement_en">{{ __('Announcement (English)') }}</label>
+                                                <input type="text" class="form-control" id="top_bar_announcement_en" name="top_bar_announcement_en"
+                                                    value="{{ @$allsettings['top_bar_announcement_en'] }}" placeholder="Example: 🔥 Special Offer: Free Shipping on Orders Over 50 OMR 🔥">
+                                            </div>
+                                            
                                             <div class="input__button">
                                                 <button type="submit" class="btn btn-blue">{{ __('Update') }}</button>
                                             </div>
@@ -210,7 +224,7 @@
                                         <div class="item-top mb-30">
                                             <h2>{{ __('SEO') }}</h2>
                                         </div>
-                                        <form enctype="multipart/form-data" method="POST"
+                                        <form method="POST"
                                             action="{{ route('admin.general.settings.update_settings') }}">
                                             @csrf
                                             <div class="input__group mb-25">
@@ -288,12 +302,12 @@
                                         </form>
                                     </div>
                                 </div> --}}
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <div class="form-vertical__item bg-style">
                                         <div class="item-top mb-30">
                                             <h2>{{ __('Email') }}</h2>
                                         </div>
-                                        <form enctype="multipart/form-data" method="POST"
+                                        <form method="POST"
                                             action="{{ route('admin.general.settings.update_email') }}">
                                             @csrf
                                             <div class="input__group mb-25">
@@ -336,7 +350,7 @@
                                             </div>
                                         </form>
                                     </div>
-                                </div>
+                                </div> --}}
                                 {{-- <div class="col-md-6">
                                     <div class="form-vertical__item bg-style">
                                         <div class="item-top mb-30">

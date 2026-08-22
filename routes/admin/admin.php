@@ -51,6 +51,7 @@ use App\Http\Controllers\Admin\Reports\OrdersReportController;
 use App\Http\Controllers\Admin\Reports\DeliveryMenReportController;
 use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\RecipeController;
 
 
 Route::get('/admin/login', [AuthController::class, 'login'])->name('admin.login')->middleware('guest:admin');
@@ -135,6 +136,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:admin', 'is_admin'], '
         Route::post('/update-status/{id}', [\App\Http\Controllers\Admin\PartnerRequestController::class, 'updateStatus'])->name('partner-requests.update_status')->middleware(['permission:expert-request-edit']);
         Route::get('/delete/{id}', [\App\Http\Controllers\Admin\PartnerRequestController::class, 'destroy'])->name('partner-requests.delete')->middleware(['permission:expert-request-delete']);
     });
+
+    Route::group(['prefix' => 'recipe', 'as' => 'recipe.'], function () {
+        Route::get('', [RecipeController::class, 'index'])->name('index');
+        Route::get('/create', [RecipeController::class, 'create'])->name('create');
+        Route::post('/store', [RecipeController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [RecipeController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [RecipeController::class, 'update'])->name('update');
+        Route::get('/active/{id}', [RecipeController::class, 'active'])->name('active');
+        Route::get('/inactive/{id}', [RecipeController::class, 'inactive'])->name('inactive');
+        Route::get('/delete/{id}', [RecipeController::class, 'delete'])->name('delete');
+    });
+
     Route::group(['prefix' => 'general-settings'], function () {
         Route::get('', [GeneralSettingsController::class, 'GeneralSettings'])->name('general.settings')->middleware(['permission:cms-list|cms-create|cms-edit|cms-delete']);
         Route::get('/edit/{id}', [GeneralSettingsController::class, 'GeneralSettingsEdit'])->name('general.settings.edit')->middleware(['permission:cms-edit']);

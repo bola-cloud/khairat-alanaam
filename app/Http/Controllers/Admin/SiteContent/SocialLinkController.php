@@ -16,7 +16,7 @@ class SocialLinkController extends Controller
             $social = SocialLink::create([
                 'Facebook' => '#',
                 'Twitter' => '#',
-                'Linkedin' => '#',
+                'Youtube' => '#',
                 'Instagram' => '#',
             ]);
         }
@@ -36,7 +36,7 @@ class SocialLinkController extends Controller
         $update = SocialLink::where('id', $id)->update([
             'Facebook' => $request->facebook,
             'Twitter' => $request->twitter,
-            'Linkedin' => $request->linkedin,
+            'Youtube' => $request->youtube,
             'Instagram' => $request->instagram,
         ]);
         if ($update) {

@@ -12,7 +12,7 @@ class SocialLink extends Model
         'Facebook',
         'Skype',
         'Twitter',
-        'Linkedin',
+        'Youtube',
         'Instagram',
     ];
 }

@@ -5,7 +5,7 @@
 @endphp
 
 <!-- Store Header -->
-<header class="relative shadow-sm py-4 lg:py-6" dir="{{ $dir }}" style="background-image: url('{{ asset('assets/elketar/Section - Categories Showcase.png') }}'); background-size: cover; background-position: center;background-blend-mode: overlay;" x-data="{ mobileMenu: false }">
+<header class="relative z-[1001] shadow-sm py-4 lg:py-6" dir="{{ $dir }}" style="background-image: url('{{ asset('assets/elketar/Section - Categories Showcase.png') }}'); background-size: cover; background-position: center;background-blend-mode: overlay;" x-data="{ mobileMenu: false }">
     <div class="container mx-auto px-4 lg:px-8">
         <div class="flex items-center justify-between gap-4">
             

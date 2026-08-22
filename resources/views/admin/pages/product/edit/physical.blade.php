@@ -112,6 +112,14 @@
                                                 </select>
                                             </div>
 
+                                            <div class="input__group mb-25" style="display: flex; gap: 20px; align-items: flex-start; border: 1px solid #eee; padding: 10px; border-radius: 8px;">
+                                                <div>
+                                                    <input type="checkbox" id="is_package" name="is_package" value="1" {{ $product->is_package ? 'checked' : '' }}>
+                                                    <label for="is_package" style="display: inline-block; margin-bottom: 0; margin-left: 5px; font-weight: bold;">{{ __('Show as Package on Homepage') }}</label>
+                                                    <p style="font-size: 11px; color: #777; margin-top: 5px;">{{ __('Displays this product in the "Featured Bundles" slider on the homepage.') }}</p>
+                                                </div>
+                                            </div>
+
 
                                             {{-- <div class="input__group mb-25">
                                                 <label for="select2Multiple">{{ __('Product Color') }}</label>
@@ -141,9 +149,6 @@
                                             <!-- <label>{{ __('Product Weight') }}</label>
                                             <div id="weight-container">
                                             </div> -->
-                                            @if(!$product->synced_from_smartlife && empty($product->smartlife_id))
-                                            <button type="button" class="btn btn-primary" id="add-weight-btn">اضافة وزن</button>
-                                            @endif
                                         </div>
 
                                             <div class="input__group mb-25">
@@ -153,6 +158,7 @@
                                                 </div>
                                                 @if(!$product->synced_from_smartlife && empty($product->smartlife_id))
                                                 <button type="button" class="btn btn-primary" id="add-size-btn">اضافة خيار</button>
+                                                <small class="text-info d-block mt-2"><i class="fas fa-info-circle"></i> يرجى التأكد من إدخال السعر الخاص بكل خيار/حجم تقوم بإضافته لتجنب أي أخطاء أثناء الحفظ.</small>
                                                 @endif
                                             </div>
 
@@ -172,7 +178,7 @@
                                                 <input type="text" class="form-control" id="qty" name="qty"
                                                     value="{{ $product->Quantity }}" @if($product->synced_from_smartlife || !empty($product->smartlife_id)) readonly @endif>
                                                 @if($product->synced_from_smartlife || !empty($product->smartlife_id))
-                                                    <small class="text-muted">{{ __('Quantity is managed by SmartLife ERP sync and cannot be edited manually.') }}</small>
+                                                    <small class="text-muted">{{ __('Quantity must be tracked correctly.') }}</small>
                                                 @endif
                                             </div>
                                             <div class="input__group mb-25">
@@ -261,43 +267,7 @@
                                                         for="customSwitch1">{{ __('Active') }}</label>
                                                 </div>
                                             </div>
-                                            <div class="input__group mb-25">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" value="1"
-                                                        {{ $product->Featured_Product == 1 ? 'checked' : '' }}
-                                                        name="feature" class="custom-control-input" id="customSwitch2">
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch2">{{ __('Popular') }}</label>
-                                                </div>
-                                            </div>
-                                            <div class="input__group mb-25">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" value="1"
-                                                        {{ $product->Best_Selling == 1 ? 'checked' : '' }}
-                                                        name="best_sale" class="custom-control-input" id="customSwitch3">
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch3">{{ __('Best Selling') }}</label>
-                                                </div>
-                                            </div>
-                                            <div class="input__group mb-25">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" value="1"
-                                                        {{ $product->On_Sale == 1 ? 'checked' : '' }} name="on_sale"
-                                                        class="custom-control-input" id="customSwitch4">
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch4">{{ __('On Sale') }}</label>
-                                                </div>
-                                            </div>
-                                            <div class="input__group mb-25">
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" value="1"
-                                                        {{ $product->New_Arrival == 1 ? 'checked' : '' }}
-                                                        name="on_arrival" class="custom-control-input"
-                                                        id="customSwitch5">
-                                                    <label class="custom-control-label"
-                                                        for="customSwitch5">{{ __('New Arrival') }}</label>
-                                                </div>
-                                            </div>
+
                                             <div class="input__group mb-25">
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" value="1"
@@ -443,9 +413,10 @@
                 </div>
                 <div class="col-md-5">
                     <label for="price-${sizeCounter}">السعر:</label>
-                    <input type="text" class="form-control" id="price-${sizeCounter}" name="size_price[]" placeholder="السعر" value="${price || ''}" ${disabledAttr}>
+                    <input type="number" step="0.01" class="form-control" id="price-${sizeCounter}" name="size_price[]" placeholder="السعر" value="${price || ''}" ${disabledAttr}>
                     ${isSynced ? `<input type="hidden" name="size_price[]" value="${price || ''}">` : ''}
                 </div>
+                
                 <div class="col-md-1">
                     <label class="d-block">&nbsp;</label>
                     ${removeBtn}
@@ -525,7 +496,7 @@
                             $('#subcategory_id').append('<option value="">{{ __("Select Subcategory") }}</option>');
                             $.each(data, function (key, value) {
                                 var isSelected = (value.id == currentSubcategoryId) ? 'selected' : '';
-                                $('#subcategory_id').append('<option value="' + value.id + isSelected+ '">' + value.name_ar + '</option>');
+                                $('#subcategory_id').append('<option value="' + value.id + '" ' + isSelected + '>' + value.name_ar + '</option>');
                             });
                         }
                     });

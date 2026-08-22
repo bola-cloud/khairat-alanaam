@@ -60,7 +60,7 @@ class HomePageController extends Controller
         $section = HomepageSection::find($id);
         // pass all sections so the edit page can render each section as a separate card
         try {
-            $data['sections'] = HomepageSection::whereNotIn('section_key', ['newdesign_brands', 'newdesign_sale_banner'])
+            $data['sections'] = HomepageSection::whereIn('section_key', ['newdesign_features', 'newdesign_farm'])
                 ->orderBy('display_order')
                 ->get();
         } catch (\Exception $e) {
@@ -111,6 +111,56 @@ class HomePageController extends Controller
                 }
                 $section->content_en = ['items' => $items_en];
                 $section->content_fr = ['items' => $items_fr];
+                $ok = $section->save();
+                if ($ok) {
+                    return redirect()->route('admin.home.page.site.content.edit', $section->id)->with('success', __('Successfully Updated !'));
+                }
+                return redirect()->route('admin.home.page.site.content.edit', $section->id)->with('error', __('Does not Updated !'));
+            }
+
+            // Special handling for farm section (title, lead, 3 features)
+            if ($section->section_key === 'newdesign_farm') {
+                $items_en = [];
+                $items_fr = [];
+                for ($i = 1; $i <= 3; $i++) {
+                    $items_en[] = [
+                        'title' => $request->input('en_farm_feat_' . $i . '_title', ''),
+                        'desc' => $request->input('en_farm_feat_' . $i . '_desc', ''),
+                        'icon' => $request->input('en_farm_feat_' . $i . '_icon', ''),
+                    ];
+                    $items_fr[] = [
+                        'title' => $request->input('fr_farm_feat_' . $i . '_title', ''),
+                        'desc' => $request->input('fr_farm_feat_' . $i . '_desc', ''),
+                        'icon' => $request->input('fr_farm_feat_' . $i . '_icon', ''),
+                    ];
+                }
+                
+                $content_en_data = [
+                    'title' => $request->en_title,
+                    'lead' => $request->en_description_one,
+                    'items' => $items_en
+                ];
+                $content_fr_data = [
+                    'title' => $request->fr_title,
+                    'lead' => $request->fr_description_one,
+                    'items' => $items_fr
+                ];
+
+                if ($request->hasFile('image2')) {
+                    $image2 = fileUpload($request['image2'], PromotionImage());
+                    $content_en_data['image2'] = $image2;
+                    $content_fr_data['image2'] = $image2;
+                } else {
+                    $old_en = is_array($section->content_en) ? $section->content_en : json_decode($section->content_en, true);
+                    if (isset($old_en['image2'])) {
+                        $content_en_data['image2'] = $old_en['image2'];
+                        $content_fr_data['image2'] = $old_en['image2'];
+                    }
+                }
+
+                $section->content_en = $content_en_data;
+                $section->content_fr = $content_fr_data;
+                
                 $ok = $section->save();
                 if ($ok) {
                     return redirect()->route('admin.home.page.site.content.edit', $section->id)->with('success', __('Successfully Updated !'));

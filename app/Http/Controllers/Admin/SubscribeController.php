@@ -20,7 +20,7 @@ class SubscribeController extends Controller
     public function subscribeStore(Request $request)
     {
         $this->validate($request, [
-            'subscribe' => 'required|email|unique:subscribes,Subscribe',
+            'subscribe' => 'required|unique:subscribes,Subscribe',
         ]);
         if ($request->ajax()) {
             $store = Subscribe::create([

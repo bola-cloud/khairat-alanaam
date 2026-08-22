@@ -369,6 +369,100 @@
                                                             <label>{{ __('Points (one per line) (AR)') }}</label>
                                                             <textarea class="form-control" name="fr_description_two">{{ old('fr_description_two', is_array($content_fr['points'] ?? null) ? implode("\n", $content_fr['points']) : ($content_fr['points'] ?? '')) }}</textarea>
                                                         </div>
+                                                        </div>
+
+                                                    @elseif($secKey === 'newdesign_farm')
+                                                        <div class="mb-2"><strong>{{ __('English') }}</strong></div>
+                                                        <div class="input__group mb-2">
+                                                            <label>{{ __('Title') }}</label>
+                                                            <input type="text" class="form-control" name="en_title" value="{{ old('en_title', $content_en['title'] ?? '') }}">
+                                                        </div>
+                                                        <div class="input__group mb-2">
+                                                            <label>{{ __('Subtitle / Lead') }}</label>
+                                                            <textarea class="form-control" name="en_description_one" rows="3">{{ old('en_description_one', $content_en['lead'] ?? '') }}</textarea>
+                                                        </div>
+                                                        
+                                                        <div class="input__group mb-2">
+                                                            <label>{{ __('Main Farm Image') }} <span class="text-danger" style="font-size: 12px; margin-right: 10px;">(المقاس المفضل: 600x500 بيكسل)</span></label>
+                                                            <input type="file" class="form-control" name="image">
+                                                            @php
+                                                                $farmImg = null;
+                                                                if(!empty($sec->image)){
+                                                                    if (file_exists(public_path($sec->image))) {
+                                                                        $farmImg = asset($sec->image);
+                                                                    } elseif (file_exists(public_path(PromotionImage() . $sec->image))) {
+                                                                        $farmImg = asset(PromotionImage() . $sec->image);
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            @if($farmImg)
+                                                                <img src="{{ $farmImg }}" style="max-height:80px; margin-top:8px; max-width:80px;" />
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="input__group mb-2">
+                                                            <label>{{ __('Inset Farm Image (Small)') }} <span class="text-danger" style="font-size: 12px; margin-right: 10px;">(المقاس المفضل: 300x300 بيكسل مربعة)</span></label>
+                                                            <input type="file" class="form-control" name="image2">
+                                                            @php
+                                                                $farmImg2 = null;
+                                                                if(isset($content_en['image2']) && !empty($content_en['image2'])){
+                                                                    if (file_exists(public_path(PromotionImage() . $content_en['image2']))) {
+                                                                        $farmImg2 = asset(PromotionImage() . $content_en['image2']);
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            @if($farmImg2)
+                                                                <img src="{{ $farmImg2 }}" style="max-height:80px; margin-top:8px; max-width:80px;" />
+                                                            @endif
+                                                        </div>
+
+                                                        @for($i=1;$i<=3;$i++)
+                                                            @php $it = $content_en['items'][$i-1] ?? ['title'=>'','desc'=>'','icon'=>'']; @endphp
+                                                            <div class="border p-3 rounded mb-3 bg-light">
+                                                                <div class="font-bold mb-2 text-[#1A4231]">{{ __('Feature') }} #{{ $i }}</div>
+                                                                <div class="input__group mb-2">
+                                                                    <label>{{ __('Feature Title') }}</label>
+                                                                    <input type="text" class="form-control" name="en_farm_feat_{{ $i }}_title" value="{{ old('en_farm_feat_'.$i.'_title', $it['title'] ?? '') }}">
+                                                                </div>
+                                                                <div class="input__group mb-2">
+                                                                    <label>{{ __('Feature Description') }}</label>
+                                                                    <input type="text" class="form-control" name="en_farm_feat_{{ $i }}_desc" value="{{ old('en_farm_feat_'.$i.'_desc', $it['desc'] ?? '') }}">
+                                                                </div>
+                                                                <div class="input__group mb-2">
+                                                                    <label>{{ __('Feature Icon (FontAwesome Class)') }}</label>
+                                                                    <input type="text" class="form-control" name="en_farm_feat_{{ $i }}_icon" value="{{ old('en_farm_feat_'.$i.'_icon', $it['icon'] ?? '') }}" placeholder="fas fa-check">
+                                                                </div>
+                                                            </div>
+                                                        @endfor
+                                                        
+                                                        <hr>
+                                                        <div class="mb-2"><strong>{{ __('Arabic') }}</strong></div>
+                                                        <div class="input__group mb-2">
+                                                            <label>{{ __('Title (AR)') }}</label>
+                                                            <input type="text" class="form-control" name="fr_title" value="{{ old('fr_title', $content_fr['title'] ?? '') }}">
+                                                        </div>
+                                                        <div class="input__group mb-2">
+                                                            <label>{{ __('Subtitle / Lead (AR)') }}</label>
+                                                            <textarea class="form-control" name="fr_description_one" rows="3">{{ old('fr_description_one', $content_fr['lead'] ?? '') }}</textarea>
+                                                        </div>
+                                                        @for($i=1;$i<=3;$i++)
+                                                            @php $itf = $content_fr['items'][$i-1] ?? ['title'=>'','desc'=>'','icon'=>'']; @endphp
+                                                            <div class="border p-3 rounded mb-3 bg-light">
+                                                                <div class="font-bold mb-2 text-[#1A4231]">{{ __('Feature') }} #{{ $i }} (AR)</div>
+                                                                <div class="input__group mb-2">
+                                                                    <label>{{ __('Feature Title (AR)') }}</label>
+                                                                    <input type="text" class="form-control" name="fr_farm_feat_{{ $i }}_title" value="{{ old('fr_farm_feat_'.$i.'_title', $itf['title'] ?? '') }}">
+                                                                </div>
+                                                                <div class="input__group mb-2">
+                                                                    <label>{{ __('Feature Description (AR)') }}</label>
+                                                                    <input type="text" class="form-control" name="fr_farm_feat_{{ $i }}_desc" value="{{ old('fr_farm_feat_'.$i.'_desc', $itf['desc'] ?? '') }}">
+                                                                </div>
+                                                                <div class="input__group mb-2">
+                                                                    <label>{{ __('Feature Icon (FontAwesome Class)') }}</label>
+                                                                    <input type="text" class="form-control" name="fr_farm_feat_{{ $i }}_icon" value="{{ old('fr_farm_feat_'.$i.'_icon', $itf['icon'] ?? '') }}" placeholder="fas fa-check">
+                                                                </div>
+                                                            </div>
+                                                        @endfor
 
                                                     @elseif($secKey === 'newdesign_brands')
                                                         <div class="input__group mb-2" id="brands-card-{{ $sec->id }}">

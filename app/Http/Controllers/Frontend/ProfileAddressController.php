@@ -24,7 +24,9 @@ class ProfileAddressController extends Controller
             'street' => 'required|string|max:255',
             'building_no' => 'nullable|string|max:255',
             'apartment' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
+            'state_id' => 'required',
+            'city_id' => 'required',
+            'area_id' => 'required',
             'phone' => 'required|string|max:255',
             'notes' => 'nullable|string',
             'type' => 'nullable|string|in:home,work',
@@ -42,12 +44,15 @@ class ProfileAddressController extends Controller
         $address->phone = $request->phone;
         $address->address_line1 = $request->street;
         $address->address_line2 = json_encode([
+            'state_id' => $request->state_id,
+            'city_id' => $request->city_id,
+            'area_id' => $request->area_id,
             'building' => $request->building_no ?? '',
             'apartment' => $request->apartment ?? '',
             'notes' => $request->notes ?? '',
             'type' => $request->type ?? 'home',
         ]);
-        $address->city = $request->city;
+        $address->city = $request->city_id; // Just for fallback/compatibility
         $address->country = 'Oman';
         $address->address_type = 'both';
         $address->is_default = !$hasDefault;
@@ -70,7 +75,9 @@ class ProfileAddressController extends Controller
             'street' => 'required|string|max:255',
             'building_no' => 'nullable|string|max:255',
             'apartment' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
+            'state_id' => 'required',
+            'city_id' => 'required',
+            'area_id' => 'required',
             'phone' => 'required|string|max:255',
             'notes' => 'nullable|string',
             'type' => 'nullable|string|in:home,work',
@@ -83,12 +90,15 @@ class ProfileAddressController extends Controller
         $address->phone = $request->phone;
         $address->address_line1 = $request->street;
         $address->address_line2 = json_encode([
+            'state_id' => $request->state_id,
+            'city_id' => $request->city_id,
+            'area_id' => $request->area_id,
             'building' => $request->building_no ?? '',
             'apartment' => $request->apartment ?? '',
             'notes' => $request->notes ?? '',
             'type' => $request->type ?? 'home',
         ]);
-        $address->city = $request->city;
+        $address->city = $request->city_id;
         $address->save();
 
         return response()->json([

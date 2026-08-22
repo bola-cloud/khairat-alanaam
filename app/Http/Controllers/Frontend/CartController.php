@@ -20,7 +20,7 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         if ($request->ajax()) {
-            $product = Product::with('colors', 'sizes', 'comboItems')
+            $product = Product::with('colors', 'sizes')
                 ->where('id', $request->product_id)
                 ->first();
 
@@ -192,7 +192,7 @@ class CartController extends Controller
         foreach (Cart::content() as $cart) {
             if ($cart->rowId == $id) {
                 // Check Stock Validation
-                $product = Product::with('comboItems')->find($cart->id); // optimize: eager load comboItems
+                $product = Product::find($cart->id);
                 
                 if ($product) {
                     $trialBoxesCatId = DB::table('categories')

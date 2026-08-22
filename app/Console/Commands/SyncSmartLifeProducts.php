@@ -156,19 +156,6 @@ class SyncSmartLifeProducts extends Command
         $this->newLine(1);
 
         // Second Pass: Sync Combo Relationships now that all products are imported
-        if (!$shadowOnly && !empty($comboDataToSync)) {
-            $this->info('Processing combo relationships (Second Pass)...');
-            foreach ($comboDataToSync as $combo) {
-                $product = Product::where('smartlife_id', $combo['smartlife_id'])->first();
-                if ($product && !empty($combo['combo_items'])) {
-                    // API returned combo_items — use them directly
-                    $this->syncComboItems($product, $combo['combo_items']);
-                } elseif ($product && $product->comboItems()->count() === 0) {
-                    // API did NOT return combo_items and no existing link — infer by name
-                    $this->inferComboByName($product, $products);
-                }
-            }
-        }
         $this->newLine(1);
 
         // Handle deleted items from SmartLife

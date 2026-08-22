@@ -16,8 +16,10 @@ class Advertise extends Model
         'image',
         'en_title',
         'en_subtitle',
+        'en_badge',
         'ar_title',
         'ar_subtitle',
+        'ar_badge',
         // keep legacy french fields for compatibility
         'fr_title',
         'fr_subtitle',

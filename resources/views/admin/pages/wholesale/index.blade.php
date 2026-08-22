@@ -82,8 +82,8 @@
                                         @csrf
                                         <select name="status" onchange="this.form.submit()" class="form-select form-select-sm status-select" style="width: auto; min-width: 120px;">
                                             <option value="0" class="text-warning" {{ $req->status == 0 ? 'selected' : '' }}>{{ __('Pending') }}</option>
-                                            <option value="1" class="text-success" {{ $req->status == 1 ? 'selected' : '' }}>{{ __('Contacted') }}</option>
-                                            <option value="2" class="text-danger" {{ $req->status == 2 ? 'selected' : '' }}>{{ __('Cancelled') }}</option>
+                                            <option value="1" class="text-success" {{ $req->status == 1 ? 'selected' : '' }}>{{ __('Approved') }}</option>
+                                            <option value="2" class="text-danger" {{ $req->status == 2 ? 'selected' : '' }}>{{ __('Rejected') }}</option>
                                         </select>
                                     </form>
                                 </td>
@@ -162,6 +162,29 @@
                         <div class="mb-3">
                             <h6 class="fw-bold mb-1">{{ __('Additional Notes') }}:</h6>
                             <p class="text-muted bg-light p-2 rounded" style="white-space: pre-line;">{{ $req->notes ?? __('None') }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="fw-bold mb-1">{{ __('Commercial Register / Signboard') }}:</h6>
+                            @if($req->cr_or_signboard)
+                                @php
+                                    $fileExt = strtolower(pathinfo($req->cr_or_signboard, PATHINFO_EXTENSION));
+                                    $filePath = asset('uploaded_files/wholesale/' . $req->cr_or_signboard);
+                                @endphp
+                                @if($fileExt === 'pdf')
+                                    <a href="{{ $filePath }}" target="_blank" class="btn btn-sm btn-primary text-white" style="background-color: #0d6efd; border-color: #0d6efd; padding: 6px 12px;">
+                                        <i class="fas fa-file-pdf me-1"></i> {{ __('View PDF Document') }}
+                                    </a>
+                                @else
+                                    <a href="{{ $filePath }}" target="_blank" class="d-block mb-2">
+                                        <img src="{{ $filePath }}" class="img-fluid img-thumbnail" style="max-height: 200px;" alt="Signboard Image">
+                                    </a>
+                                    <a href="{{ $filePath }}" target="_blank" class="btn btn-sm btn-primary text-white" style="background-color: #0d6efd; border-color: #0d6efd; padding: 6px 12px;">
+                                        <i class="fas fa-external-link-alt me-1"></i> {{ __('Open Full Image') }}
+                                    </a>
+                                @endif
+                            @else
+                                <p class="text-danger">{{ __('No document uploaded') }}</p>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">

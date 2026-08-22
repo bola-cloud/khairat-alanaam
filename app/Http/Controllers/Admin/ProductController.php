@@ -23,8 +23,6 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             // load sizes & weights so we can compute a fallback price when `Price` is empty
-            // Also eager load combo relationships
-            // Exclude packages/offers and combo products from standard product list
             $data = Product::query()
                 ->where(function ($query) {
                     $query->whereHas('category', function ($q) {
@@ -32,8 +30,7 @@ class ProductController extends Controller
                     })
                     ->orWhereNull('Category_Id');
                 })
-                ->whereNotIn('product_type', ['Combo', 'تجميعي', 'combo'])
-                ->with('category', 'brand', 'sizes', 'weights', 'comboItems', 'parentCombos')
+                ->with('category', 'brand', 'sizes', 'weights')
                 ->orderByDesc('id')
                 ->get();
             return DataTables::of($data)
@@ -266,6 +263,7 @@ class ProductController extends Controller
         $data['price'] = $data['price'] ?? 0;
         $data['discount_price'] = $data['discount_price'] ?? 0;
         $data['discount'] = $data['discount'] ?? 0;
+        $data['is_package'] = $request->is_package ? 1 : 0;
 
         if ($request->product_type == PRODUCT_PHYSICAL) {
             $create_product = $this->physicalProductAdd($data);
@@ -355,7 +353,8 @@ class ProductController extends Controller
             'Today_Special' => $data['today_special'],
             'Voucher' => $this->generateRandomString(6),
             'points' => $data['points'] ?? 0,
-            'subcategory_id' => $data['subcategory_id']
+            'subcategory_id' => $data['subcategory_id'],
+            'is_package' => $data['is_package'] ?? 0
         ]);
         if (!empty($product)) {
             if (isset($data['product_tag'])) {
@@ -376,11 +375,17 @@ class ProductController extends Controller
             $prices = request('size_price', []);
             $weights = request('size_weight', []);
 
+            $newPrSizes = [];
             foreach ($sizes as $key => $size) {
-                $product->sizes()->attach($size, ['price' => $prices[$key], 'weight' => $weights[$key]]);
+                if ($size != null) {
+                    $newPrSizes[$size] = [
+                        'price' => isset($prices[$key]) ? $prices[$key] : 0,
+                        'weight' => !empty($weights[$key]) ? $weights[$key] : 0
+                    ];
+                }
             }
 
-            $product->sizes()->sync($sizes);
+            $product->sizes()->sync($newPrSizes);
 
             // if (isset($data['size'])) {
             //     $sizeid = $data['size'];
@@ -712,6 +717,7 @@ class ProductController extends Controller
         $data['on_sale'] = checkBoxValue($request->on_sale);
         $data['on_arrival'] = checkBoxValue($request->on_arrival);
         $data['today_special'] = checkBoxValue($request->today_special);
+        $data['is_package'] = $request->has('is_package') ? checkBoxValue($request->is_package) : 0;
 
         if ($product->type == PRODUCT_PHYSICAL) {
             $update = $this->physicalProductUpdate($data, $product);
@@ -829,12 +835,13 @@ class ProductController extends Controller
             $prices = request('size_price', []);
             $weights = request('size_weight', []);
 
-
             $newPrSizes = [];
-
             foreach ($sizes as $key => $size) {
                 if ($size != null) {
-                    $newPrSizes[$size] = ['price' => $prices[$key], 'weight' => $weights[$key]];
+                    $newPrSizes[$size] = [
+                        'price' => isset($prices[$key]) ? $prices[$key] : 0,
+                        'weight' => !empty($weights[$key]) ? $weights[$key] : 0
+                    ];
                 }
             }
 
@@ -850,7 +857,7 @@ class ProductController extends Controller
                 if ($weight != null) {
                     $newWeights[$key] = [
                         'weight' => $weight,
-                        'price' => $weightPrices[$key]
+                        'price' => isset($weightPrices[$key]) ? $weightPrices[$key] : 0
                     ];
                 }
             }
@@ -1089,33 +1096,7 @@ class ProductController extends Controller
 
     public function stockBreakdown($id)
     {
-        $product = Product::with('comboItems')->findOrFail($id);
-
-        if ($product->product_type !== 'Combo' && $product->product_type !== 'تجميعي') {
-            return response()->json(['error' => 'Not a combo product'], 400);
-        }
-
-        $components = [];
-        $maxStock = $product->virtual_stock;
-
-        foreach ($product->comboItems as $item) {
-            $requiredQty = $item->pivot->quantity > 0 ? $item->pivot->quantity : 1;
-            $itemVirtualStock = $item->virtual_stock;
-            $possibleCombinations = floor($itemVirtualStock / $requiredQty);
-
-            $components[] = [
-                'name' => $item->fr_Product_Name, // Or localize based on app locale
-                'current_stock' => $itemVirtualStock,
-                'required_per_combo' => $requiredQty,
-                'max_combinations' => $possibleCombinations
-            ];
-        }
-
-        return response()->json([
-            'product_name' => $product->fr_Product_Name,
-            'virtual_stock' => $maxStock,
-            'components' => $components
-        ]);
+        return response()->json(['error' => 'Combos are no longer supported'], 400);
     }
 
     public function bulkActive(Request $request)

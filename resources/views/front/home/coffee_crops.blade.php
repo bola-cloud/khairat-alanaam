@@ -247,7 +247,8 @@
                      data-country="{{ $cKey }}"
                      data-category="{{ $product->subcategory_id }}"
                      data-name="{{ strtolower($product->localized_name) }}"
-                     data-rating="{{ ($product->id % 2 == 0) ? 5 : 4 }}">
+                     data-rating="{{ ($product->id % 2 == 0) ? 5 : 4 }}"
+                     data-sizes="{{ implode(',', $product->sizes->pluck('Size')->map('strtolower')->toArray()) }}">
                     <!-- Image -->
                     <a href="{{ route('single.product.new', $product->en_Product_Slug) }}" class="w-full lg:w-2/5 shrink-0 h-[240px] lg:h-auto min-h-[320px] relative block overflow-hidden group">
                         @php
@@ -394,6 +395,16 @@
             <div class="flex flex-wrap gap-2.5 {{ $isRtl ? 'justify-start flex-row-reverse' : 'justify-start' }}">
                 @foreach($subcategories as $sub)
                 <button class="filter-category-btn border border-gray-200 rounded-full px-5 py-2.5 text-xs lg:text-sm font-bold text-gray-600 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all active:scale-95" data-category="{{ $sub->id }}">{{ $sub->localized_name }}</button>
+                @endforeach
+            </div>
+        </div>
+        
+        <!-- Size/Weight Filter -->
+        <div class="flex flex-col gap-3 {{ $isRtl ? 'text-right' : 'text-left' }}">
+            <span class="text-sm lg:text-base font-extrabold text-gray-800">{{ __('new_design.coffee_crops.modal_crop_weight') ?? 'الوزن / الحجم' }}</span>
+            <div class="flex flex-wrap gap-2.5 {{ $isRtl ? 'justify-start flex-row-reverse' : 'justify-start' }}">
+                @foreach(productSize() as $size)
+                <button class="filter-size-btn border border-gray-200 rounded-full px-5 py-2.5 text-xs lg:text-sm font-bold text-gray-600 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all active:scale-95" data-size="{{ strtolower($size->Size) }}">{{ $size->Size_ar ?: $size->Size }}</button>
                 @endforeach
             </div>
         </div>
@@ -563,6 +574,7 @@
         let activeCategoryPill = 'all';
         let selectedCountries = [];
         let selectedCategories = [];
+        let selectedSizes = [];
         let selectedStars = 0;
         let searchQuery = '';
 
@@ -599,7 +611,17 @@
                     return;
                 }
 
-                // 5. Modal Rating Filter
+                // 5. Modal Size Filter
+                const cardSizes = card.getAttribute('data-sizes') ? card.getAttribute('data-sizes').split(',') : [];
+                if (selectedSizes.length > 0) {
+                    const hasMatch = selectedSizes.some(s => cardSizes.includes(s));
+                    if (!hasMatch) {
+                        card.style.setProperty('display', 'none', 'important');
+                        return;
+                    }
+                }
+
+                // 6. Modal Rating Filter
                 if (selectedStars > 0 && cardRating < selectedStars) {
                     card.style.setProperty('display', 'none', 'important');
                     return;
@@ -661,6 +683,26 @@
                     btn.classList.remove('border-gray-200', 'text-gray-600', 'bg-white');
                     if (!selectedCategories.includes(category)) {
                         selectedCategories.push(category);
+                    }
+                }
+            });
+        });
+
+        // Size Pills Toggle Selection (Modal)
+        const sizeBtns = document.querySelectorAll('.filter-size-btn');
+        sizeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const size = btn.getAttribute('data-size');
+                const isActive = btn.classList.contains('border-[#1A4231]');
+                if (isActive) {
+                    btn.classList.remove('border-[#1A4231]', 'text-[#1A4231]', 'bg-[#1A4231]/5');
+                    btn.classList.add('border-gray-200', 'text-gray-600', 'bg-white');
+                    selectedSizes = selectedSizes.filter(s => s !== size);
+                } else {
+                    btn.classList.add('border-[#1A4231]', 'text-[#1A4231]', 'bg-[#1A4231]/5');
+                    btn.classList.remove('border-gray-200', 'text-gray-600', 'bg-white');
+                    if (!selectedSizes.includes(size)) {
+                        selectedSizes.push(size);
                     }
                 }
             });

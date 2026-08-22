@@ -107,7 +107,6 @@ class CheckoutController extends Controller
             $data['description'] = $seo->description;
             $data['keywords'] = $seo->keywords;
             $data['extraWeightFees'] = $this->calculateExtraWeightFees();
-            // Find Oman country row if present. If missing, fall back to first country or null.
             $oman = Country::where('name_en', 'Oman')->first();
             if ($oman) {
                 $oman_country_id = $oman->id;
@@ -115,6 +114,8 @@ class CheckoutController extends Controller
                 $firstCountry = Country::first();
                 $oman_country_id = $firstCountry ? $firstCountry->id : null;
             }
+
+            $data['saved_addresses'] = $data['user']->addresses()->orderBy('is_default', 'desc')->get();
 
             // If we have a country id, load states; otherwise give an empty collection to avoid null access in views.
             $data['states'] = $oman_country_id ? State::where('country_id', $oman_country_id)->get() : collect([]);
@@ -261,7 +262,7 @@ class CheckoutController extends Controller
 
         // Final Stock Validation
         foreach (Cart::content() as $cItem) {
-            $product = Product::with('comboItems')->find($cItem->id);
+            $product = Product::find($cItem->id);
             if ($product) {
                 $available = $product->virtual_stock;
                 if ($cItem->qty > $available) {
@@ -941,11 +942,11 @@ class CheckoutController extends Controller
             Cart::destroy();
             // Prepare modal data to show on home page
             $modal = [
-                'line1' => __('THANK YOU FOR CHOOSING Hi Speed'),
-                'line2' => __('Orders arriving at 7 PM will be delivered the following day.'),
+                'line1' => __('تم استلام طلبك بنجاح! شكراً لاختيارك خيرات الأنعام'),
+                'line2' => __('سيتم التواصل معك قريباً لتأكيد التوصيل.'),
                 'order_number' => $order['data']->Order_Number ?? session('order_number') ?? null,
             ];
-            return redirect()->route('front')->with(['order_success_modal' => $modal, 'success' => 'Order successfully created!']);
+            return redirect()->route('front')->with(['order_success_modal' => $modal, 'success' => 'تم إنشاء الطلب بنجاح!']);
         }
         $modal = [
             'line1' => __('Ooops! Something went wrong.'),
@@ -1126,6 +1127,14 @@ class CheckoutController extends Controller
 
 
             if ($order) {
+                $couponId = Session::get('Coupon_Id');
+                if ($couponId) {
+                    $usedCoupon = \App\Models\Admin\Coupon::find($couponId);
+                    if ($usedCoupon && $usedCoupon->usage_count > 0) {
+                        $usedCoupon->decrement('usage_count');
+                    }
+                }
+                
                 session()->put('Coupon_Id', null);
                 session()->put('couponCode', null);
                 session()->put('CouponAmount', 0);
@@ -1223,38 +1232,12 @@ class CheckoutController extends Controller
 
     public function subQtyProduct($product_id, $qty)
     {
-        $product = Product::with('comboItems')->whereId($product_id)->first();
+        $product = Product::find($product_id);
 
-        if (($product->product_type === 'Combo' || $product->product_type === 'تجميعي') && $product->comboItems->isNotEmpty()) {
-            $isSingleItemCombo = $product->comboItems->count() === 1;
-
-            foreach ($product->comboItems as $component) {
-                // Calculate deduction based on multiplier: (Quantity in Combo * Combo Qty Sold)
-                // This covers both 1:1 (where qty=1) and Packs (where qty>1)
-                $qtyToDeduct = $component->pivot->quantity * $qty;
-
-                $componentObj = Product::find($component->id);
-                if ($componentObj) {
-                    $new_comp_qty = $componentObj->Quantity - $qtyToDeduct;
-                    $nn_comp_qty = $new_comp_qty < 0 ? 0 : $new_comp_qty;
-
-                    $componentObj->update([
-                        'Quantity' => $nn_comp_qty,
-                    ]);
-                }
-            }
-            // Logic for combo product itself - usually we don't deduct stock if it's virtual, 
-            // but if it has a stock tracking, we might. 
-            // Assuming for now combo stock is virtual/calculated so we don't touch its quantity column 
-            // unless we want to keep it in sync (which requires complex observer).
-            // Let's just deduct components as requested.
-        } else {
+        if ($product) {
             $new_qty = $product->Quantity - $qty;
-            if ($new_qty < 1) {
-                $nn_qty = 0;
-            } else {
-                $nn_qty = $new_qty;
-            }
+            $nn_qty = $new_qty < 1 ? 0 : $new_qty;
+            
             $product->update([
                 'Quantity' => $nn_qty,
             ]);

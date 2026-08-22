@@ -42,34 +42,58 @@
     <div class="container mx-auto px-4 lg:px-8 flex flex-col gap-10 max-w-[1360px]">
 
         <!-- Filters & Category Navigation Bar -->
-        <section id="products-list" class="bg-white rounded-2xl border border-gray-150 p-4 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <section id="products-list" class="flex flex-col gap-6">
             
-            <!-- Category Pills (Right side in RTL) -->
-            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
-                <button data-category-slug="all" class="category-pill bg-[#1A4231] text-white px-6 py-2.5 rounded-full font-bold text-xs lg:text-sm shadow-sm transition-all">
+            <!-- Category Pills Container -->
+            <div class="flex overflow-x-auto items-center gap-3 w-full pb-2 scrollbar-hide snap-x">
+                <button data-category-slug="all" class="category-pill shrink-0 snap-start bg-[#1A4231] text-white px-6 py-2.5 rounded-full font-bold text-xs lg:text-sm shadow-sm transition-all border border-[#1A4231]">
                     {{ __('new_design.store_page.filter_all') }}
                 </button>
                 @foreach($categories as $cat)
-                <button data-category-slug="{{ $cat->en_Category_Slug }}" class="category-pill bg-[#F9FAFB] hover:bg-gray-100 text-[#1A4231] border border-gray-200/40 px-6 py-2.5 rounded-full font-bold text-xs lg:text-sm transition-all">
+                <button data-category-slug="{{ $cat->en_Category_Slug }}" class="category-pill shrink-0 snap-start bg-white hover:bg-gray-50 text-gray-500 hover:text-[#1A4231] border border-gray-200 px-6 py-2.5 rounded-full font-bold text-xs lg:text-sm transition-all">
                     {{ $cat->localized_name }}
                 </button>
                 @endforeach
             </div>
 
-            <!-- Sort Dropdown (Left side in RTL) -->
-            <div class="flex items-center gap-3 shrink-0 self-end md:self-auto">
-                <span class="text-xs lg:text-sm font-bold text-[#1A4231]/60">
-                    {{ __('new_design.store_page.sort_by') }}
-                </span>
-                <div class="relative bg-[#F9FAFB] border border-gray-200 rounded-xl px-4 py-2 text-xs lg:text-sm font-bold text-[#1A4231] cursor-pointer">
-                    <select class="bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer pr-6 py-0 text-[#1A4231] w-full">
-                        <option value="latest">{{ __('new_design.store_page.sort_latest') }}</option>
-                        <option value="low-high">{{ __('new_design.store_page.sort_low_high') }}</option>
-                        <option value="high-low">{{ __('new_design.store_page.sort_high_low') }}</option>
-                    </select>
-                </div>
-            </div>
+            <!-- Filters & Sort Container -->
+            <div class="flex flex-wrap items-center justify-between gap-4 w-full bg-white rounded-2xl border border-gray-150 p-4 shadow-sm">
+                
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Subcategory Filter -->
+                    <div class="relative bg-[#F9FAFB] border border-gray-200 rounded-xl px-3 py-2 text-xs lg:text-sm font-bold text-[#1A4231] cursor-pointer hover:bg-white transition-colors">
+                        <select id="subcategoryFilter" class="bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer pr-6 py-0 text-[#1A4231] w-full min-w-[110px]">
+                            <option value="all">{{ __('All Types') }}</option>
+                            @foreach($subcategories as $subcat)
+                                <option value="{{ $subcat->id }}">{{ app()->getLocale() == 'fr' ? $subcat->name_ar : $subcat->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
+                    <!-- Size/Weight Filter -->
+                    <div class="relative bg-[#F9FAFB] border border-gray-200 rounded-xl px-3 py-2 text-xs lg:text-sm font-bold text-[#1A4231] cursor-pointer hover:bg-white transition-colors">
+                        <select id="sizeFilter" class="bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer pr-6 py-0 text-[#1A4231] w-full min-w-[100px]">
+                            <option value="all">{{ __('Weight/Size') }}</option>
+                            @foreach($sizes as $size)
+                                <option value="{{ $size->id }}">{{ app()->getLocale() == 'fr' ? ($size->Size_ar ?? $size->Size) : $size->Size }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sort Dropdown -->
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-bold text-gray-500 hidden sm:inline-block">{{ $isRtl ? 'ترتيب حسب:' : 'Sort by:' }}</span>
+                    <div class="relative bg-[#F9FAFB] border border-gray-200 rounded-xl px-3 py-2 text-xs lg:text-sm font-bold text-[#1A4231] cursor-pointer hover:bg-white transition-colors">
+                        <select id="sortFilter" class="bg-transparent border-none focus:outline-none focus:ring-0 cursor-pointer pr-6 py-0 text-[#1A4231] w-full min-w-[120px]">
+                            <option value="latest">{{ __('new_design.store_page.sort_latest') }}</option>
+                            <option value="low-high">{{ __('new_design.store_page.sort_low_high') }}</option>
+                            <option value="high-low">{{ __('new_design.store_page.sort_high_low') }}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
         <!-- Product Cards Grid (3 Columns) -->
@@ -78,10 +102,40 @@
             @foreach($products as $product)
             @php
                 $catSlug = $product->category ? $product->category->en_Category_Slug : '';
+                $subcatId = $product->subcategory_id ?? 'all';
+                $sizeIds = $product->sizes->pluck('id')->implode(',');
+
+                $hasOptions = ($product->sizes && $product->sizes->count() > 0) || ($product->weights && $product->weights->count() > 0);
+                
+                $productSizes = [];
+                if($product->sizes) {
+                    foreach($product->sizes as $sz) {
+                        $productSizes[] = [
+                            'id' => $sz->id,
+                            'name' => $sz->Size,
+                            'name_ar' => $sz->Size_ar ?? $sz->Size,
+                            'price' => floatval($sz->pivot->price ?? $product->Price)
+                        ];
+                    }
+                }
+                
+                $productWeights = [];
+                if($product->weights) {
+                    foreach($product->weights as $wt) {
+                        $productWeights[] = [
+                            'id' => $wt->id,
+                            'name' => $wt->weight,
+                            'name_ar' => $wt->weight,
+                            'price' => floatval($wt->price ?? $product->Price)
+                        ];
+                    }
+                }
             @endphp
             <!-- Product Card -->
             <div class="product-card bg-white rounded-[32px] border border-[#1A4231] overflow-hidden flex flex-col justify-between hover:shadow-lg transition-all duration-300"
                  data-category="{{ $catSlug }}"
+                 data-subcategory="{{ $subcatId }}"
+                 data-sizes="{{ $sizeIds }}"
                  data-price="{{ $product->Price }}"
                  data-created-at="{{ $product->created_at }}">
                 
@@ -152,12 +206,23 @@
 
                 <!-- Add to Cart Button -->
                 <div class="px-6 lg:px-8 pb-6 lg:pb-8">
-                    <button onclick="addToCart({{ $product->id }}, {{ $product->Discount > 0 ? ($product->Price - ($product->Price * $product->Discount / 100)) : $product->Price }})" class="w-full bg-[#1A4231] hover:bg-[#2C624A] text-white py-4 rounded-full text-sm font-extrabold flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-md">
-                        <span>{{ __('new_design.store_page.add_to_cart') }}</span>
-                        <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                        </svg>
-                    </button>
+                    @if($hasOptions)
+                        <button type="button" 
+                            onclick="openQuickViewModal({{ $product->id }}, '{{ addslashes(htmlspecialchars($product->localized_name, ENT_QUOTES)) }}', '{{ $imgSrc }}', {{ json_encode($productSizes) }}, {{ json_encode($productWeights) }}, {{ floatval($product->Price) }}, {{ floatval($product->Discount) }})" 
+                            class="w-full bg-[#1A4231] hover:bg-[#2C624A] text-white py-4 rounded-full text-sm font-extrabold flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-md">
+                            <span>{{ __('new_design.store_page.add_to_cart') }}</span>
+                            <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </button>
+                    @else
+                        <button onclick="addToCart({{ $product->id }}, {{ $product->Discount > 0 ? ($product->Price - ($product->Price * $product->Discount / 100)) : $product->Price }})" class="w-full bg-[#1A4231] hover:bg-[#2C624A] text-white py-4 rounded-full text-sm font-extrabold flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-md">
+                            <span>{{ __('new_design.store_page.add_to_cart') }}</span>
+                            <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </button>
+                    @endif
                 </div>
 
             </div>
@@ -204,12 +269,36 @@
 
 </div>
 
+<style>
+    /* Premium Cairo Styling */
+    .store-page {
+        font-family: 'Cairo', sans-serif;
+    }
+    
+    /* Scrollbar hide utility */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .category-pill.active {
+        background-color: #1A4231 !important;
+        color: white !important;
+        border-color: #1A4231 !important;
+    }
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const pills = document.querySelectorAll('.category-pill');
     const cards = document.querySelectorAll('.product-card');
     const cardsContainer = document.querySelector('.products-grid');
-    const sortSelect = document.querySelector('select');
+    const sortSelect = document.getElementById('sortFilter');
+    const subcategorySelect = document.getElementById('subcategoryFilter');
+    const sizeSelect = document.getElementById('sizeFilter');
     
     let currentCategory = 'all';
 
@@ -217,28 +306,51 @@ document.addEventListener('DOMContentLoaded', function() {
     pills.forEach(pill => {
         pill.addEventListener('click', function() {
             // Update active styling
-            pills.forEach(p => {
-                p.classList.remove('bg-[#1A4231]', 'text-white', 'shadow-sm');
-                p.classList.add('bg-[#F9FAFB]', 'text-[#1A4231]', 'border', 'border-gray-200/40');
+            document.querySelectorAll('.category-pill').forEach(b => {
+                b.classList.remove('active', 'bg-[#1A4231]', 'text-white', 'border-[#1A4231]');
+                b.classList.add('bg-white', 'text-gray-500', 'border-gray-200');
             });
-            this.classList.remove('bg-[#F9FAFB]', 'text-[#1A4231]', 'border', 'border-gray-200/40');
-            this.classList.add('bg-[#1A4231]', 'text-white', 'shadow-sm');
+            this.classList.add('active', 'bg-[#1A4231]', 'text-white', 'border-[#1A4231]');
+            this.classList.remove('bg-white', 'text-gray-500', 'border-gray-200');
 
             currentCategory = this.getAttribute('data-category-slug');
+            
+            // Optionally, reset subcategory when changing main category to avoid empty states
+            if (subcategorySelect) subcategorySelect.value = 'all';
+            
             filterAndSort();
         });
     });
 
-    // Sort Selection Change
-    if (sortSelect) {
-        sortSelect.addEventListener('change', filterAndSort);
-    }
+    // Listeners for new filters
+    if (sortSelect) sortSelect.addEventListener('change', filterAndSort);
+    if (subcategorySelect) subcategorySelect.addEventListener('change', filterAndSort);
+    if (sizeSelect) sizeSelect.addEventListener('change', filterAndSort);
 
     function filterAndSort() {
+        const selectedSubcategory = subcategorySelect ? subcategorySelect.value : 'all';
+        const selectedSize = sizeSelect ? sizeSelect.value : 'all';
+
         // Filter
         cards.forEach(card => {
             const cardCat = card.getAttribute('data-category');
-            if (currentCategory === 'all' || cardCat === currentCategory) {
+            const cardSubcat = card.getAttribute('data-subcategory');
+            const cardSizes = card.getAttribute('data-sizes'); // e.g. "1,2,12"
+
+            // Main Category match
+            const matchesCat = (currentCategory === 'all' || cardCat === currentCategory);
+            
+            // Subcategory match
+            const matchesSubcat = (selectedSubcategory === 'all' || cardSubcat === selectedSubcategory);
+            
+            // Size match
+            let matchesSize = true;
+            if (selectedSize !== 'all') {
+                const sizesArray = cardSizes ? cardSizes.split(',') : [];
+                matchesSize = sizesArray.includes(selectedSize);
+            }
+
+            if (matchesCat && matchesSubcat && matchesSize) {
                 card.style.display = 'flex';
             } else {
                 card.style.display = 'none';
@@ -272,6 +384,200 @@ document.addEventListener('DOMContentLoaded', function() {
         allSorted.forEach(card => cardsContainer.appendChild(card));
     }
 });
+
+/* Quick View Modal Logic */
+let qvProductId = null;
+let qvSelectedSizeId = null;
+let qvSelectedWeightId = null;
+let qvSelectedPrice = 0;
+
+function openQuickViewModal(productId, productName, productImg, sizes, weights, basePrice, discount) {
+    qvProductId = productId;
+    qvSelectedSizeId = null;
+    qvSelectedWeightId = null;
+    qvSelectedPrice = basePrice;
+    
+    // Calculate initial price (apply discount if any)
+    if (discount > 0) {
+        qvSelectedPrice = basePrice - (basePrice * discount / 100);
+    }
+
+    const modal = document.getElementById('quickViewModal');
+    document.getElementById('qvProductImage').src = productImg;
+    document.getElementById('qvProductName').innerText = productName;
+    updateQvPriceDisplay();
+
+    const sizesContainer = document.getElementById('qvSizesContainer');
+    const weightsContainer = document.getElementById('qvWeightsContainer');
+    
+    // Populate Sizes
+    if (sizes && sizes.length > 0) {
+        let sizesHtml = `<p class="font-bold text-sm mb-2 text-[#1A4231]">{{ $isRtl ? 'اختر الحجم:' : 'Select Size:' }}</p><div class="flex flex-wrap gap-2">`;
+        sizes.forEach((sz, idx) => {
+            const priceVal = discount > 0 ? (sz.price - (sz.price * discount / 100)) : sz.price;
+            sizesHtml += `<button type="button" onclick="selectQvSize(${sz.id}, ${priceVal}, this)" class="qv-size-btn px-4 py-2 rounded-xl border-2 font-bold text-xs transition-all ${idx === 0 ? 'border-[#1A4231] bg-[#1A4231] text-white shadow-sm' : 'border-gray-100 bg-gray-50 text-slate-600 hover:border-gray-200'}">${sz.name_ar}</button>`;
+            if(idx === 0) {
+                qvSelectedSizeId = sz.id;
+                qvSelectedPrice = priceVal;
+            }
+        });
+        sizesHtml += `</div>`;
+        sizesContainer.innerHTML = sizesHtml;
+        sizesContainer.style.display = 'block';
+    } else {
+        sizesContainer.innerHTML = '';
+        sizesContainer.style.display = 'none';
+    }
+
+    // Populate Weights
+    if (weights && weights.length > 0) {
+        let weightsHtml = `<p class="font-bold text-sm mb-2 text-[#1A4231]">{{ $isRtl ? 'اختر الوزن:' : 'Select Weight:' }}</p><div class="flex flex-wrap gap-2">`;
+        weights.forEach((wt, idx) => {
+            const priceVal = discount > 0 ? (wt.price - (wt.price * discount / 100)) : wt.price;
+            weightsHtml += `<button type="button" onclick="selectQvWeight(${wt.id}, ${priceVal}, this)" class="qv-weight-btn px-4 py-2 rounded-xl border-2 font-bold text-xs transition-all ${(!qvSelectedSizeId && idx === 0) ? 'border-[#1A4231] bg-[#1A4231] text-white shadow-sm' : 'border-gray-100 bg-gray-50 text-slate-600 hover:border-gray-200'}">${wt.name_ar}</button>`;
+            if(!qvSelectedSizeId && idx === 0) {
+                qvSelectedWeightId = wt.id;
+                qvSelectedPrice = priceVal;
+            }
+        });
+        weightsHtml += `</div>`;
+        weightsContainer.innerHTML = weightsHtml;
+        weightsContainer.style.display = 'block';
+    } else {
+        weightsContainer.innerHTML = '';
+        weightsContainer.style.display = 'none';
+    }
+
+    updateQvPriceDisplay();
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeQuickViewModal() {
+    const modal = document.getElementById('quickViewModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function selectQvSize(id, price, btn) {
+    qvSelectedSizeId = id;
+    qvSelectedPrice = price;
+    
+    // Reset sizes UI
+    document.querySelectorAll('.qv-size-btn').forEach(b => {
+        b.className = "qv-size-btn px-4 py-2 rounded-xl border-2 font-bold text-xs transition-all border-gray-100 bg-gray-50 text-slate-600 hover:border-gray-200";
+    });
+    btn.className = "qv-size-btn px-4 py-2 rounded-xl border-2 font-bold text-xs transition-all border-[#1A4231] bg-[#1A4231] text-white shadow-sm";
+    
+    updateQvPriceDisplay();
+}
+
+function selectQvWeight(id, price, btn) {
+    qvSelectedWeightId = id;
+    qvSelectedPrice = price;
+    
+    // Reset weights UI
+    document.querySelectorAll('.qv-weight-btn').forEach(b => {
+        b.className = "qv-weight-btn px-4 py-2 rounded-xl border-2 font-bold text-xs transition-all border-gray-100 bg-gray-50 text-slate-600 hover:border-gray-200";
+    });
+    btn.className = "qv-weight-btn px-4 py-2 rounded-xl border-2 font-bold text-xs transition-all border-[#1A4231] bg-[#1A4231] text-white shadow-sm";
+    
+    updateQvPriceDisplay();
+}
+
+function updateQvPriceDisplay() {
+    document.getElementById('qvProductPrice').innerText = qvSelectedPrice.toFixed(2) + " {{ __('new_design.coffee_crops.currency') }}";
+}
+
+function submitQuickViewAddToCart() {
+    if(!qvProductId) return;
+    
+    const btn = document.getElementById('qvSubmitBtn');
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>`;
+
+    $.ajax({
+        type: "POST",
+        url: "{{ route('add.to.cart') }}",
+        data: {
+            product_id: qvProductId,
+            price: qvSelectedPrice,
+            quantity: 1,
+            size_id: qvSelectedSizeId,
+            selectedSize: qvSelectedSizeId,
+            weight_id: qvSelectedWeightId,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function(response) {
+            closeQuickViewModal();
+            if (typeof window.showCartSuccess === 'function') {
+                window.showCartSuccess(response);
+            } else {
+                toastr.success("{{ __('Product Added to Cart Successfully') }}");
+                $(".totalCountItem").html(response[0]);
+            }
+        },
+        error: function(xhr) {
+            if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.error) {
+                toastr.error(xhr.responseJSON.error);
+            } else {
+                toastr.error("{{ __('Failed to add product to cart') }}");
+            }
+        },
+        complete: function() {
+            btn.disabled = false;
+            btn.innerHTML = `<span>{{ __('new_design.store_page.add_to_cart') }}</span> <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>`;
+        }
+    });
+}
 </script>
+
+<!-- Quick View Modal Structure -->
+<div id="quickViewModal" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity" dir="{{ $dir }}">
+    <div class="bg-white rounded-3xl w-[90%] max-w-md overflow-hidden shadow-2xl relative animate-fadeInUp">
+        <!-- Close Button -->
+        <button onclick="closeQuickViewModal()" class="absolute top-4 {{ $isRtl ? 'left-4' : 'right-4' }} bg-white/80 backdrop-blur text-gray-500 hover:text-red-500 rounded-full p-2 z-10 transition-colors shadow-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        
+        <!-- Header Image -->
+        <div class="w-full h-48 bg-gray-50 relative">
+            <img id="qvProductImage" src="" alt="Product" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+            <h3 id="qvProductName" class="absolute bottom-4 {{ $isRtl ? 'right-4' : 'left-4' }} text-white font-black text-xl w-[80%] leading-tight drop-shadow-md"></h3>
+        </div>
+        
+        <!-- Body Content -->
+        <div class="p-6">
+            <!-- Price Display -->
+            <div class="mb-4 pb-4 border-b border-gray-100 flex items-center justify-between">
+                <span class="text-sm font-bold text-gray-500">{{ $isRtl ? 'السعر' : 'Price' }}:</span>
+                <span id="qvProductPrice" class="text-xl font-black text-[#1A4231]"></span>
+            </div>
+
+            <!-- Options Containers -->
+            <div id="qvSizesContainer" class="mb-4"></div>
+            <div id="qvWeightsContainer" class="mb-6"></div>
+            
+            <!-- Submit Button -->
+            <button id="qvSubmitBtn" onclick="submitQuickViewAddToCart()" class="w-full bg-[#1A4231] hover:bg-[#2C624A] text-white py-3.5 rounded-2xl text-base font-extrabold flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] transition-all shadow-md">
+                <span>{{ __('new_design.store_page.add_to_cart') }}</span>
+                <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fadeInUp {
+    animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+</style>
 
 @endsection

@@ -15,7 +15,8 @@ class Coupon extends Model
         'Min_Expenses',
         'ExpireDate',
         'usage_count',
-        'user_id'
+        'user_id',
+        'limit_per_user'
     ];
 
 

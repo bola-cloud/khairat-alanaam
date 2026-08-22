@@ -59,6 +59,12 @@
                                                     placeholder="{{ __('Usage Count') }}">
                                             </div>
                                             <div class="input__group mb-25">
+                                                <label for="limit_per_user">{{ __('Limit Per User') }}</label>
+                                                <input type="number" min="1" step="1" class="form-control"
+                                                    id="limit_per_user" name="limit_per_user" value="{{ $edit->limit_per_user }}"
+                                                    placeholder="{{ __('Limit Per User') }}">
+                                            </div>
+                                            <div class="input__group mb-25">
                                                 <label for="user_id">{{ __('Select User') }}</label>
                                                 <select id="user_id" name="user_id" class="form-control">
                                                     <option value="">{{ __('No User') }}</option>
@@ -95,20 +101,7 @@
 @push('coupon_scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const userSelect = document.getElementById("user_id");
-            const usageCount = document.getElementById("usage_count");
-
-            function toggleUsageCount() {
-                if (userSelect.value) {
-                    usageCount.value = 1;
-                    usageCount.setAttribute("disabled", "disabled");
-                } else {
-                    usageCount.removeAttribute("disabled");
-                }
-            }
-
-            userSelect.addEventListener("change", toggleUsageCount);
-            toggleUsageCount(); // Run on page load
+            // JS removed
         });
     </script>
 @endpush

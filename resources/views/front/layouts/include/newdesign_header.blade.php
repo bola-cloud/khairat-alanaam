@@ -18,7 +18,7 @@
 </style>
 
 <!-- Top Header (Categories Showcase Background Image) -->
-<div class="relative py-3 lg:py-4 shadow-sm" dir="{{ $dir }}" style="background-image: url('{{ asset('assets/elketar/Section - Categories Showcase.png') }}'); background-size: cover; background-position: center; background-blend-mode: overlay;" x-data="{ mobileMenu: false }">
+<div class="relative z-[1001] py-3 lg:py-4 shadow-sm" dir="{{ $dir }}" style="background-image: url('{{ asset('assets/elketar/Section - Categories Showcase.png') }}'); background-size: cover; background-position: center; background-blend-mode: overlay;" x-data="{ mobileMenu: false }">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between gap-4">
             
@@ -151,7 +151,7 @@
         display: none !important;
     }
 </style>
-<nav class="hidden lg:block py-3.5" dir="{{ $dir }}" style="background: linear-gradient(to right, #1A4231, #387C5F);">
+<nav class="hidden lg:block py-3.5 sticky top-0 z-[1000] shadow-md w-full" dir="{{ $dir }}" style="background: linear-gradient(to right, #1A4231, #387C5F);">
     <div class="container mx-auto px-4">
         <ul class="flex items-center justify-start lg:justify-center gap-4 lg:gap-6 text-white font-medium overflow-x-auto no-scrollbar" style="font-family: 'Cairo', sans-serif; font-size: 18px; line-height: 27px; scrollbar-width: none; -ms-overflow-style: none; justify-content: safe center;">
             <li><a href="{{ route('front') }}" class="hover:text-white/80 transition-colors whitespace-nowrap">{{ __('new_design.menu.home') }}</a></li>

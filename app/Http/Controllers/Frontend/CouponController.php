@@ -36,6 +36,14 @@ class CouponController extends Controller
                 // Use numeric subtotal helper to avoid formatted rounding
                 $subtotal = floatval(subtotal());
                 if (!empty($couponDetails)) {
+                    if ($couponDetails->limit_per_user) {
+                        $usedCount = \App\Models\Admin\Order::where('User_Id', $user_id)
+                            ->where('Coupon_Id', $couponDetails->id)
+                            ->count();
+                        if ($usedCount >= $couponDetails->limit_per_user) {
+                            return redirect()->back()->with('error', __('You have reached the maximum usage limit for this coupon.'));
+                        }
+                    }
                     if ($couponDetails->Status == 0) {
                         return redirect()->back()->with('error', __('Coupon Code is not Active !'));
                     }
@@ -54,9 +62,6 @@ class CouponController extends Controller
                     //                    }
                     $couponAmount = $couponDetails->Amount;
 
-                    $appliedCouponId = session('Coupon_Id');
-                    if($appliedCouponId != $couponDetails->id)
-                        $couponDetails->decrement('usage_count');
                     Session::put('Coupon_Id', $couponDetails->id);
                     Session::put('CouponAmount', $couponAmount);
                     Session::put('couponCode', $request->coupon_code);

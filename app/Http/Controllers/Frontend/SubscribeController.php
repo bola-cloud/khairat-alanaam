@@ -10,11 +10,10 @@ class SubscribeController extends Controller
     public function subscribe(Request $request)
     {
         $request->validate([
-            'subscribe' => 'required|email|unique:subscribes,Subscribe',
+            'subscribe' => 'required|unique:subscribes,Subscribe',
         ], [
-            'subscribe.required' => __('The email field is required.'),
-            'subscribe.email' => __('Please enter a valid email address.'),
-            'subscribe.unique' => __('This email is already subscribed.'),
+            'subscribe.required' => __('The field is required.'),
+            'subscribe.unique' => __('This is already subscribed.'),
         ]);
 
         Subscribe::create([

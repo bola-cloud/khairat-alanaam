@@ -34,6 +34,7 @@ use League\Csv\Reader;
 
 
 //Route::redirect('/', '');
+
 Route::post('currency-price', [CartController::class, 'currencyPrice'])->name('currency_price');
 Route::get('currency-symbol', [CartController::class, 'currencySymbol'])->name('currency_symbol');
 Route::group(['middleware' => ['is_user']], function () {
@@ -61,7 +62,7 @@ Route::group(['middleware' => ['is_user']], function () {
     Route::post('/contact-us', [NewDesignController::class, 'contact_us_store'])->name('contact.us.store');
     Route::get('/login', [NewDesignController::class, 'login'])->name('login');
     Route::get('/register', [NewDesignController::class, 'register'])->name('user.sign.up');
-    Route::get('/product-details', [NewDesignController::class, 'product_details'])->name('front.product_details');
+    Route::get('/product/{slug}', [NewDesignController::class, 'product_details'])->name('front.product_details');
     Route::get('/cart', [NewDesignController::class, 'cart'])->name('front.cart');
     Route::get('/theme-set/{theme}', [HomeController::class, 'theme_set']);
     Route::get('locale/{lang}', [HomeController::class, 'localeSwitch'])->name('locale.switch');
@@ -111,13 +112,24 @@ Route::group(['middleware' => ['is_user']], function () {
         //forget password
         Route::get('forget-password', [AuthController::class, 'userForgetPasswordGet'])->name('forget.password.get');
         Route::post('forget-password', [AuthController::class, 'userForgetPasswordPost'])->name('forget.password.post')->middleware(['isDemo']);
-        Route::get('reset-password/{token}', [AuthController::class, 'userShowResetPasswordForm'])->name('reset.password.get');
-        Route::post('reset-password', [AuthController::class, 'submitResetPasswordForm'])->name('reset.password.post')->middleware(['isDemo']);
+        Route::get('forget-password/otp', [AuthController::class, 'userForgetPasswordOtp'])->name('forget.password.otp');
+        Route::post('forget-password/otp', [AuthController::class, 'userForgetPasswordOtpVerify'])->name('forget.password.otp.post');
+        Route::get('forget-password/reset', [AuthController::class, 'userShowResetPasswordForm'])->name('reset.password.get');
+        Route::post('forget-password/reset', [AuthController::class, 'submitResetPasswordForm'])->name('reset.password.post')->middleware(['isDemo']);
+        Route::get('forget-password/success', [AuthController::class, 'userResetPasswordSuccess'])->name('reset.password.success');
 
-        //User Profile
-        Route::get('profile', [NewDesignController::class, 'profile'])->name('user.profile');
+        Route::get('contact-us', [NewDesignController::class, 'contactUs'])->name('contact.us');
+        Route::post('contact-us', [NewDesignController::class, 'contactUsSend'])->name('contact.us.send');
+        Route::get('about-us', [NewDesignController::class, 'aboutUs'])->name('about.us');
 
         Route::group(['middleware' => 'auth'], function () {
+            // V2 Profile Routes
+            Route::get('profile', [NewDesignController::class, 'profile'])->name('user.profile');
+            Route::get('profile/addresses', [NewDesignController::class, 'profileAddresses'])->name('user.profile.addresses');
+            Route::get('profile/orders', [NewDesignController::class, 'profileOrders'])->name('user.profile.orders');
+            Route::get('profile/favorites', [NewDesignController::class, 'profileFavorites'])->name('user.profile.favorites');
+            Route::get('profile/orders/{id}', [NewDesignController::class, 'trackOrder'])->name('user.profile.order.track');
+
             Route::post('profile-update', [\App\Http\Controllers\Frontend\ProfileSettingsController::class, 'update'])->name('user.profile.update')->middleware(['isDemo']);
             Route::post('orders/{orderNumber}/reorder', [\App\Http\Controllers\Frontend\ProfileOrdersController::class, 'reorder'])->name('user.profile.orders.reorder');
             Route::post('review-store', [\App\Http\Controllers\Frontend\ProfileReviewsController::class, 'store'])->name('user.profile.review_store')->middleware(['isDemo']);
@@ -139,6 +151,12 @@ Route::group(['middleware' => ['is_user']], function () {
                 Route::get('/', [WishlistController::class, 'Wishlist'])->name('wishlist');
                 Route::get('delete', [WishlistController::class, 'delete'])->name('wishlist.delete');
             });
+
+            // V2 Favorites
+            Route::get('/my-favorites', [\App\Http\Controllers\Frontend\NewDesignController::class, 'favorites'])->name('front.v2.favorites');
+
+            // Recipe Details
+            Route::get('/recipe/{slug}', [\App\Http\Controllers\Frontend\NewDesignController::class, 'recipeDetails'])->name('front.v2.recipe.details');
 
             // comparelist
             Route::group(['prefix' => 'compare'], function () {

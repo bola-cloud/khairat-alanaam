@@ -100,7 +100,9 @@ class CategoryController extends Controller
             'fr_Category_Slug' => $this->slugify($request->fr_category_name),
             'Category_Icon' => $icon_name,
             'order' => $request->order,
-            'show_on_home' => $request->show_on_home ? 1 : 0
+            'show_on_home' => $request->show_on_home ? 1 : 0,
+            'is_occasion' => $request->is_occasion ? 1 : 0,
+            'is_cut' => $request->is_cut ? 1 : 0
         ]);
         if ($category) {
             return redirect()->route('admin.category')->with('success', __('Successfully Stored !'));
@@ -144,7 +146,9 @@ class CategoryController extends Controller
             'fr_Category_Slug' => is_null($request->fr_category_name) ? $cat->fr_Category_Slug : $this->slugify($request->fr_category_name),
             'Category_Icon' => $icon_name,
             'order' => $request->order,
-            'show_on_home' => $request->show_on_home ? 1 : 0
+            'show_on_home' => $request->show_on_home ? 1 : 0,
+            'is_occasion' => $request->is_occasion ? 1 : 0,
+            'is_cut' => $request->is_cut ? 1 : 0
         ]);
         if ($update) {
             return redirect()->route('admin.category')->with('success', __('Successfully Updated!'));

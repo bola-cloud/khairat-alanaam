@@ -13,6 +13,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/checkout/order','/checkout/guest-order', '/success','/cancel','/fail','/ipn',
-        '/payment/webhook/thawani'
+        '/payment/webhook/thawani',
+        'admin/general-settings/update-settings',
+        'admin/general-settings/update-email',
+        'admin/general-settings/update-social-login',
     ];
 }

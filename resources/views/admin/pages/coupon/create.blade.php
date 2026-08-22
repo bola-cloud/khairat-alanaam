@@ -56,6 +56,12 @@
                                             </div>
 
                                             <div class="input__group mb-25">
+                                                <label for="limit_per_user">{{ __('Limit Per User') }}</label>
+                                                <input type="number" min="1" step="1" id="limit_per_user" name="limit_per_user"
+                                                    value="{{ old('limit_per_user') ?? 1 }}" placeholder="{{ __('Limit Per User') }}">
+                                            </div>
+
+                                            <div class="input__group mb-25">
                                                 <label for="user_id">{{ __('Select User') }}</label>
                                                 <select id="user_id" name="user_id" class="form-control select2">
                                                     <option value="">{{ __('No User') }}</option>
@@ -93,16 +99,6 @@
         $(document).ready(function() {
             // Initialize Select2
             $('.select2').select2();
-
-            // Handle user selection change
-            $('#user_id').on('change', function() {
-                console.log('User selected');
-                if ($(this).val()) {
-                    $('#usage_count').val(1).prop('disabled', true);
-                } else {
-                    $('#usage_count').prop('disabled', false);
-                }
-            });
         });
     </script>
 @endpush

@@ -59,14 +59,14 @@
                 </a>
             </li>
         @endcan
-        {{-- @can('category-list')
+        @can('category-list')
         <li class="{{ isset($submenu) && $submenu == 'subcategory' ? 'mm-active' : '' }}">
             <a href="{{ route('admin.subcategory') }}">
                 <i class="fa fa-circle"></i>
                 <span>{{ __('Subcategory') }}</span>
             </a>
         </li>
-        @endcan --}}
+        @endcan
         {{-- @canany(['category-list'])
         <li class="{{ isset($menu) && $menu == 'catbad' ? 'mm-active' : '' }}">
 
@@ -109,26 +109,26 @@
                             <span>{{ __('Add Product') }}</span>
                         </a>
                     </li>
-                    <li class="{{ isset($submenu) && $submenu == 'add_monthly_offer' ? 'mm-active' : '' }}">
+                    <!-- <li class="{{ isset($submenu) && $submenu == 'add_monthly_offer' ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.physical.product.create', ['category_slug' => 'packages']) }}">
                             <i class="fa fa-circle"></i>
                             <span>{{ __('Add Monthly Offer') }}</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="{{ isset($submenu) && $submenu == 'product_list' ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.product') }}">
                             <i class="fa fa-circle"></i>
                             <span>{{ __('Product List') }}</span>
                         </a>
                     </li>
-                    @can('offers-packages-list')
+                    <!-- @can('offers-packages-list')
                     <li class="{{ isset($submenu) && $submenu == 'offers_packages' ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.offers-packages.index') }}">
                             <i class="fa fa-circle"></i>
                             <span>{{ __('Offers Packages') }}</span>
                         </a>
                     </li>
-                    @endcan
+                    @endcan -->
 
                     <li class="{{ isset($submenu) && $submenu == 'product_reviews' ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.product.reviews') }}">
@@ -150,12 +150,12 @@
                             <span>{{ __('Product Color') }}</span>
                         </a>
                     </li> --}}
-                    {{-- <li class="{{ isset($submenu) && $submenu == 'size' ? 'mm-active' : '' }}">
+                    <li class="{{ isset($submenu) && $submenu == 'size' ? 'mm-active' : '' }}">
                         <a href="{{ route('admin.product.size') }}">
                             <i class="fa fa-circle"></i>
-                            <span>{{ __('Product Size') }}</span>
+                            <span>{{ __('Product Options') }} (خيارات المنتجات)</span>
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
             </li>
         @endcanany
@@ -366,6 +366,14 @@
                 </a>
             </li>
         @endcanany
+        @canany(['advertise-list'])
+            <li class="{{ isset($menu) && $menu == 'recipe' ? 'mm-active' : '' }}">
+                <a href="{{ route('admin.recipe.index') }}">
+                    <i class="fas fa-utensils"></i>
+                    <span>{{ __('Recipes') }}</span>
+                </a>
+            </li>
+        @endcanany
         {{-- @canany(['blog-list'])
         <li class="{{ isset($menu) && $menu == 'blog' ? 'mm-active' : '' }}">
             <a href="{{ route('admin.blog') }}">
@@ -541,24 +549,6 @@
                             <span>{{ __('Languages') }}</span>
                         </a>
                     </li> -->
-                    <li class="{{ isset($submenu) && $submenu == 'csr' ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.csr.index') }}">
-                            <i class="fa fa-circle"></i>
-                            <span>{{ __('CSR Initiatives') }}</span>
-                        </a>
-                    </li>
-                    <li class="{{ isset($submenu) && $submenu == 'gift_card_packages' ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.gift_card_packages.index') }}">
-                            <i class="fa fa-circle"></i>
-                            <span>{{ __('Gift Card Packages') }}</span>
-                        </a>
-                    </li>
-                    <li class="{{ isset($submenu) && $submenu == 'custom_box_templates' ? 'mm-active' : '' }}">
-                        <a href="{{ route('admin.custom_box_templates.index') }}">
-                            <i class="fa fa-circle"></i>
-                            <span>{{ __('Custom Box Templates') }}</span>
-                        </a>
-                    </li>
                 </ul>
             </li>
         @endcanany

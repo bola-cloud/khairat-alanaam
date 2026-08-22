@@ -22,7 +22,9 @@ class Category extends Model
     'fr_Category_Slug',
     'fr_Description',
     "order",
-    "show_on_home"
+    "show_on_home",
+    "is_occasion",
+    "is_cut"
   ];
   public function products()
   {

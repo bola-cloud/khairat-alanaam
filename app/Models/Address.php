@@ -62,4 +62,42 @@ class Address extends Model
     {
         return $this->building;
     }
+
+    public function getStateIdAttribute()
+    {
+        $data = json_decode($this->address_line2, true);
+        return is_array($data) ? ($data['state_id'] ?? null) : null;
+    }
+
+    public function getCityIdAttribute()
+    {
+        $data = json_decode($this->address_line2, true);
+        return is_array($data) ? ($data['city_id'] ?? null) : null;
+    }
+
+    public function getAreaIdAttribute()
+    {
+        $data = json_decode($this->address_line2, true);
+        return is_array($data) ? ($data['area_id'] ?? null) : null;
+    }
+
+    public function getCityNameAttribute()
+    {
+        $cityId = $this->city_id;
+        if ($cityId) {
+            $city = \App\Models\City::find($cityId);
+            return $city ? ($city->name_ar ?? $city->name_en) : $this->city;
+        }
+        return $this->city;
+    }
+
+    public function getStateNameAttribute()
+    {
+        $stateId = $this->state_id;
+        if ($stateId) {
+            $state = \App\Models\State::find($stateId);
+            return $state ? ($state->name_ar ?? $state->name_en) : $this->state;
+        }
+        return $this->state;
+    }
 }

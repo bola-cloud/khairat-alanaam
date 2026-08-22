@@ -41,7 +41,69 @@
 
 <div class="wholesale-page bg-[#F9F8F6] text-[#1A4231] overflow-hidden" dir="{{ $dir }}">
 
-    <!-- Hero Banner Section -->
+    @if(isset($is_approved) && $is_approved)
+        <!-- B2B CATALOG PAGE (Approved Users) -->
+        <section class="py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-[#1A4231] text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent z-0"></div>
+            <div class="container mx-auto relative z-10">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div class="text-start">
+                        <span class="inline-block bg-[#FBF0D8] text-[#1A4231] font-bold text-xs px-3 py-1 rounded-full mb-3 uppercase tracking-wider">
+                            {{ $isRtl ? 'بوابة الأعمال B2B' : 'B2B Portal' }}
+                        </span>
+                        <h1 class="text-3xl lg:text-5xl font-black text-[#FBF0D8] mb-2">{{ $isRtl ? 'كتالوج منتجات الجملة' : 'Wholesale Products Catalog' }}</h1>
+                        <p class="text-white/80 font-medium max-w-2xl">{{ $isRtl ? 'مرحباً بك في بوابة شركاء الأعمال. استعرض مجموعتنا المتميزة وتواصل معنا لطلبات الجملة الخاصة بك.' : 'Welcome to your dedicated B2B portal. Browse our premium selection and contact us for your bulk orders.' }}</p>
+                    </div>
+                    <div class="flex gap-4">
+                        <a href="https://wa.me/{{ env('WHATSAPP_NUMBER', '+96890000000') }}" target="_blank" class="bg-[#25D366] text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-[#128C7E] transition-colors shadow-lg whitespace-nowrap">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                            <span>{{ $isRtl ? 'تواصل عبر واتساب' : 'Contact via WhatsApp' }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Grid -->
+        <section class="py-12 lg:py-20 px-4 sm:px-6 lg:px-8 bg-[#F9F8F6]">
+            <div class="container mx-auto">
+                @if(isset($products) && $products->isEmpty())
+                    <div class="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
+                        <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-[#1A4231] mb-2">{{ $isRtl ? 'لا توجد منتجات متاحة حالياً.' : 'No products available right now.' }}</h3>
+                    </div>
+                @else
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+                        @foreach($products as $product)
+                            <!-- Product Card -->
+                            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group flex flex-col">
+                                <div class="relative aspect-square overflow-hidden bg-gray-50 flex items-center justify-center p-4">
+                                    <img src="{{ resolve_product_image($product->Primary_Image) }}" alt="{{ $product->localized_name }}" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-5 flex flex-col flex-grow text-start">
+                                    <span class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-wide">{{ $product->category?->localized_name }}</span>
+                                    <h3 class="text-lg font-bold text-[#1A4231] mb-2 line-clamp-2 leading-tight">
+                                        {{ $product->localized_name }}
+                                    </h3>
+                                    <div class="mt-auto pt-4 flex items-center justify-between">
+                                        @php
+                                            $whatsappMsg = urlencode(($isRtl ? 'أريد الاستفسار عن أسعار الجملة لمنتج: ' : 'I want to inquire about wholesale prices for: ') . $product->localized_name);
+                                        @endphp
+                                        <a href="https://wa.me/{{ env('WHATSAPP_NUMBER', '+96890000000') }}?text={{ $whatsappMsg }}" target="_blank" class="w-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366] hover:text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+                                            <i class="fab fa-whatsapp text-lg"></i>
+                                            <span>{{ $isRtl ? 'استفسر عبر الواتساب' : 'Inquire via WhatsApp' }}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </section>
+
+    @else
+        <!-- Hero Banner Section -->
     <section class="py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
         <div class="container mx-auto">
             <!-- Hero Wavy Card -->
@@ -198,12 +260,38 @@
                     </div>
 
                     <!-- Main White Form Column -->
-                    <form id="wholesale-request-form" action="{{ route('wholesale.orders.store') }}" method="POST" class="lg:col-span-8 p-8 lg:p-12 flex flex-col gap-6 text-start">
-                        @csrf
+                    <div class="lg:col-span-8 p-8 lg:p-12 flex flex-col">
                         
-                        <h3 class="text-2xl lg:text-3xl font-black text-[#1A4231] pb-2 border-b border-gray-100">
+                        <h3 class="text-2xl lg:text-3xl font-black text-[#1A4231] pb-2 border-b border-gray-100 mb-6 text-start">
                             {{ __('new_design.wholesale.form_title') }}
                         </h3>
+
+                        @if(!auth()->check())
+                            <!-- GUEST STATE -->
+                            <div class="bg-[#F9F8F6] rounded-2xl p-8 text-center flex flex-col items-center justify-center border border-gray-100 my-auto h-full min-h-[300px]">
+                                <div class="w-16 h-16 rounded-full bg-[#1A4231]/10 flex items-center justify-center text-[#1A4231] mb-4 mx-auto">
+                                    <i class="fas fa-lock text-2xl"></i>
+                                </div>
+                                <h4 class="text-xl font-bold text-[#1A4231] mb-2">{{ $isRtl ? 'تسجيل الدخول مطلوب' : 'Login Required' }}</h4>
+                                <p class="text-gray-600 font-medium mb-8 max-w-md mx-auto">{{ $isRtl ? 'للتعرف على منتجات الجملة وتقديم طلب، يرجى تسجيل الدخول أو إنشاء حساب أولاً.' : 'To get to know wholesale products and submit a request, please log in or register first.' }}</p>
+                                <div class="flex flex-wrap items-center justify-center gap-4">
+                                    <a href="{{ route('login') }}" class="bg-[#1A4231] text-white px-8 py-3 rounded-full font-bold hover:bg-[#1A4231]/90 transition-colors shadow-sm">{{ $isRtl ? 'تسجيل الدخول' : 'Login' }}</a>
+                                    <a href="{{ route('user.sign.up') }}" class="bg-white text-[#1A4231] border border-[#1A4231] px-8 py-3 rounded-full font-bold hover:bg-gray-50 transition-colors shadow-sm">{{ $isRtl ? 'إنشاء حساب' : 'Register' }}</a>
+                                </div>
+                            </div>
+                        @elseif(isset($is_pending) && $is_pending)
+                            <!-- PENDING STATE -->
+                            <div class="bg-[#FBF0D8]/50 rounded-2xl p-8 text-center flex flex-col items-center justify-center border border-[#C5A880]/30 my-auto h-full min-h-[300px]">
+                                <div class="w-16 h-16 rounded-full bg-[#1A4231] flex items-center justify-center text-[#FBF0D8] mb-4 mx-auto shadow-inner">
+                                    <i class="fas fa-clock text-2xl"></i>
+                                </div>
+                                <h4 class="text-xl font-bold text-[#1A4231] mb-2">{{ $isRtl ? 'طلبك قيد المراجعة' : 'Your Request is Under Review' }}</h4>
+                                <p class="text-gray-700 font-medium max-w-md mx-auto">{{ $isRtl ? 'شكراً لك! يقوم فريقنا حالياً بمراجعة طلبك. سنتواصل معك قريباً، وبمجرد الموافقة سيتم فتح كتالوج الجملة لك.' : 'Thank you! Our team is currently reviewing your request. We will contact you soon, and once approved, the wholesale catalog will be unlocked for you.' }}</p>
+                            </div>
+                        @else
+                            <!-- FORM STATE -->
+                            <form id="wholesale-request-form" action="{{ route('wholesale.orders.store') }}" method="POST" enctype="multipart/form-data" class="flex flex-col gap-6 text-start">
+                                @csrf
 
                         <!-- Grid Inputs -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -275,6 +363,14 @@
                             </div>
                         </div>
 
+                        <!-- File Upload: CR or Signboard -->
+                        <div class="flex flex-col gap-2 border border-gray-200 p-4 rounded-2xl bg-white shadow-sm mt-2">
+                            <label class="text-sm font-bold text-gray-800">{{ $isRtl ? 'السجل التجاري أو لائحة المحل' : 'Commercial Register or Shop Signboard' }} <span class="text-red-500">*</span></label>
+                            <p class="text-xs text-gray-500 mb-2 font-medium">{{ $isRtl ? 'يرجى إرفاق ملف (PDF) أو صورة (JPG, PNG) - الحد الأقصى 10 ميجابايت' : 'Please upload a PDF or Image (JPG, PNG) - Max 10MB' }}</p>
+                            <input type="file" name="cr_or_signboard" accept=".pdf,image/jpeg,image/png,image/jpg" required 
+                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1A4231]/10 file:text-[#1A4231] hover:file:bg-[#1A4231]/20 cursor-pointer transition-all">
+                        </div>
+
                         <!-- Notes text area -->
                         <div class="flex flex-col gap-2">
                             <label class="text-sm font-bold text-gray-700">{{ __('new_design.wholesale.input_notes') }}</label>
@@ -290,13 +386,14 @@
                         </button>
 
                     </form>
-
-                </div>
+                    @endif
+                    </div>
 
             </div>
         </div>
     </section>
 
+    @endif
 </div>
 
 @endsection
@@ -317,10 +414,14 @@ $(document).ready(function() {
             <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="width: 20px; height: 20px; display: inline-block; animation: spin 1s linear infinite;"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path></svg>
         `);
         
+        var formData = new FormData(form[0]);
+        
         $.ajax({
             url: form.attr('action'),
             type: 'POST',
-            data: form.serialize(),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function(response) {
                 // Restore button
                 submitBtn.prop('disabled', false).html(originalBtnHtml);

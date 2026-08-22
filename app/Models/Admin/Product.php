@@ -17,59 +17,8 @@ class Product extends Model
 
     // ... (Fillable array omitted for brevity, keeping original content)
 
-    public function comboItems()
-    {
-        return $this->belongsToMany(Product::class, 'product_combos', 'product_id', 'combo_product_id')
-            ->withPivot('quantity')
-            ->withTimestamps();
-    }
-
-    public function parentCombos()
-    {
-        return $this->belongsToMany(Product::class, 'product_combos', 'combo_product_id', 'product_id')
-            ->withPivot('quantity')
-            ->withTimestamps();
-    }
-
     public function getVirtualStockAttribute()
     {
-        $type = trim($this->product_type);
-        if ($type === 'Combo' || $type === 'تجميعي' || $type === 'combo') {
-            if ($this->comboItems->isEmpty()) {
-                // If items are empty, it means the sync failed to link them OR it's a manual combo without items.
-                // We log this to help the admin identify the problematic product.
-                if ($this->Quantity <= 0) {
-                    \Illuminate\Support\Facades\Log::warning("Combo product has no items linked", [
-                        'id' => $this->id,
-                        'name' => $this->en_Product_Name,
-                        'barcode' => $this->barcode
-                    ]);
-                }
-                return $this->Quantity;
-            }
-
-            // 1:1 Mirroring: Combo stock equals related product stock ONLY if quantity is 1
-            if ($this->comboItems->count() === 1 && $this->comboItems->first()->pivot->quantity == 1) {
-                return (int) $this->comboItems->first()->virtual_stock;
-            }
-
-            $maxQuotients = [];
-            foreach ($this->comboItems as $item) {
-                // Use virtual_stock of the component to support nested combos
-                $itemStock = $item->virtual_stock;
-
-                if ($itemStock <= 0) {
-                    return 0;
-                }
-
-                $requiredQty = $item->pivot->quantity > 0 ? $item->pivot->quantity : 1;
-                $maxQuotients[] = floor($itemStock / $requiredQty);
-            }
-
-            return empty($maxQuotients) ? 0 : (int) min($maxQuotients);
-        }
-
-        // For Standard products, return actual DB quantity
         return $this->Quantity;
     }
 
@@ -121,7 +70,8 @@ class Product extends Model
         'show_pos',
         'synced_from_smartlife',
         'points',
-        'subcategory_id'
+        'subcategory_id',
+        'is_package'
     ];
 
     protected $casts = [
@@ -238,28 +188,8 @@ class Product extends Model
 
     public function scopeAvailable($query)
     {
-        return $query->where('Status', 1)->where(function ($q) {
-            // Standard products must have Quantity > 0
-            $q->where(function ($q2) {
-                $q2->whereNotIn('product_type', ['Combo', 'تجميعي'])
-                    ->where('Quantity', '>', 0);
-            })
-            // Combo products: only show if ALL linked components have sufficient stock and are Active.
-            // A combo is hidden if EXISTS a component with Quantity < required_quantity OR Status = 0.
-            ->orWhere(function ($q2) {
-                $q2->whereIn('product_type', ['Combo', 'تجميعي'])
-                    ->whereNotExists(function ($sub) {
-                        $sub->select(\Illuminate\Support\Facades\DB::raw(1))
-                            ->from('product_combos')
-                            ->join('products as components', 'product_combos.combo_product_id', '=', 'components.id')
-                            ->whereColumn('product_combos.product_id', 'products.id')
-                            ->where(function ($q3) {
-                                $q3->where('components.Quantity', '<', \Illuminate\Support\Facades\DB::raw('product_combos.quantity'))
-                                    ->orWhere('components.Status', 0);
-                            });
-                    });
-            });
-        });
+        // Standard products must have Quantity > 0
+        return $query->where('Status', 1)->where('Quantity', '>', 0);
     }
 
     public function getLocalizedNameAttribute()
