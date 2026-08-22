@@ -30,7 +30,7 @@ html, body {
 }
 
 .text-primary {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
 }
 
 /* Utilities */
