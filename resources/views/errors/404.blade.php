@@ -1,5 +1,5 @@
 @extends('v2.layouts.app')
-@section('title', __('Error 404'))
+@section('title', app()->getLocale() == 'ar' ? 'خطأ 404' : 'Error 404')
 
 @section('content')
 <div class="v2-container" style="padding: 100px 0; text-align: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -8,12 +8,14 @@
             <i class="fas fa-exclamation-circle"></i>
         </div>
         <h1 style="font-size: 60px; font-weight: 900; color: #333; margin-bottom: 10px;">404</h1>
-        <h2 style="font-size: 24px; font-weight: 800; color: #333; margin-bottom: 20px;">{{ __('Oops! page not found') }}</h2>
+        <h2 style="font-size: 24px; font-weight: 800; color: #333; margin-bottom: 20px;">
+            {{ app()->getLocale() == 'ar' ? 'عفواً! الصفحة غير موجودة' : 'Oops! page not found' }}
+        </h2>
         <p style="font-size: 16px; color: #666; margin-bottom: 40px; line-height: 1.6;">
-            {{ __('The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.') }}
+            {{ app()->getLocale() == 'ar' ? 'الصفحة التي تبحث عنها ربما تكون قد أزيلت، أو تم تغيير اسمها، أو غير متاحة مؤقتاً.' : 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.' }}
         </p>
         <a href="{{ route('front') }}" class="btn-primary" style="font-size: 16px; padding: 12px 30px;">
-            <i class="fas fa-home" style="margin-right: 8px; margin-left: 8px;"></i> {{ __('v2_layout.home' ?? 'Back to Home') }}
+            <i class="fas fa-home" style="margin-right: 8px; margin-left: 8px;"></i> {{ app()->getLocale() == 'ar' ? 'الرئيسية' : 'Back to Home' }}
         </a>
     </div>
 </div>
