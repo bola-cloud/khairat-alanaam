@@ -1,35 +1,20 @@
-@extends('errors.layout')
-@section('title', __('Error'))
+@extends('v2.layouts.app')
+@section('title', __('Error 503'))
+
 @section('content')
-    <!-- breadcrumb area start here  -->
-    <div class="breadcrumb-area">
-        <div class="container">
-            <div class="breadcrumb-wrap text-center">
-                <h2 class="page-title">{{__('Error')}}</h2>
-                <ul class="breadcrumb-pages">
-                    <li class="page-item"><a class="page-item-link" href="{{route('front')}}">{{__('Home')}}</a></li>
-                    <li class="page-item">{{__('Error')}}</li>
-                </ul>
-            </div>
+<div class="v2-container" style="padding: 100px 0; text-align: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="max-width: 600px;">
+        <div style="font-size: 120px; color: var(--primary-color); margin-bottom: 20px;">
+            <i class="fas fa-exclamation-circle"></i>
         </div>
+        <h1 style="font-size: 60px; font-weight: 900; color: #333; margin-bottom: 10px;">503</h1>
+        <h2 style="font-size: 24px; font-weight: 800; color: #333; margin-bottom: 20px;">{{ __('Service Unavailable') }}</h2>
+        <p style="font-size: 16px; color: #666; margin-bottom: 40px; line-height: 1.6;">
+            {{ __('The service is temporarily unavailable for maintenance. Please check back later.') }}
+        </p>
+        <a href="{{ route('front') }}" class="btn-primary" style="font-size: 16px; padding: 12px 30px;">
+            <i class="fas fa-home" style="margin-right: 8px; margin-left: 8px;"></i> {{ __('v2_layout.home' ?? 'Back to Home') }}
+        </a>
     </div>
-    <!-- breadcrumb area end here  -->
-
-    <!-- Error Page area start here  -->
-    <div class="error-page-area section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h1 class="fw-bold">{{__('ERROR 503 SERVER UNAVAILABLE')}}</h1>
-                    <p>
-                        {{__('Server is unavailable. Click on the button below
-                        to do something, Thanks!')}}
-                    </p>
-                    <a href="{{route('front')}}" class="primary-btn">{{__('Back to Home')}}</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Error Page area end here  -->
+</div>
 @endsection
-

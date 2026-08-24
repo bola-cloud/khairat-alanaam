@@ -1,61 +1,20 @@
-@extends('front.layouts.new_design_layout')
-@section('title', __('404 - Page Not Found'))
-@section('description', __('The page you are looking for could not be found.'))
+@extends('v2.layouts.app')
+@section('title', __('Error 404'))
+
 @section('content')
-
-@php
-    $imgPng = asset('new-design/images/error.png');
-    $imgSvg = asset('new-design/images/error.svg');
-@endphp
-
-<div class="container py-5 text-center">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="my-5">
-                <img src="{{ $imgPng }}" alt="404" class="img-fluid mx-auto d-block" style="max-width:720px;" onerror="this.onerror=null;this.src='{{ $imgSvg }}'" />
-            </div>
-
-            <h1 class="h2 fw-bold mt-4">{{ __('Oops! page not found') }}</h1>
-            <p class="text-muted my-3">{{ __('The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.') }}</p>
-
-            <a href="{{ url('/') }}" class="btn btn-success mt-3">{{ __('Back to Home') }}</a>
+<div class="v2-container" style="padding: 100px 0; text-align: center; min-height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div style="max-width: 600px;">
+        <div style="font-size: 120px; color: var(--primary-color); margin-bottom: 20px;">
+            <i class="fas fa-exclamation-circle"></i>
         </div>
+        <h1 style="font-size: 60px; font-weight: 900; color: #333; margin-bottom: 10px;">404</h1>
+        <h2 style="font-size: 24px; font-weight: 800; color: #333; margin-bottom: 20px;">{{ __('Oops! page not found') }}</h2>
+        <p style="font-size: 16px; color: #666; margin-bottom: 40px; line-height: 1.6;">
+            {{ __('The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.') }}
+        </p>
+        <a href="{{ route('front') }}" class="btn-primary" style="font-size: 16px; padding: 12px 30px;">
+            <i class="fas fa-home" style="margin-right: 8px; margin-left: 8px;"></i> {{ __('v2_layout.home' ?? 'Back to Home') }}
+        </a>
     </div>
 </div>
-
-@endsection
-@extends('errors.layout')
-@section('title', __('Error'))
-@section('content')
-    <!-- breadcrumb area start here  -->
-    <div class="breadcrumb-area">
-        <div class="container">
-            <div class="breadcrumb-wrap text-center">
-                <h2 class="page-title">{{__('Error')}}</h2>
-                <ul class="breadcrumb-pages">
-                    <li class="page-item"><a class="page-item-link" href="{{route('front')}}">{{__('Home')}}</a></li>
-                    <li class="page-item">{{__('Error')}}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- breadcrumb area end here  -->
-
-    <!-- Error Page area start here  -->
-    <div class="error-page-area section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h1 class="fw-bold">{{__('ERROR 404 NOT FOUND')}}</h1>
-                    <p>
-                        {{__('You may have mis-typed the URL.
-                        Or the page has been removed.Actually, there is nothing to see here. Click on the button below
-                        to do something, Thanks!')}}
-                    </p>
-                    <a href="{{ url('/') }}" class="primary-btn">{{__('Back to Home')}}</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Error Page area end here  -->
 @endsection
