@@ -18,6 +18,8 @@ class BasePaymentService
             $this->get_way = new PaystackService($object);
         } elseif ($this->provider == INSTAMOJO) {
             $this->get_way = new InstamojoService($object);
+        } elseif ($this->provider == OMPAY) {
+            $this->get_way = new OmpayService();
         }
     }
 

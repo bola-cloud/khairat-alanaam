@@ -686,6 +686,17 @@ class CheckoutController extends Controller
                         // Handle the error case
                         return response()->json(['error' => 'Failed to create session' . $response], 500);
                     }
+                    
+                case 'ompay':
+                    session()->put('payment_method_name', OMPAY);
+                    $ompayService = resolve(\App\Http\Services\OmpayService::class);
+                    // Pass the grand_total and order_number (as reference_number)
+                    // The OmpayService will initiate the payment and redirect the user
+                    
+                    // We also need to create a PENDING order first before redirecting just like Thawani
+                    $this->orderCreateCall($order_number, $shipping_charge, $tax, $subtotal, $this->discount, $this->grand_total, OMPAY, "PENDING", $buy_for, false);
+                    
+                    return $ompayService->handlePayment($this->grand_total, 'OMR', $order_number);
 
                 case 'COD':
                     return $this->orderCreateCall($order_number, $shipping_charge, $tax, $subtotal, $this->discount, $this->grand_total, COD);
@@ -873,6 +884,11 @@ class CheckoutController extends Controller
         } elseif ($request->payment == 'paypal') {
             session()->put('payment_method_name', PAYPAL);
             return $this->pay($this->grand_total, $this->discount, 'USD', 1, $request->payment_method);
+        } elseif ($request->payment == 'ompay') {
+            session()->put('payment_method_name', OMPAY);
+            $ompayService = resolve(\App\Http\Services\OmpayService::class);
+            $this->orderCreateCall($order_number, $shipping_charge, $tax, $subtotal, $this->discount, $this->grand_total, OMPAY, "PENDING", null, false);
+            return $ompayService->handlePayment($this->grand_total, 'OMR', $order_number);
         } elseif ($request->payment == 'COD') {
             return $this->orderCreateCall($order_number, $shipping_charge, $tax, $subtotal, $this->discount, $this->grand_total, COD);
         } elseif ($request->payment == 'bank') {
@@ -905,6 +921,21 @@ class CheckoutController extends Controller
 
     public function approval()
     {
+        if (session()->get('payment_method_name') === OMPAY) {
+            $paymentPlatform = resolve(\App\Http\Services\OmpayService::class);
+            $payment = $paymentPlatform->handleApproval();
+            if ($payment['success'] == true) {
+                // Find order and update its status
+                $order = Order::where('Order_Number', session()->get('ompay_reference_number') ?? session()->get('order_number'))->first();
+                if ($order) {
+                    $order->update(['Payment_Status' => PAYMENT_SUCCESS, 'Is_Order_Successful' => true]);
+                }
+                
+                return redirect()->route('front')->with('success', 'Payment Successful!');
+            }
+            return redirect()->route('checkout')->with('error', $payment['message']);
+        }
+        
         if (session()->has('paymentPlatformId')) {
 
             $paymentPlatform = $this->paymentPlatformResolver

@@ -37,6 +37,7 @@ const BANK = 'bank';
 const INSTAMOJO = 'instamojo';
 const PAYSTACK = 'paystack';
 const THAWANI = 'thawani';
+const OMPAY = 'OMPAY';
 
 function getPaymentMethodName($input = null)
 {
@@ -48,6 +49,7 @@ function getPaymentMethodName($input = null)
         INSTAMOJO => 'instamojo',
         PAYSTACK => 'paystack',
         SSLCOMMERZ => 'sslcommerz',
+        OMPAY => 'ompay',
     ];
     if (is_null($input)) {
         return $output;
@@ -66,6 +68,7 @@ function getPaymentMethodId($input = null)
         'instamojo' => INSTAMOJO,
         'paystack' => PAYSTACK,
         'sslcommerz' => SSLCOMMERZ,
+        'ompay' => OMPAY,
     ];
     if (is_null($input)) {
         return $output;

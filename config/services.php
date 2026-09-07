@@ -75,5 +75,11 @@ return [
         'rest_api_key' => env('ONESIGNAL_REST_API_KEY'),
         'android_channel_id' => env('ONESIGNAL_ANDROID_CHANNEL_ID'),
     ],
+    'ompay' => [
+        'api_key' => env('OMPAY_API_KEY'),
+        'api_secret' => env('OMPAY_API_SECRET'),
+        'base_url' => env('OMPAY_BASE_URL', 'https://api.sandbox.truepay.ompay.om'),
+        'class' => App\Http\Services\OmpayService::class,
+    ],
 
 ];
