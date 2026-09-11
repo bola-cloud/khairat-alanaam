@@ -121,7 +121,7 @@
                                 <div class="col-md-6">
                                     <div class="input__group mb-2">
                                         <label>{{ __("العنوان بالعربية") }}</label>
-                                        <input type="text" class="form-control" name="about_feature2_title_ar" value="{{ $settings["about_feature2_title_ar"] ?? "معتمد حلال ١٠٠٪" }}">
+                                        <input type="text" class="form-control" name="about_feature2_title_ar" value="{{ $settings["about_feature2_title_ar"] ?? "حلال 100%" }}">
                                     </div>
                                     <div class="input__group mb-2">
                                         <label>{{ __("العنوان الفرعي بالعربية") }}</label>

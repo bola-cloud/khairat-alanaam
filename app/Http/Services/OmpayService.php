@@ -14,18 +14,33 @@ class OmpayService
     protected $baseUri;
     protected $apiKey;
     protected $apiSecret;
+    protected $testMode;
 
     public function __construct()
     {
         $this->baseUri = config('services.ompay.base_url');
         $this->apiKey = config('services.ompay.api_key');
         $this->apiSecret = config('services.ompay.api_secret');
+        $this->testMode = config('services.ompay.test_mode', false);
     }
 
     public function handlePayment($value, $currency, $referenceNumber = null)
     {
         if (is_null($referenceNumber)) {
             $referenceNumber = 'ORD-' . time() . '-' . rand(1000, 9999);
+        }
+
+        if ($this->testMode) {
+            $transactionId = 'TEST_TXN_' . rand(10000, 99999);
+            session()->put('ompay_transaction_id', $transactionId);
+            session()->put('ompay_reference_number', $referenceNumber);
+            Log::info("OMPAY (TEST MODE): Simulating payment initiation for {$referenceNumber}");
+            
+            // Redirect immediately to approval route
+            return redirect(route('approval', [
+                'transaction_id' => $transactionId,
+                'reference_number' => $referenceNumber
+            ]));
         }
 
         $data = [
@@ -67,6 +82,17 @@ class OmpayService
 
         if ($transactionId || $referenceNumber) {
             
+            if ($this->testMode && str_starts_with($transactionId, 'TEST_TXN_')) {
+                Log::info("OMPAY Verify (TEST MODE): Approving payment for {$referenceNumber}");
+                $data['success'] = true;
+                $data['amount'] = session()->get('grand_total') ?? 0;
+                $data['message'] = 'Payment Successful (Test Mode)!';
+                
+                session()->forget('ompay_transaction_id');
+                session()->forget('ompay_reference_number');
+                return $data;
+            }
+
             $payload = [];
             if ($transactionId) {
                 $payload['transaction_id'] = $transactionId;

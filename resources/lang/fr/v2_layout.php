@@ -13,7 +13,7 @@ return [
     'register' => 'سجل الآن',
     
     'nav_home' => 'الرئيسية',
-    'nav_categories' => 'الفئات',
+    'nav_categories' => 'أقسام',
     'nav_about' => 'من نحن',
     'nav_contact' => 'اتصل بنا',
     

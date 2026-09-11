@@ -861,7 +861,7 @@
     "Bank Transfer": "تحويل بنكي",
     "Create Order for Customer": "إنشاء طلب لزبون",
     "Select Area": "اختر المنطقة",
-    "Thawani": "ثواني",
+    "Thawani": "OMPAY",
     "In-Store Pickup": "استلام من المخزن",
     "In-Store Pickup (customer collects from shop)": "استلام من المخزن",
     "Warehouse Pickup": "استلام من المخزن",
@@ -1493,5 +1493,11 @@
     "v2_layout.my_orders": "طلباتي",
     "v2_layout.nav_favorites": "المفضلة",
     "v2_layout.logout": "تسجيل الخروج",
-    "v2_home.more": "أكثر"
+    "v2_home.more": "أكثر",
+    "new_design.auth.phone_taken": "رقم الهاتف هذا مسجل بالفعل لدينا.",
+    "Sign Up Successfully! Please verify your account with the OTP sent to your phone.": "تم إنشاء الحساب بنجاح! يرجى تأكيد حسابك باستخدام رمز التحقق المرسل إلى هاتفك.",
+    "Please verify your account with the OTP sent to your phone.": "يرجى تأكيد حسابك باستخدام رمز التحقق المرسل إلى هاتفك.",
+    "Failed to send OTP. Please try again later.": "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى لاحقاً.",
+    "Sign Up Successfully! But failed to send OTP. Please try resending the OTP.": "تم إنشاء الحساب بنجاح! ولكن فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى لاحقاً.",
+    "OTP has been resent to your phone.": "تم إعادة إرسال رمز التحقق إلى هاتفك."
 }

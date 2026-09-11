@@ -180,69 +180,7 @@
         </section>
     @endif
 
-    <!-- Features Section -->
-    @php
-        $featData = null;
-        if (isset($featuresSection) && $featuresSection->status) {
-            $featData = in_array(app()->getLocale(), ['ar', 'fr']) ? $featuresSection->content_fr : $featuresSection->content_en;
-        }
-    @endphp
-    <section class="features-section" style="padding: 100px 0 50px 0; background-color: #fff;">
-        <div class="v2-container">
-            <div class="grid-features">
-                @if($featData && isset($featData['items']))
-                    @foreach(array_slice($featData['items'], 0, 4) as $index => $item)
-                        @php
-                            $icons = ['fas fa-truck-fast', 'fas fa-shield-alt', 'fas fa-ribbon', 'far fa-clock'];
-                        @endphp
-                        <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                            <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
-                                <i class="{{ $icons[$index] ?? 'fas fa-check' }}"></i>
-                            </div>
-                            <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">{{ $item['title'] ?? '' }}</h4>
-                            <p style="margin: 0; color: #888; font-size: 13px;">{{ $item['desc'] ?? '' }}</p>
-                        </div>
-                    @endforeach
-                @else
-                    <!-- Fallback if dynamic features not set -->
-                    <!-- Feature 1 -->
-                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
-                            <i class="fas fa-truck-fast"></i>
-                        </div>
-                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_1_title')</h4>
-                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_1_desc')</p>
-                    </div>
-                    <!-- Feature 2 -->
-                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_2_title')</h4>
-                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_2_desc')</p>
-                    </div>
-                    <!-- Feature 3 -->
-                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
-                            <i class="fas fa-ribbon"></i>
-                        </div>
-                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_3_title')</h4>
-                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_3_desc')</p>
-                    </div>
-                    <!-- Feature 4 -->
-                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
-                            <i class="far fa-clock"></i>
-                        </div>
-                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_4_title')</h4>
-                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_4_desc')</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </section>
-
-    <!-- Category Swiper -->
+        <!-- Category Swiper -->
     <section class="home-categories" style="padding: 40px 0; background: var(--bg-color); overflow: hidden;">
         <div class="v2-container" style="position: relative;">
             <div class="swiper category-swiper">
@@ -653,6 +591,69 @@
             </div>
         </div>
     </section>
+
+    <!-- Features Section -->
+    @php
+        $featData = null;
+        if (isset($featuresSection) && $featuresSection->status) {
+            $featData = in_array(app()->getLocale(), ['ar', 'fr']) ? $featuresSection->content_fr : $featuresSection->content_en;
+        }
+    @endphp
+    <section class="features-section" style="padding: 100px 0 50px 0; background-color: #fff;">
+        <div class="v2-container">
+            <div class="grid-features">
+                @if($featData && isset($featData['items']))
+                    @foreach(array_slice($featData['items'], 0, 4) as $index => $item)
+                        @php
+                            $icons = ['fas fa-truck-fast', 'fas fa-shield-alt', 'fas fa-ribbon', 'far fa-clock'];
+                        @endphp
+                        <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                            <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                                <i class="{{ $icons[$index] ?? 'fas fa-check' }}"></i>
+                            </div>
+                            <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">{{ $item['title'] ?? '' }}</h4>
+                            <p style="margin: 0; color: #888; font-size: 13px;">{{ $item['desc'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                @else
+                    <!-- Fallback if dynamic features not set -->
+                    <!-- Feature 1 -->
+                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                            <i class="fas fa-truck-fast"></i>
+                        </div>
+                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_1_title')</h4>
+                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_1_desc')</p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_2_title')</h4>
+                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_2_desc')</p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                            <i class="fas fa-ribbon"></i>
+                        </div>
+                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_3_title')</h4>
+                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_3_desc')</p>
+                    </div>
+                    <!-- Feature 4 -->
+                    <div style="background: #fff; padding: 40px 20px; text-align: center; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                        <div style="width: 60px; height: 60px; background: #fff5f5; color: #e32636; font-size: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px;">
+                            <i class="far fa-clock"></i>
+                        </div>
+                        <h4 style="margin: 0 0 8px; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_home.feature_4_title')</h4>
+                        <p style="margin: 0; color: #888; font-size: 13px;">@lang('v2_home.feature_4_desc')</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </section>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

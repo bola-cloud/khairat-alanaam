@@ -20,21 +20,17 @@ class AuthController extends Controller
             'phone_number' => 'required',
             'code' => 'required',
         ]);
-        $otp = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
         $full_phone = $validated['code'] . $validated['phone_number'];
         $phone_without_plus = ltrim($full_phone, '+');
-        Otp::create([
-            'phone_number' => $full_phone,
-            'otp' => $otp,
-        ]);
+        
+        $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+        $refNo = $muscatOtpService->sendOtp($phone_without_plus);
 
-        $response = Http::asForm()->post('https://whatsapi.hispeed.om/api/v1/whatsapp/send_otp', [
-            'phone_number' => $phone_without_plus,
-            'otp' => $otp,
-            'language' => app()->getLocale() == 'fr' ? 'ar' : app()->getLocale()
-        ]);
-
-        if ($response->successful()) {
+        if ($refNo) {
+            Otp::create([
+                'phone_number' => $full_phone,
+                'otp' => $refNo,
+            ]);
             return response()->json(['message' => 'OTP sent successfully'], 200);
         } else {
             return response()->json(['error' => 'Failed to send OTP'], 500);
@@ -47,7 +43,7 @@ class AuthController extends Controller
             'phone_number' => 'required',
             'name' => 'required',
             'code' => 'required',
-            'otp' => 'required|digits:5',
+            'otp' => 'required',
         ]);
 
         $phone_number = $validated['phone_number'];
@@ -55,7 +51,15 @@ class AuthController extends Controller
         $entered_otp = $validated['otp'];
         $full_phone = $validated['code'] . $validated['phone_number'];
         $otp_record = Otp::where('phone_number', $full_phone)->latest()->first();
-        if (isset($otp_record) && $entered_otp === $otp_record->otp) {
+        
+        $isValid = false;
+        if ($otp_record) {
+            $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+            $phone_without_plus = ltrim($full_phone, '+');
+            $isValid = $muscatOtpService->verifyOtp($phone_without_plus, $otp_record->otp, $entered_otp);
+        }
+
+        if ($isValid) {
             $otp_record->delete();
             $user = User::where('Number', $full_phone)->where("is_admin", 0)->first();
 

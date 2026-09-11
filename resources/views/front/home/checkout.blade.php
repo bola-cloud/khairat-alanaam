@@ -244,7 +244,7 @@
                         <div class="col-6">
                             <div class="payment-method active" id="pay_thawani" onclick="selectPayment('thawani')">
                                 <i class="fas fa-credit-card payment-icon"></i>
-                                <div style="font-weight: 800; font-size: 14px;">دفع إلكتروني (ثواني)</div>
+                                <div style="font-weight: 800; font-size: 14px;">دفع إلكتروني (OMPAY)</div>
                             </div>
                         </div>
                         <div class="col-6">

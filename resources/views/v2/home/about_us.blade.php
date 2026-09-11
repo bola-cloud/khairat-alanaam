@@ -263,7 +263,7 @@
         </div>
         <div class="feature-box">
             <div class="feature-icon"><i class="fas fa-award"></i></div>
-            <h3>{{ $settings['about_feature2_title_'.$lang] ?? 'معتمد حلال ١٠٠٪' }}</h3>
+            <h3>{{ $settings['about_feature2_title_'.$lang] ?? 'حلال 100%' }}</h3>
             <p>{{ $settings['about_feature2_desc_'.$lang] ?? 'معتمد وقابل للتتبع' }}</p>
         </div>
         <div class="feature-box">

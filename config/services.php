@@ -80,6 +80,14 @@ return [
         'api_secret' => env('OMPAY_API_SECRET'),
         'base_url' => env('OMPAY_BASE_URL', 'https://api.sandbox.truepay.ompay.om'),
         'class' => App\Http\Services\OmpayService::class,
+        'test_mode' => env('OMPAY_TEST_MODE', false),
+    ],
+
+    'muscatapps' => [
+        'url' => env('MUSCATAPPS_URL', 'https://muscatapps.smsoman.com'),
+        'username' => env('MUSCATAPPS_USERNAME'),
+        'password' => env('MUSCATAPPS_PASSWORD'),
+        'test_mode' => env('MUSCATAPPS_TEST_MODE', false),
     ],
 
 ];

@@ -54,34 +54,22 @@ class AuthController extends Controller
                 return redirect()->route('front')->with('error', __('User is blocked by admin.'));
             }
 
-            // Generate OTP
-            $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-            $user->code = $otp;
-            $user->save();
+            // Send OTP via Muscat Apps SMS
+            $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+            $refNo = $muscatOtpService->sendOtp($user->Number);
 
-            // Send OTP via WhatsApp (Bypassed)
-            // try {
-            //     $response = Http::asForm()->post('https://whatsapi.hispeed.om/api/v1/whatsapp/send_otp', [
-            //         'phone_number' => $user->Number,
-            //         'otp' => $otp,
-            //         'language' => app()->getLocale() == 'fr' ? 'ar' : app()->getLocale()
-            //     ]); 
-            //     
-            //     if (!$response->successful()) {
-            //         \Illuminate\Support\Facades\Log::error('WhatsApp Login OTP sending failed', [
-            //             'status' => $response->status(),
-            //             'body' => $response->body()
-            //         ]);
-            //     }
-            // } catch (\Exception $e) {
-            //     \Illuminate\Support\Facades\Log::error('WhatsApp Login OTP sending exception: ' . $e->getMessage());
-            // }
-            \Illuminate\Support\Facades\Log::info("WhatsApp Login OTP (BYPASSED) for {$user->Number}: {$otp}");
-
-            session(['verify_target' => $user->Number]);
-            session(['verification_method' => 'whatsapp']);
-
-            return redirect()->route('user.verify.email')->with('success', __('Please verify your account with the OTP sent to your WhatsApp.'));
+            if ($refNo) {
+                // Store the reference number in the code column
+                $user->code = $refNo;
+                $user->save();
+                
+                session(['verify_target' => $user->Number]);
+                session(['verification_method' => 'sms']); // Changed to sms
+                
+                return redirect()->route('user.verify.email')->with('success', __('Please verify your account with the OTP sent to your phone.'));
+            } else {
+                return redirect()->back()->with('error', __('Failed to send OTP. Please try again later.'));
+            }
         }
 
         return redirect()->back()->with('error', __('Phone number not found. Please sign up.'));
@@ -124,13 +112,12 @@ class AuthController extends Controller
     }
     public function userSignUpPost(UserAuthRequest $request)
     {
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         $full_phone = $request->country_code . $request->phone;
         
         $user = User::create([
             'name' => $request->name,
             'Number' => $full_phone,
-            'code' => $otp, // Store OTP in code column
+            'code' => null, // Will be updated after OTP generation
         ]);
 
         if ($user) {
@@ -161,29 +148,21 @@ class AuthController extends Controller
                 }
             }
 
-            session(['verification_method' => 'whatsapp']);
-            session(['verify_target' => $full_phone]);
+            // Send OTP via Muscat Apps SMS
+            $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+            $refNo = $muscatOtpService->sendOtp($full_phone);
 
-            // Send OTP via WhatsApp (Bypassed)
-            // try {
-            //     $response = Http::asForm()->post('https://whatsapi.hispeed.om/api/v1/whatsapp/send_otp', [
-            //         'phone_number' => $full_phone,
-            //         'otp' => $otp,
-            //         'language' => app()->getLocale() == 'fr' ? 'ar' : app()->getLocale()
-            //     ]);
-            //     
-            //     if (!$response->successful()) {
-            //         \Illuminate\Support\Facades\Log::error('WhatsApp Registration OTP sending failed', [
-            //             'status' => $response->status(),
-            //             'body' => $response->body()
-            //         ]);
-            //     }
-            // } catch (\Exception $e) {
-            //     \Illuminate\Support\Facades\Log::error('WhatsApp Registration OTP sending exception: ' . $e->getMessage());
-            // }
-            \Illuminate\Support\Facades\Log::info("WhatsApp Registration OTP (BYPASSED) for {$full_phone}: {$otp}");
+            if ($refNo) {
+                $user->code = $refNo;
+                $user->save();
 
-            return redirect()->route('user.verify.email')->with('success', __('Sign Up Successfully! Please verify your account with the OTP sent to your WhatsApp.'));
+                session(['verification_method' => 'sms']);
+                session(['verify_target' => $full_phone]);
+
+                return redirect()->route('user.verify.email')->with('success', __('Sign Up Successfully! Please verify your account with the OTP sent to your phone.'));
+            } else {
+                return redirect()->route('user.verify.email')->with('error', __('Sign Up Successfully! But failed to send OTP. Please try resending the OTP.'));
+            }
         } else {
             return redirect()->route('user.sign.up')->with('error', __('Something went wrong!'));
         }
@@ -222,15 +201,27 @@ class AuthController extends Controller
             $user = User::where('Number', $target)->first();
         }
 
-        if ($user && $user->code === $request->otp) {
-            $user->email_verified_at = Carbon::now();
-            $user->code = null; // Clear OTP
-            $user->save();
+        if ($user) {
+            $isValid = false;
 
-            Auth::login($user);
-            session()->forget(['verify_target', 'verification_method']);
+            if ($method == 'email') {
+                $isValid = ($user->code === $request->otp);
+            } else {
+                // Method is SMS/WhatsApp, use Muscat Apps OTP Verification
+                $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+                $isValid = $muscatOtpService->verifyOtp($target, $user->code, $request->otp);
+            }
 
-            return redirect()->route('front')->with('success', __('Account verified successfully!'));
+            if ($isValid) {
+                $user->email_verified_at = Carbon::now();
+                $user->code = null; // Clear OTP RefNo
+                $user->save();
+
+                Auth::login($user);
+                session()->forget(['verify_target', 'verification_method']);
+
+                return redirect()->route('front')->with('success', __('Account verified successfully!'));
+            }
         }
 
         return redirect()->back()->with('error', __('Invalid OTP. Please try again.'));
@@ -255,26 +246,32 @@ class AuthController extends Controller
             return redirect()->route('login');
         }
 
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        $user->code = $otp;
-        $user->save();
-
         try {
             $appName = config('app.name', 'HiSpeed');
             if ($method == 'email') {
+                $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                $user->code = $otp;
+                $user->save();
+                
                 Mail::send('front.auth.otp_mail', ['otp' => $otp, 'user' => $user], function ($message) use ($user, $appName) {
                     $message->to($user->email);
                     $message->subject($appName . ' - Email Verification OTP');
                 });
+                
+                return redirect()->back()->with('success', __('OTP has been resent.'));
             } else {
-                // Http::asForm()->post('https://whatsapi.hispeed.om/api/v1/whatsapp/send_otp', [
-                //     'phone_number' => $target,
-                //     'otp' => $otp,
-                //     'language' => app()->getLocale() == 'fr' ? 'ar' : app()->getLocale()
-                // ]);
-                \Illuminate\Support\Facades\Log::info("WhatsApp Resend OTP (BYPASSED) for {$target}: {$otp}");
+                // Send OTP via Muscat Apps SMS
+                $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+                $refNo = $muscatOtpService->sendOtp($target);
+
+                if ($refNo) {
+                    $user->code = $refNo;
+                    $user->save();
+                    return redirect()->back()->with('success', __('OTP has been resent to your phone.'));
+                } else {
+                    return redirect()->back()->with('error', __('Failed to resend OTP. Please try again later.'));
+                }
             }
-            return redirect()->back()->with('success', __('OTP has been resent.'));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('OTP Resend failed: ' . $e->getMessage());
             return redirect()->back()->with('error', __('Failed to resend OTP. Please try again later.'));

@@ -778,5 +778,11 @@
     "Template Name": "اسم القالب",
     "Template created successfully!": "تم إنشاء القالب بنجاح!",
     "Template updated successfully!": "تم تحديث القالب بنجاح!",
-    "Template deleted successfully!": "تم حذف القالب بنجاح!"
+    "Template deleted successfully!": "تم حذف القالب بنجاح!",
+    "new_design.auth.phone_taken": "رقم الهاتف هذا مسجل بالفعل لدينا.",
+    "Sign Up Successfully! Please verify your account with the OTP sent to your phone.": "تم إنشاء الحساب بنجاح! يرجى تأكيد حسابك باستخدام رمز التحقق المرسل إلى هاتفك.",
+    "Please verify your account with the OTP sent to your phone.": "يرجى تأكيد حسابك باستخدام رمز التحقق المرسل إلى هاتفك.",
+    "Failed to send OTP. Please try again later.": "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى لاحقاً.",
+    "Sign Up Successfully! But failed to send OTP. Please try resending the OTP.": "تم إنشاء الحساب بنجاح! ولكن فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى لاحقاً.",
+    "OTP has been resent to your phone.": "تم إعادة إرسال رمز التحقق إلى هاتفك."
 }
