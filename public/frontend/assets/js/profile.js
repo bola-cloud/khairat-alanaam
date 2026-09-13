@@ -1,6 +1,9 @@
 window.profileDashboardState = function(config) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialTab = urlParams.get('tab') || 'settings';
+    
     return {
-        activeTab: 'settings',
+        activeTab: initialTab,
         ordersView: 'list',
         addressView: 'list',
         showOrderModal: false,

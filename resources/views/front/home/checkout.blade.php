@@ -100,13 +100,32 @@
                 @endforeach
             </ul>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ $isRtl ? "يرجى مراجعة البيانات" : "Please check your input" }}',
+                        html: `
+                            <ul style="text-align: {{ $isRtl ? 'right' : 'left' }}; padding-inline-start: 20px; list-style-type: disc; color: #c62828;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        `,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: '{{ $isRtl ? "حسناً" : "OK" }}'
+                    });
+                }
+            });
+        </script>
     @endif
 
     <form action="{{ route('checkout.order') }}" method="POST" id="checkout-form">
         @csrf
         <input type="hidden" name="billing_country" value="Oman">
         <input type="hidden" name="billing_zipcode" value="00000">
-        <input type="hidden" id="payment_method_input" name="payment" value="thawani">
+        <input type="hidden" id="payment_method_input" name="payment" value="ompay">
         <input type="hidden" id="collection_method_input" name="collection_method" value="delivery">
 
         <div class="row">
@@ -157,7 +176,7 @@
                         <div class="alert alert-warning text-start">
                             <strong>لا يوجد عناوين محفوظة!</strong> يرجى إضافة عنوان أولاً لإتمام الطلب.
                             <br><br>
-                            <a href="{{ route('user.profile', ['tab' => 'addresses']) }}" class="btn btn-sm btn-primary" style="background: var(--primary-color); border:none;">إضافة عنوان جديد</a>
+                            <a href="{{ route('user.profile.addresses') }}" class="btn btn-sm btn-primary" style="background: var(--primary-color); border:none;">إضافة عنوان جديد</a>
                         </div>
                     @endif
 
@@ -166,13 +185,13 @@
                         <h4 style="font-size: 16px; font-weight: bold; margin-bottom: 15px; color: var(--text-color); text-align: start;">أدخل بيانات التوصيل</h4>
                         <div class="form-group text-start">
                             <label class="form-label">الاسم الكامل</label>
-                            <input type="text" id="billing_name" name="billing_name" value="{{ old('billing_name', $billing->Name ?? $user->name ?? '') }}" required class="form-control" placeholder="الاسم الكامل">
+                            <input type="text" id="billing_name" name="billing_name" value="{{ old('billing_name', $billing->Name ?? $user->name ?? '') }}" class="form-control" placeholder="الاسم الكامل">
                         </div>
 
                         <div class="row text-start">
                             <div class="col-md-6 form-group">
                                 <label class="form-label">المنطقة / المحافظة</label>
-                                <select name="billing_state" id="billing_state_select" required class="form-control">
+                                <select name="billing_state" id="billing_state_select" class="form-control">
                                     <option value="">اختر المحافظة</option>
                                     @foreach($states as $state)
                                         <option value="{{ $state->id }}" {{ (old('billing_state', $billing->State ?? '') == $state->id) ? 'selected' : '' }}>
@@ -183,7 +202,7 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="form-label">المدينة / الولاية</label>
-                                <select name="billing_city" id="billing_city_select" required class="form-control">
+                                <select name="billing_city" id="billing_city_select" class="form-control">
                                     <option value="">اختر الولاية</option>
                                 </select>
                             </div>
@@ -192,19 +211,19 @@
                         <div class="row text-start">
                             <div class="col-md-6 form-group">
                                 <label class="form-label">الحي / المنطقة</label>
-                                <select name="billing_area" id="billing_area_select" required class="form-control">
+                                <select name="billing_area" id="billing_area_select" class="form-control">
                                     <option value="">اختر الحي</option>
                                 </select>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="form-label">رقم الجوال</label>
-                                <input type="text" id="billing_phone" name="billing_phone" value="{{ old('billing_phone', $billing->phone_number ?? $user->Number ?? '') }}" required class="form-control" dir="ltr" style="text-align: {{ $isRtl ? 'right' : 'left' }}">
+                                <input type="text" id="billing_phone" name="billing_phone" value="{{ old('billing_phone', $billing->phone_number ?? $user->Number ?? '') }}" class="form-control" dir="ltr" style="text-align: {{ $isRtl ? 'right' : 'left' }}">
                             </div>
                         </div>
 
                         <div class="form-group mb-0 text-start">
                             <label class="form-label">العنوان بالتفصيل</label>
-                            <input type="text" id="billing_street_address" name="billing_street_address" value="{{ old('billing_street_address', $billing->Street ?? '') }}" required class="form-control" placeholder="رقم المبنى، الشارع، المعالم القريبة">
+                            <input type="text" id="billing_street_address" name="billing_street_address" value="{{ old('billing_street_address', $billing->Street ?? '') }}" class="form-control" placeholder="رقم المبنى، الشارع، المعالم القريبة">
                         </div>
                     </div>
                 </div>
@@ -242,7 +261,7 @@
                     
                     <div class="row">
                         <div class="col-6">
-                            <div class="payment-method active" id="pay_thawani" onclick="selectPayment('thawani')">
+                            <div class="payment-method active" id="pay_ompay" onclick="selectPayment('ompay')">
                                 <i class="fas fa-credit-card payment-icon"></i>
                                 <div style="font-weight: 800; font-size: 14px;">دفع إلكتروني (OMPAY)</div>
                             </div>
@@ -361,10 +380,8 @@
             const el = document.getElementById(fieldId);
             if(el) {
                 if (isPickup) {
-                    el.removeAttribute('required');
                     el.disabled = true;
                 } else {
-                    el.setAttribute('required', 'required');
                     el.disabled = false;
                 }
             }
@@ -385,10 +402,10 @@
 
     function selectPayment(method) {
         document.getElementById('payment_method_input').value = method;
-        document.getElementById('pay_thawani').classList.remove('active');
+        document.getElementById('pay_ompay').classList.remove('active');
         document.getElementById('pay_cod').classList.remove('active');
-        if(method === 'thawani') {
-            document.getElementById('pay_thawani').classList.add('active');
+        if(method === 'ompay') {
+            document.getElementById('pay_ompay').classList.add('active');
         } else {
             document.getElementById('pay_cod').classList.add('active');
         }
@@ -606,5 +623,41 @@
             msgEl.style.display = 'block';
         });
     }
+
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        const method = document.getElementById('collection_method_input').value;
+        const name = document.getElementById('billing_name').value.trim();
+        const phone = document.getElementById('billing_phone').value.trim();
+        
+        if (!name || !phone) {
+            e.preventDefault();
+            alert("{{ $isRtl ? 'يرجى إدخال الاسم ورقم الجوال.' : 'Please enter your name and phone number.' }}");
+            return false;
+        }
+
+        if (method !== 'store_pickup') {
+            const hasSelectedCard = document.querySelector('.address-card.selected');
+            const manualFormVisible = document.getElementById('address_form_fields').style.display === 'block' || document.getElementById('address_form_fields').style.display === '';
+            
+            if (!hasSelectedCard && !manualFormVisible) {
+                e.preventDefault();
+                alert("{{ $isRtl ? 'يرجى اختيار عنوان التوصيل أو إدخال عنوان جديد لإتمام الطلب.' : 'Please select a delivery address or enter a new one.' }}");
+                return false;
+            }
+
+            if (manualFormVisible) {
+                const state = document.getElementById('billing_state_select').value;
+                const city = document.getElementById('billing_city_select').value;
+                const area = document.getElementById('billing_area_select').value;
+                const street = document.getElementById('billing_street_address').value.trim();
+                
+                if (!state || !city || !area || !street) {
+                    e.preventDefault();
+                    alert("{{ $isRtl ? 'يرجى إكمال جميع بيانات التوصيل (المحافظة، الولاية، الحي، والعنوان بالتفصيل).' : 'Please complete all delivery details (State, City, Area, Street).' }}");
+                    return false;
+                }
+            }
+        }
+    });
 </script>
 @endsection

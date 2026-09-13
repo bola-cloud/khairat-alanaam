@@ -41,7 +41,7 @@ class ProfileAddressController extends Controller
         $address->user_id = $user->id;
         $address->label = $request->label;
         $address->recipient_name = $user->name;
-        $address->phone = $request->phone;
+        $address->phone = ($request->country_code ?? '') . $request->phone;
         $address->address_line1 = $request->street;
         $address->address_line2 = json_encode([
             'state_id' => $request->state_id,
@@ -87,7 +87,7 @@ class ProfileAddressController extends Controller
         $address = $user->addresses()->findOrFail($id);
 
         $address->label = $request->label;
-        $address->phone = $request->phone;
+        $address->phone = ($request->country_code ?? '') . $request->phone;
         $address->address_line1 = $request->street;
         $address->address_line2 = json_encode([
             'state_id' => $request->state_id,

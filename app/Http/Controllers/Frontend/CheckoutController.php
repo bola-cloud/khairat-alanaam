@@ -247,7 +247,7 @@ class CheckoutController extends Controller
         if (!$isLoggedIn) {
             $validationRules += [
                 'billing_name' => 'required',
-                'billing_state' => 'required',
+                'billing_state' => $isPickup ? 'nullable' : 'required',
                 'billing_country' => 'required',
                 'billing_zipcode' => 'required',
             ];
@@ -301,6 +301,10 @@ class CheckoutController extends Controller
             $shipping_charge = delivery_charge($request->billing_area ?? $request->billing_city ?? $request->billing_state ?? $request->billing_country, ($request->billing_area) ? 'area' : null);
             $weight_charge = $this->calculateExtraWeightFees();
             $shipping_charge += $weight_charge;
+
+            if ($isPickup) {
+                $shipping_charge = 0;
+            }
 
             // Log shipping calculation for debugging delivery charge issues
             Log::info('Shipping calculation', [
@@ -926,14 +930,26 @@ class CheckoutController extends Controller
             $payment = $paymentPlatform->handleApproval();
             if ($payment['success'] == true) {
                 // Find order and update its status
-                $order = Order::where('Order_Number', session()->get('ompay_reference_number') ?? session()->get('order_number'))->first();
+                $order_number = session()->get('ompay_reference_number') ?? session()->get('order_number');
+                $order = Order::where('Order_Number', $order_number)->first();
                 if ($order) {
                     $order->update(['Payment_Status' => PAYMENT_SUCCESS, 'Is_Order_Successful' => true]);
                 }
                 
-                return redirect()->route('front')->with('success', 'Payment Successful!');
+                $modal = [
+                    'line1' => __('تم استلام طلبك بنجاح! شكراً لاختيارك خيرات الأنعام'),
+                    'line2' => __('عملية الدفع الإلكتروني تمت بنجاح.'),
+                    'order_number' => $order_number,
+                ];
+                return redirect()->route('front')->with(['order_success_modal' => $modal]);
             }
-            return redirect()->route('checkout')->with('error', $payment['message']);
+            
+            $modal = [
+                'line1' => __('عفواً! فشلت عملية الدفع.'),
+                'line2' => $payment['message'],
+                'action' => route('checkout')
+            ];
+            return redirect()->route('front')->with(['order_error_modal' => $modal]);
         }
         
         if (session()->has('paymentPlatformId')) {

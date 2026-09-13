@@ -174,10 +174,13 @@
                             <!-- Phone -->
                             <div class="col-12">
                                 <div class="input-group" dir="ltr">
-                                    <span class="input-group-text bg-light border-0">
-                                        <img src="https://flagcdn.com/w20/om.png" alt="Oman" class="me-2" width="20"> +968
-                                    </span>
-                                    <input type="text" name="phone" id="phone" class="form-control bg-light border-0" value="{{ str_replace('+968', '', auth()->user()->Number) }}" required dir="auto">
+                                    <select class="form-select bg-light border-0" name="country_code" id="country_code" style="max-width: 120px;">
+                                        <option value="+968" {{ strpos(auth()->user()->Number, '+968') !== false ? 'selected' : '' }}>🇴🇲 +968</option>
+                                        <option value="+974" {{ strpos(auth()->user()->Number, '+974') !== false ? 'selected' : '' }}>🇶🇦 +974</option>
+                                        <option value="+966" {{ strpos(auth()->user()->Number, '+966') !== false ? 'selected' : '' }}>🇸🇦 +966</option>
+                                        <option value="+971" {{ strpos(auth()->user()->Number, '+971') !== false ? 'selected' : '' }}>🇦🇪 +971</option>
+                                    </select>
+                                    <input type="text" name="phone" id="phone" class="form-control bg-light border-0" value="{{ str_replace(['+968', '+974', '+966', '+971'], '', auth()->user()->Number) }}" required dir="auto">
                                 </div>
                             </div>
                         </div>

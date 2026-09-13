@@ -106,6 +106,11 @@ class OmpayService
                 'Content-Type' => 'application/json',
             ])->post($this->baseUri . '/api/v1/transactions/inquiry', $payload);
 
+            Log::info('OMPAY Inquiry Response', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+
             if ($response->successful()) {
                 $responseData = $response->json();
                 
@@ -123,6 +128,8 @@ class OmpayService
             } else {
                 Log::error('OMPAY inquiry failed', ['response' => $response->body()]);
             }
+        } else {
+            Log::error('OMPAY Verify: Missing transactionId and referenceNumber');
         }
 
         return $data;

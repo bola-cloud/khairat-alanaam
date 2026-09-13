@@ -101,8 +101,8 @@
                     name: "is_paid",
                     render: function (data) {
                         return data == 1
-                            ? '<span class="badge badge-success">Paid</span>'
-                            : '<span class="badge badge-danger">Unpaid</span>';
+                            ? '<span class="badge badge-success" style="background-color: #28a745; color: white; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Paid</span>'
+                            : '<span class="badge badge-danger" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 12px; font-weight: bold;">Unpaid</span>';
                     }
                 },
                 // {
