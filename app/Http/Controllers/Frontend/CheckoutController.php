@@ -202,6 +202,14 @@ class CheckoutController extends Controller
     public function checkoutOrder(Request $request)
     {
         Log::info('Checkout Request Data', ['data' => $request->all(), 'user_id' => Auth::id()]);
+        
+        $lockKey = 'checkout_lock_' . (Auth::id() ?? session()->getId());
+        $lock = \Illuminate\Support\Facades\Cache::lock($lockKey, 10);
+
+        if (!$lock->get()) {
+            return redirect()->back()->with('error', __('يرجى الانتظار بضع ثوانٍ قبل محاولة إنشاء طلب آخر.'));
+        }
+
         $isLoggedIn = Auth::check();
         // $user_id = $isLoggedIn ? Auth::id() : null;
         $buy_for = null;

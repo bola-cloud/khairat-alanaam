@@ -653,10 +653,18 @@
                 
                 if (!state || !city || !area || !street) {
                     e.preventDefault();
-                    alert("{{ $isRtl ? 'يرجى إكمال جميع بيانات التوصيل (المحافظة، الولاية، الحي، والعنوان بالتفصيل).' : 'Please complete all delivery details (State, City, Area, Street).' }}");
+                    alert("{{ $isRtl ? 'يرجى إكمال جميع بيانات التوصيل (المحافظة، الولاية، المنطقة، والشارع).' : 'Please complete all delivery details (State, City, Area, Street).' }}");
                     return false;
                 }
             }
+        }
+
+        // Prevent double submission
+        const submitBtn = this.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __("جاري المعالجة...") }}';
+            submitBtn.style.opacity = '0.7';
         }
     });
 </script>

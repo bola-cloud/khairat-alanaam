@@ -69,7 +69,12 @@ class OmpayService
 
         Log::error('OMPAY payment initiation failed', ['response' => $response->body()]);
         
-        return redirect()->back()->with('error', 'Unable to initiate payment with OMPAY.');
+        $modal = [
+            'line1' => __('عفواً! فشل الاتصال ببوابة الدفع.'),
+            'line2' => __('بوابة OMPAY لا تستجيب حالياً أو هناك خطأ في الشبكة. يرجى المحاولة لاحقاً.'),
+            'action' => route('front')
+        ];
+        return redirect()->route('front')->with(['order_error_modal' => $modal, 'error' => 'Unable to initiate payment with OMPAY.']);
     }
 
     public function handleApproval(Request $request = null)

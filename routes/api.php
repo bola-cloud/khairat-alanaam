@@ -51,6 +51,9 @@ Route::get('success', [CheckoutController::class, 'success'])->name('api.thawani
 Route::get('fail', [CheckoutController::class, 'fail'])->name('api.thawani.fail');
 Route::get('/order-print/{id}', [OrderController::class, 'order_print'])->name('order.print');
 
+// OMPAY Webhook
+Route::post('/ompay/webhook', [\App\Http\Controllers\Api\OmpayWebhookController::class, 'handleWebhook'])->name('api.ompay.webhook');
+
 Route::group(['middleware' => ['auth:sanctum', 'setLanguage']], function () {
     Route::post('/coupon-apply', [CouponController::class, 'couponApply']);
     Route::post('/checkout', [CheckoutController::class, 'checkoutOrder']);

@@ -28,6 +28,10 @@ class V2OccasionProductsSeeder extends Seeder
                 $productNameEn = 'Premium ' . $occasion->en_Category_Name . ' Pack';
                 $productNameFr = 'باقة ' . $occasion->fr_Category_Name . ' المميزة';
                 
+                $price = rand(15, 50);
+                $discount = rand(5, 15);
+                $discountPrice = $price - ($price * ($discount / 100));
+
                 $product = Product::create([
                     'en_Product_Name' => $productNameEn,
                     'fr_Product_Name' => $productNameFr,
@@ -44,15 +48,16 @@ class V2OccasionProductsSeeder extends Seeder
                     'Voucher' => '',
                     'ItemTag' => 'Occasion',
                     'Category_Id' => $occasion->id,
-                    'Price' => rand(15, 50),
-                    'Discount_Price' => 0,
+                    'Price' => $price,
+                    'Discount_Price' => $discountPrice,
+                    'Discount' => $discount,
                     'Quantity' => 50,
                     'Status' => 1,
-                    'Primary_Image' => 'default.png',
-                    'Image2' => 'default.png',
-                    'Image3' => 'default.png',
-                    'Image4' => 'default.png',
-                    'Image5' => 'default.png',
+                    'Primary_Image' => '6aa822f84007b1789403896.png',
+                    'Image2' => '6aa822f84007b1789403896.png',
+                    'Image3' => '6aa822f84007b1789403896.png',
+                    'Image4' => '6aa822f84007b1789403896.png',
+                    'Image5' => '6aa822f84007b1789403896.png',
                     'type' => 1,
                     'is_package' => 0,
                     'Today_Special' => 0,

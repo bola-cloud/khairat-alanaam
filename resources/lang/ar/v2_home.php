@@ -11,7 +11,7 @@ return array (
   'feature_1_desc' => 'متحكم بدرجة حرارته',
   'feature_2_title' => 'جودة مضمونة',
   'feature_2_desc' => 'إرجاع واستبدال مجاني',
-  'feature_3_title' => 'معتمد حلال 100%',
+  'feature_3_title' => 'حلال 100%',
   'feature_3_desc' => 'معتمد وقابل للتتبع',
   'feature_4_title' => 'توصيل خلال ساعتين',
   'feature_4_desc' => 'توصيل طازج خلال ساعتين',

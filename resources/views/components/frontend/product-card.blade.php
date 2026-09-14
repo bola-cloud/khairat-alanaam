@@ -15,8 +15,8 @@
             @foreach ($product->product_tags as $ppt)
                 <span class="product-flag sale">{{ $ppt->tag }}</span>
             @endforeach
-            @if ($product->Discount > 0)
-                <span class="product-flag discount">{{ __('-') }}{{ $product->Discount }} %</span>
+            @if ($hasDiscount)
+                <span class="product-flag discount">{{ __('-') }}{{ $cardDiscountPercent }} %</span>
             @endif
         </div>
 
@@ -50,7 +50,6 @@
 
         <div class="product-price">
             @php
-                // Prefer product-level Price when set (old design behavior).
                 $finalPrice = 0;
                 if (!empty($product->Price) && $product->Price > 0) {
                     $finalPrice = $product->Price;
@@ -63,9 +62,12 @@
                         $finalPrice = $firstSize?->pivot->price ?? 0;
                     }
                 }
+                
+                $hasDiscount = $product->Discount_Price > 0 && $product->Discount_Price < $finalPrice;
+                $cardDiscountPercent = $hasDiscount ? round((($finalPrice - $product->Discount_Price) / $finalPrice) * 100) : 0;
             @endphp
 
-            @if ($product->Discount > 0)
+            @if ($hasDiscount)
                 {{-- show discounted price first, then original struck-through to the right (matches home design) --}}
                 <span class="price" style="font-weight:600;">{{ currencyConverter($product->Discount_Price) }}</span>
                 <span class="price price-strikethrough">{{ currencyConverter($finalPrice) }}</span>
@@ -79,8 +81,8 @@
         @if(!$isInDetailsPage)
             <a href="javascript:void(0)" title="{{ __('Add To Cart') }}"
                 class="add-cart addCart mt-auto w-100 d-inline-flex justify-content-center align-items-center"
-                data-id="{{ $product->id }}" data-discount="{{$product->Discount_Price}}"
-                data-percenteng="{{ number_format($product->Discount, 0) }}" data-name="{{ $product->en_Product_Name }}"
+                data-id="{{ $product->id }}" data-discount="{{$product->Discount_Price}}" data-price="{{$hasDiscount ? $product->Discount_Price : $finalPrice}}"
+                data-percenteng="{{ $cardDiscountPercent }}" data-name="{{ $product->en_Product_Name }}"
                 data-sizes="{{ json_encode($product->sizes) }}" data-additions="{{json_encode($product->additions)}}"
                 data-weights="{{ json_encode($product->weights) }}">
                 <svg fill="#000000" class="size-8 hover:fill-white transition-colors" version="1.1" id="Capa_1"

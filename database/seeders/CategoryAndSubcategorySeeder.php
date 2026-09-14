@@ -76,6 +76,10 @@ class CategoryAndSubcategorySeeder extends Seeder
                     'status' => 1
                 ]);
 
+                $price = rand(20, 50);
+                $discount = rand(5, 20); // 5% to 20% discount
+                $discountPrice = $price - ($price * ($discount / 100));
+                
                 // Create a dummy product for each subcategory
                 Product::create([
                     'Category_Id' => $cat->id,
@@ -84,9 +88,9 @@ class CategoryAndSubcategorySeeder extends Seeder
                     'fr_Product_Name' => 'منتج تجريبي ' . $subcatName,
                     'en_Product_Slug' => Str::slug('dummy product ' . $subcatName) . '-' . rand(1000, 9999),
                     'Brand_Id' => 1,
-                    'Price' => rand(10, 50),
-                    'Discount_Price' => rand(5, 45),
-                    'Discount' => rand(1, 20),
+                    'Price' => $price,
+                    'Discount_Price' => $discountPrice,
+                    'Discount' => $discount,
                     'Quantity' => 100,
                     'en_About' => 'Dummy description',
                     'fr_About' => 'وصف تجريبي',
@@ -96,7 +100,7 @@ class CategoryAndSubcategorySeeder extends Seeder
                     'fr_ShippingReturn' => 'قواعد الشحن',
                     'en_AdditionalInformation' => 'Additional info',
                     'fr_AdditionalInformation' => 'معلومات إضافية',
-                    'Primary_Image' => 'placeholder.png',
+                    'Primary_Image' => '6aa822f84007b1789403896.png',
                     'Voucher' => 'no',
                     'Status' => 1,
                     'ItemTag' => 'New',

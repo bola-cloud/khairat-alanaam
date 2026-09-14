@@ -349,6 +349,7 @@
             </li>
         @endcanany
 
+        {{-- 
         @canany(['subscription-list'])
             <li class="{{ isset($menu) && $menu == 'subscriptions' ? 'mm-active' : '' }}">
                 <a href="{{ route('admin.subscriptions') }}">
@@ -357,6 +358,7 @@
                 </a>
             </li>
         @endcanany
+        --}}
 
         @canany(['advertise-list'])
             <li class="{{ isset($menu) && $menu == 'advertise' ? 'mm-active' : '' }}">

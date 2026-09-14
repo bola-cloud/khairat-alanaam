@@ -198,7 +198,7 @@
                                             </div>
                                             <div class="input__group mb-25">
                                                 <label for="exampleInputEmail1">{{ __('Discount Price') }}</label>
-                                                <input type="number" class="form-control"
+                                                <input type="number" step="any" class="form-control"
                                                     value="{{ $product->Discount_Price }}" id="discount_price"
                                                     name="discount_price" readonly>
                                             </div>

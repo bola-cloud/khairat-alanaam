@@ -5,18 +5,32 @@
     $cartContent = \Cart::content();
     $cartCount = \Cart::count();
     $cartTotal = \Cart::total(2, '.', '');
-    $cartSubtotal = \Cart::subtotal(2, '.', ''); // Depending on config, subtotal might be total without tax
+    $cartSubtotal = \Cart::subtotal(2, '.', ''); 
     
-    // Calculate total discount if needed based on original prices vs cart prices
-    $totalDiscount = 0;
-    foreach($cartContent as $item) {
-        $originalPrice = \App\Models\Admin\Product::find($item->id)->Price ?? $item->price;
-        if($originalPrice > $item->price) {
-            $totalDiscount += ($originalPrice - $item->price) * $item->qty;
+    // Calculate Subscription Discount
+    $subDiscountPercent = 0;
+    $maxDiscountAmount = PHP_INT_MAX;
+    if (auth()->check()) {
+        $activeSubscription = \App\Models\UserSubscription::where('user_id', auth()->id())
+            ->where('status', 'active')
+            ->whereDate('end_at', '>=', now())
+            ->first();
+        if ($activeSubscription && $activeSubscription->subscription) {
+            $subDiscountPercent = $activeSubscription->subscription->discount_percent ?? 0;
+            $maxDiscountAmount = $activeSubscription->subscription->max_discount_amount ?? PHP_INT_MAX;
         }
     }
-    $rawSubtotal = $cartTotal + $totalDiscount;
-    $finalTotal = $cartTotal;
+    
+    $subtotalVal = floatval($cartSubtotal);
+    $calculatedSubDiscount = ($subDiscountPercent / 100) * $subtotalVal;
+    $subscriptionDiscountAmount = min($calculatedSubDiscount, $maxDiscountAmount);
+
+    // Calculate Coupon Discount
+    $couponDiscount = floatval(session()->get('CouponAmount', 0));
+    
+    $totalDiscount = $subscriptionDiscountAmount + $couponDiscount;
+    $rawSubtotal = floatval($cartSubtotal);
+    $finalTotal = max(0, $rawSubtotal - $totalDiscount);
 @endphp
 
 @section('title', __('v2_store.store_title', ['default' => 'سلة التسوق']))
@@ -89,7 +103,7 @@
             @foreach($cartContent as $item)
                 @php
                     $productName = $lang == 'fr' ? ($item->options->name_ar ?? $item->name) : $item->name;
-                    $itemImage = $item->options->image ? asset('assets/images/' . $item->options->image) : asset('assets/images/placeholder.png');
+                    $itemImage = $item->options->image && $item->options->image != 'default.png' ? asset(ProductImage() . $item->options->image) : asset('assets/images/placeholder.png');
                     $originalPrice = \App\Models\Admin\Product::find($item->id)->Price ?? $item->price;
                 @endphp
                 <div class="cart-item-row" id="row-{{ $item->rowId }}" style="display: flex; gap: 20px; background: #fff; padding: 20px; border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 15px; position: relative;">
@@ -150,18 +164,24 @@
                 <h3 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 800; text-align: center;">@lang('v2_home.order_summary')</h3>
                 
 
-                
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; color: var(--text-color);">
+                   <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; color: var(--text-color);">
                     <span>@lang('v2_home.subtotal')</span>
                     <span style="font-weight: 600;"><span id="summary-subtotal">{{ number_format($rawSubtotal, 2) }}</span> @lang('v2_layout.currency_omr')</span>
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; color: var(--primary-color); border-bottom: 1px solid #eee; padding-bottom: 20px;">
-                    <span>@lang('v2_home.discount')</span>
-                    <span style="font-weight: 600;" dir="ltr">- <span id="summary-discount">{{ number_format($totalDiscount, 2) }}</span> @lang('v2_layout.currency_omr')</span>
+                @if($subscriptionDiscountAmount > 0)
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: var(--primary-color);">
+                    <span>{{ $lang == 'fr' ? 'خصم الاشتراك' : 'Subscription Discount' }}</span>
+                    <span style="font-weight: 600;" dir="ltr">- <span id="summary-sub-discount">{{ number_format($subscriptionDiscountAmount, 2) }}</span> @lang('v2_layout.currency_omr')</span>
                 </div>
-                
+                @endif
 
+                @if($couponDiscount > 0)
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; color: var(--primary-color); border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                    <span>{{ $lang == 'fr' ? 'خصم الكوبون' : 'Coupon Discount' }} ({{ session('couponCode') }})</span>
+                    <span style="font-weight: 600;" dir="ltr">- <span id="summary-coupon-discount">{{ number_format($couponDiscount, 2) }}</span> @lang('v2_layout.currency_omr')</span>
+                </div>
+                @endif
                 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 18px; font-weight: 800; color: var(--text-color);">
                     <span>@lang('v2_home.total')</span>
@@ -170,11 +190,14 @@
                 
                 <!-- Coupon Code -->
                 <div style="margin-bottom: 25px;">
-                    <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-color); margin-bottom: 8px;">@lang('v2_home.got_coupon')</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="coupon_code" placeholder="@lang('v2_home.enter_coupon')" style="flex-grow: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; text-align: left;" dir="ltr">
-                        <button type="button" onclick="applyCoupon()" style="padding: 0 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-family: inherit; cursor: pointer;">@lang('v2_home.apply')</button>
-                    </div>
+                    <form action="{{ route('apply.coupon') }}" method="POST">
+                        @csrf
+                        <label style="display: block; font-size: 12px; font-weight: 700; color: var(--text-color); margin-bottom: 8px;">@lang('v2_home.got_coupon')</label>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" name="coupon_code" value="{{ session('couponCode', '') }}" placeholder="@lang('v2_home.enter_coupon')" style="flex-grow: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; text-align: left;" dir="ltr">
+                            <button type="submit" style="padding: 0 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-family: inherit; cursor: pointer;">@lang('v2_home.apply')</button>
+                        </div>
+                    </form>
                 </div>
                 
                 <a href="{{ route('checkout') }}" class="btn-primary" style="display: block; text-align: center; padding: 15px; font-size: 16px; border-radius: 8px; margin-bottom: 10px;">@lang('v2_home.checkout')</a>
@@ -203,7 +226,7 @@
             </a>
         </div>
         
-        <div class="grid-products" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+        <div class="grid-products" style="display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
             @foreach($relatedProducts as $relProduct)
                 @php
                     $relName = $lang == 'fr' ? ($relProduct->fr_Product_Name ?? $relProduct->en_Product_Name) : $relProduct->en_Product_Name;
@@ -222,7 +245,7 @@
                     @endif
                     
                     <a href="{{ route('front.product_details', $relProduct->en_Product_Slug ?: $relProduct->id) }}" style="display: block; position: relative; height: 200px; padding: 20px;">
-                        <img src="{{ $relProduct->Primary_Image ? asset('assets/images/' . $relProduct->Primary_Image) : asset('assets/images/placeholder.png') }}" alt="{{ $relName }}" style="width:100%; height:100%; object-fit:contain;">
+                        <img src="{{ $relProduct->Primary_Image && $relProduct->Primary_Image != 'default.png' ? asset(ProductImage() . $relProduct->Primary_Image) : asset('assets/images/placeholder.png') }}" alt="{{ $relName }}" style="width:100%; height:100%; object-fit:contain;">
                     </a>
                     
                     <div style="flex-grow: 1; display: flex; flex-direction: column; padding: 0 10px 10px;">
@@ -235,17 +258,21 @@
                         <p style="margin: 0 0 15px 0; font-size: 13px; color: #888; line-height: 1.4;">{{ Str::limit($relAbout, 50) }}</p>
                         
                         <div style="margin-top: auto;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: center; gap: 10px; align-items: center; margin-bottom: 15px;">
+                                @php
+                                    $relFinalPrice = ($relProduct->Discount_Price > 0 && $relProduct->Discount_Price < $relProduct->Price) ? $relProduct->Discount_Price : $relProduct->Price;
+                                    $relHasDiscount = $relFinalPrice < $relProduct->Price;
+                                @endphp
                                 <div style="font-size: 18px; font-weight: 800; color: #e32636;">
-                                    {{ $relProduct->Price }} ر.ع
+                                    {{ number_format($relFinalPrice, 3) }} ر.ع
                                 </div>
-                                @if($relProduct->Discount_Price && $relProduct->Discount_Price < $relProduct->Price)
+                                @if($relHasDiscount)
                                 <div style="text-decoration: line-through; color: #999; font-size: 13px;">
-                                    {{ $relProduct->Price + 5 }} ر.ع
+                                    {{ number_format($relProduct->Price, 3) }} ر.ع
                                 </div>
                                 @endif
                             </div>
-                            <button type="button" onclick="addToCart('{{ $relProduct->id }}', '{{ $relProduct->Discount_Price ?: $relProduct->Price }}')" class="add-to-cart-btn" style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">@lang('v2_home.add_to_cart')</button>
+                            <button type="button" onclick="addToCart('{{ $relProduct->id }}', '{{ $relFinalPrice }}')" class="add-to-cart-btn" style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">@lang('v2_home.add_to_cart')</button>
                         </div>
                     </div>
                 </div>
@@ -281,14 +308,28 @@
             $('#price-' + rowId).text(parseFloat(st).toFixed(2));
         }
 
-        // Re-calculate discounts if needed (this requires backend to send the total discount or we simplify it)
-        // Since we don't have total discount from the AJAX response easily without modifying CartController,
-        // we will update just the subtotal and total using standard logic.
+        // Re-calculate discounts
         $('#summary-subtotal').text(subtotal.toFixed(2));
         
-        let currentDiscountText = $('#summary-discount').text();
-        let currentDiscount = parseFloat(currentDiscountText) || 0;
-        let finalTotal = subtotal - currentDiscount;
+        let subDiscountText = $('#summary-sub-discount').length ? $('#summary-sub-discount').text() : '0';
+        let subDiscount = parseFloat(subDiscountText) || 0;
+        
+        let couponDiscountText = $('#summary-coupon-discount').length ? $('#summary-coupon-discount').text() : '0';
+        let couponDiscount = parseFloat(couponDiscountText) || 0;
+        
+        // Subscription discount percentage calculation (if backend sent updated total, we could use it, but here's a dynamic approach)
+        let subPercent = {{ floatval($subDiscountPercent) }};
+        if(subPercent > 0) {
+            let maxD = {{ floatval($maxDiscountAmount) }};
+            let calc = (subtotal * subPercent) / 100;
+            subDiscount = Math.min(calc, maxD);
+            if($('#summary-sub-discount').length) {
+                $('#summary-sub-discount').text(subDiscount.toFixed(2));
+            }
+        }
+        
+        let totalDiscount = subDiscount + couponDiscount;
+        let finalTotal = Math.max(0, subtotal - totalDiscount);
         $('#summary-total').text(finalTotal.toFixed(2));
     }
 
@@ -343,14 +384,7 @@
     }
 
     function applyCoupon() {
-        let code = document.getElementById('coupon_code').value;
-        if(!code) {
-            alert('{{ __("v2_home.enter_coupon") }}');
-            return;
-        }
-        // Since we don't have the coupon route in this specific task context, we simulate it
-        alert('{{ __("v2_home.apply") }}...');
-        // Here you would normally POST to a coupon route and then reload.
+        // Now handled by native form submission
     }
 </script>
 @endsection

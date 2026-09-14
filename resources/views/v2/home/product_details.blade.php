@@ -14,18 +14,9 @@
     $catName = $product->category ? ($lang == 'fr' ? $product->category->fr_Category_Name : $product->category->en_Category_Name) : '';
     $catName = $catName ?: ($product->category ? $product->category->en_Category_Name : '');
     
-    $discountAmount = $product->Discount ?? 0;
-    $hasDiscount = $discountAmount > 0;
-    
-    $finalPrice = $product->Price;
-    if ($hasDiscount) {
-        if (strpos($discountAmount, '%') !== false) {
-            $percent = (float) str_replace('%', '', $discountAmount);
-            $finalPrice = $product->Price - ($product->Price * ($percent / 100));
-        } else {
-            $finalPrice = $product->Price - (float) $discountAmount;
-        }
-    }
+    $finalPrice = ($product->Discount_Price > 0 && $product->Discount_Price < $product->Price) ? (float)$product->Discount_Price : (float)$product->Price;
+    $hasDiscount = $finalPrice < $product->Price;
+    $discountPercent = $hasDiscount ? round((($product->Price - $finalPrice) / $product->Price) * 100) : 0;
 @endphp
 
 @section('title', $productName . ' - ' . __('v2_product.home'))
@@ -49,7 +40,7 @@
             <div style="position: relative; background: var(--white); border-radius: 12px; padding: 20px; border: 1px solid var(--border-color); margin-bottom: 15px;">
                 @if($hasDiscount)
                 <div style="position: absolute; top: 15px; {{ $lang == 'fr' ? 'right' : 'left' }}: 15px; background: var(--primary-color); color: #fff; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; z-index: 2;">
-                    {{ $discountAmount }}{{ strpos($discountAmount, '%') === false ? '%' : '' }} خصم
+                    {{ $discountPercent }}% خصم
                 </div>
                 @endif
                 <img id="main-product-image" src="{{ asset($product->Primary_Image && $product->Primary_Image != 'default.png' ? ProductImage() . $product->Primary_Image : 'assets/images/placeholder.png') }}" alt="{{ $productName }}" style="width: 100%; height: auto; border-radius: 8px; max-height: 500px; object-fit: contain;">
@@ -371,23 +362,14 @@
                     $relName = $lang == 'fr' ? $relProduct->fr_Product_Name : $relProduct->en_Product_Name;
                     $relName = $relName ?: $relProduct->en_Product_Name;
                     
-                    $relDiscount = $relProduct->Discount ?? 0;
-                    $relHasDiscount = $relDiscount > 0;
-                    $relFinalPrice = $relProduct->Price;
-                    
-                    if ($relHasDiscount) {
-                        if (strpos($relDiscount, '%') !== false) {
-                            $percent = (float) str_replace('%', '', $relDiscount);
-                            $relFinalPrice = $relProduct->Price - ($relProduct->Price * ($percent / 100));
-                        } else {
-                            $relFinalPrice = $relProduct->Price - (float) $relDiscount;
-                        }
-                    }
+                    $relFinalPrice = ($relProduct->Discount_Price > 0 && $relProduct->Discount_Price < $relProduct->Price) ? (float)$relProduct->Discount_Price : (float)$relProduct->Price;
+                    $relHasDiscount = $relFinalPrice < $relProduct->Price;
+                    $relDiscountPercent = $relHasDiscount ? round((($relProduct->Price - $relFinalPrice) / $relProduct->Price) * 100) : 0;
                 @endphp
                 <div class="product-card" style="border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: #fff; position: relative;">
                     @if($relHasDiscount)
                         <div style="position: absolute; top: 10px; {{ $lang == 'fr' ? 'right' : 'left' }}: 10px; background: var(--primary-color); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; z-index: 2;">
-                            {{ $relDiscount }}{{ strpos($relDiscount, '%') === false ? '%' : '' }}
+                            {{ $relDiscountPercent }}% خصم
                         </div>
                     @endif
                     <a href="{{ route('front.product_details', $relProduct->en_Product_Slug ?: $relProduct->id) }}" style="display: block; position: relative; height: 200px; padding: 20px;">
