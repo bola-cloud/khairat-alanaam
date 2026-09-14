@@ -77,7 +77,7 @@
                 @endif
 
                 <a href="{{ route('front.product_details', $product->en_Product_Slug ?: $product->id) }}" style="display:block; position: relative; margin-bottom: 15px; flex-shrink: 0;">
-                    <img src="{{ asset('assets/images/' . $product->Primary_Image) }}" alt="{{ $productName }}" style="width:100%; height:160px; object-fit:cover; border-radius:12px;">
+                    <img src="{{ $product->Primary_Image && $product->Primary_Image != 'default.png' ? asset(ProductImage() . $product->Primary_Image) : asset('assets/images/placeholder.png') }}" alt="{{ $productName }}" style="width:100%; height:160px; object-fit:cover; border-radius:12px;">
                 </a>
                 
                 <div style="flex-grow: 1; display: flex; flex-direction: column;">
