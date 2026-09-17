@@ -1034,33 +1034,25 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'Order not found']);
         }
 
-        $pdfUrl = route('api.whatsapp.invoice_pdf', ['id' => $order->id, 'lang' => app()->getLocale()]);
         $phoneNumber = $order->billing_address['phone_number'] ?? $order->user->Number ?? '';
         $name = $order->billing_address['name'] ?? $order->user->name ?? 'Customer';
 
+        if (empty($phoneNumber)) {
+            return response()->json(['success' => false, 'message' => 'No phone number available']);
+        }
+
         try {
-            $payload = [
-                'phone_number' => str_starts_with($phoneNumber, '+') ? $phoneNumber : '+' . $phoneNumber,
-                'name' => $name,
-                'booking_id' => $order->id,
-                'order_id' => $order->id,
-                'pdf' => $pdfUrl,
-            ];
-
-            Log::info('WhatsApp Order Notification request (BYPASSED)', ['payload' => $payload]);
-
-            // $response = Http::asForm()->post('https://whatsapi.hispeed.om/api/v1/whatsapp/success/payment', $payload);
-
-            // Log::info('WhatsApp Order Notification response', [
-            //     'order' => $order->Order_Number,
-            //     'response' => $response->json(),
-            //     'phone' => $phoneNumber,
-            //     'pdf_url_sent' => $pdfUrl
-            // ]);
-
-            return response()->json(['success' => true]);
+            $smsService = new \App\Http\Services\MuscatAppsOtpService();
+            $message = "عزيزي العميل {$name}، تم استلام طلبك بنجاح. رقم الطلب: {$order->Order_Number}. شكراً لتسوقك من خيرات الأنعام.";
+            $success = $smsService->sendSms($phoneNumber, $message);
+            
+            if ($success) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Failed to send SMS']);
+            }
         } catch (\Exception $ex) {
-            Log::error('Error sending WhatsApp order notification: ' . $ex->getMessage());
+            Log::error('Error sending SMS order notification: ' . $ex->getMessage());
             return response()->json(['success' => false, 'message' => $ex->getMessage()]);
         }
     }

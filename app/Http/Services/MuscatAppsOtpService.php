@@ -69,6 +69,51 @@ class MuscatAppsOtpService
     }
 
     /**
+     * Send general SMS
+     * 
+     * @param string $phone
+     * @param string $message
+     * @return bool
+     */
+    public function sendSms($phone, $message)
+    {
+        if ($this->testMode) {
+            Log::info("Muscat Apps SMS (TEST MODE) sent to {$phone}: {$message}");
+            return true;
+        }
+
+        try {
+            $phone = ltrim($phone, '+');
+            
+            $payload = [
+                'Phoneno' => $phone,
+                'Username' => $this->username,
+                'Password' => $this->password,
+                'MsgTemplate' => $message,
+            ];
+
+            $response = Http::post("{$this->url}/api/SendSMS", $payload);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                
+                if (isset($data['StatusCode']) && $data['StatusCode'] == "0") {
+                    Log::info("Muscat Apps SMS sent successfully to {$phone}");
+                    return true;
+                }
+                
+                Log::error("Muscat Apps SMS Error: " . ($data['StatusDesc'] ?? 'Unknown Error'), ['response' => $data]);
+            } else {
+                Log::error("Muscat Apps SMS API HTTP Error: " . $response->status(), ['body' => $response->body()]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Muscat Apps SMS Exception: " . $e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
      * Verify OTP
      * 
      * @param string $phone

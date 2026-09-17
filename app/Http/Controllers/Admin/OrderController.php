@@ -372,7 +372,7 @@ class OrderController extends Controller
                     $btn = $btn . '<a href="javascript:void(0)" class="btn-action" onclick="orderStatusEdit(' . $data->id . ')" title="' . __('Change Status') . '" style="padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><i class="fas fa-info-circle"></i></a>';
 
                     if (in_array($data->Order_Status, [ORDER_PENDING, ORDER_CANCELLED])) {
-                        $btn = $btn . '<a href="' . route('admin.order_send_to_whatsapp', encrypt($data->id)) . '" class="btn-action send-to-whatsapp" style="padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><i class="fa-brands fa-whatsapp"></i></a>';
+                        $btn = $btn . '<a href="' . route('admin.order_send_to_sms', encrypt($data->id)) . '" class="btn-action send-to-whatsapp" style="padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><i class="fa-solid fa-sms"></i></a>';
                     }
                     if ($data->is_paid == 0 && strtoupper($data->Payment_Method) != 'COD') {
                         $btn = $btn . '<a href="' . route('admin.order_delete', encrypt($data->id)) . '" class="btn-action delete" style="padding: 6px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"><i class="fas fa-trash-alt"></i></a>';
@@ -715,102 +715,38 @@ class OrderController extends Controller
         return redirect()->back()->with('error', __('Something went wrong!'));
     }
 
-    public function orderSendToWhatsapp($id)
+    public function orderSendToSms($id)
     {
         $id = decrypt($id);
         $order = Order::whereId($id)->with('order_details.product')->first();
 
-        $checkoutProduct = [];
-
-        foreach ($order->order_details as $item) {
-            $cleanName = preg_replace('/[^A-Za-z0-9\s\x{0600}-\x{06FF}]/u', '', $item->product->en_Product_Name);
-            $checkoutProduct[] = [
-                'name' => Str::limit($cleanName, 35),
-                'quantity' => (int) $item->Quantity,
-                'unit_amount' => number_format($item->Price, 3) * 1000,
-            ];
-        }
-
-        if ($order->Delivery_Charge != 0) {
-            $checkoutProduct[] = [
-                'name' => 'Shipping Charge',
-                'quantity' => 1,
-                'unit_amount' => number_format($order->Delivery_Charge, 3) * 1000,
-            ];
-        }
-
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'thawani-api-key' => config('services.thawani.secret_key'),
-        ])->post(config('services.thawani.checkout_url') . '/checkout/session', [
-                    'client_reference_id' => $order->Order_Number,
-                    'mode' => 'payment',
-                    'products' => $checkoutProduct,
-                    'success_url' => route('thawani.success', [
-                        'order_number' => $order->Order_Number,
-                    ]),
-                    'cancel_url' => route('thawani.cancel', [
-                        'order_number' => $order->Order_Number,
-                    ]),
-                    'metadata' => [
-                        'order_number' => $order->Order_Number,
-                        'shipping_charge' => (float) $order->Delivery_Charge,
-                        'subtotal' => $order->Sub_Total,
-                        'discount' => (float) $order->Coupon_Amount,
-                        'grand_total' => (float) $order->Grand_Total,
-                        'tax' => (float) $order->Tax,
-                    ]
-                ]);
-
-        if ($response->successful()) {
-            $paymentJsonData = $response->json();
-            // create new request body for create payment
-            $payment = [
-                'session_id' => $paymentJsonData['data']['session_id'],
-                'user_id' => $order->User_Id,
-                'order_number' => $order->Order_Number,
-                'amount' => $order->Grand_Total,
-                'status' => 'CREATED',
-            ];
-
-
-            $paymentRequest = new Request($payment);
-
-
-            // create payment
-            $this->paymentController->createPayment($paymentRequest);
-
-            $paymentUrl = config('services.thawani.pay_url') . $paymentJsonData['data']['session_id'] . '?key=' . config('services.thawani.public_key');
-
+        try {
             $serialized_billing = $order->billing_address;
-
+            
             $phoneNumber = null;
             if (isset($serialized_billing['phone_number'])) {
                 $phoneNumber = $serialized_billing['phone_number'];
+            } elseif ($order->user) {
+                $phoneNumber = $order->user->Number;
             }
 
-            $pdfUrl = route('api.whatsapp.invoice_pdf', ['id' => $order->id, 'lang' => (session('APP_LOCALE') == 'fr' ? 'ar' : 'en')]);
-            $response = Http::asForm()->post('https://whatsapi.hispeed.om/api/v1/whatsapp/payment_pdf', [
-                'phone_number' => $phoneNumber,
-                'payment_url' => $paymentUrl,
-                'created_by' => $order->admin ? 'admin' : 'user',
-                'pdf' => $pdfUrl,
-                'price' => $order->Grand_Total,
-                'language' => session('APP_LOCALE') == 'fr' ? 'ar' : 'en'
-            ]);
-
-
-
-            if ($response->successful()) {
-
-                return redirect()->back()->with('success', __('Successfully Send To Whatsapp!'));
+            if ($phoneNumber) {
+                $smsService = new \App\Http\Services\MuscatAppsOtpService();
+                $message = "عزيزي العميل، تم استلام طلبك بنجاح. رقم الطلب: {$order->Order_Number}. شكراً لتسوقك من خيرات الأنعام.";
+                $success = $smsService->sendSms($phoneNumber, $message);
+                
+                if ($success) {
+                    return redirect()->back()->with('success', __('Successfully Sent SMS!'));
+                } else {
+                    return redirect()->back()->with('error', __('Failed to send SMS.'));
+                }
             } else {
-                return redirect()->back()->with('error', __('Something went wrong!'));
+                return redirect()->back()->with('error', __('No phone number found for this order.'));
             }
+        } catch (\Exception $e) {
+            \Log::error('Admin Order Send SMS Exception: ' . $e->getMessage());
+            return redirect()->back()->with('error', __('Something went wrong!'));
         }
-        return redirect()->back()->with('error', __('Something went wrong!'));
     }
 
 

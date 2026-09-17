@@ -20,13 +20,18 @@
         <!-- Top Bar (Desktop & Mobile Adaptive) -->
         <div class="store-top-bar">
             <div class="store-title-box">
-                <h1 class="store-title">@lang('v2_store.all_products')</h1>
+                @php 
+                    $catFilter = request('category', []); 
+                    $selectedCategory = (count($catFilter) == 1) ? collect($categories)->firstWhere('id', $catFilter[0]) : null;
+                    $storeTitle = $selectedCategory ? (app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $selectedCategory->fr_Category_Name : $selectedCategory->en_Category_Name) : trans('v2_store.all_products');
+                @endphp
+                <h1 class="store-title">{{ $storeTitle }}</h1>
                 <span class="store-count">@lang('v2_store.product_count', ['count' => $products->total()])</span>
             </div>
             
             <div class="store-actions">
                 <div style="position: relative; flex: 1;">
-                    <select name="sort" class="store-sort-select" style="appearance: none; -webkit-appearance: none;">
+                    <select name="sort" class="store-sort-select" style="appearance: none; -webkit-appearance: none; cursor: pointer;">
                         <option value="">@lang('v2_store.sort_default')</option>
                         <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>@lang('v2_store.sort_latest')</option>
                         <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>@lang('v2_store.sort_price_asc')</option>
@@ -53,19 +58,48 @@
                 </div>
                 <div style="background: #fafafa; padding: 25px; border-radius: 12px; border: 1px solid #eee; overflow: hidden;">
                     
-                    <!-- Categories -->
-                    <div style="margin-bottom: 25px;">
-                        <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_layout.nav_categories')</h3>
-                        @php $catFilter = request('category', []); @endphp
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            @foreach($categories as $category)
-                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #555;">
-                                <input type="checkbox" name="category[]" value="{{ $category->id }}"  {{ in_array($category->id, $catFilter) ? 'checked' : '' }} style="accent-color: #e32636; width: 18px; height: 18px; flex-shrink: 0;"> 
-                                <span>{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $category->fr_Category_Name : $category->en_Category_Name }}</span>
-                            </label>
-                            @endforeach
+                    @if($selectedCategory)
+                        <!-- Dynamic Subcategories for selected Category -->
+                        <div style="margin-bottom: 25px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #333;">الأقسام الفرعية</h3>
+                                <a href="{{ route('front.store') }}" style="font-size: 12px; color: #e32636; text-decoration: none; font-weight: bold;"><i class="fas fa-arrow-right" style="margin-inline-end: 4px;"></i> كل الأقسام</a>
+                            </div>
+                            <!-- keep category filter active but hidden so it persists in the form submission -->
+                            <input type="hidden" name="category[]" value="{{ $selectedCategory->id }}">
+                            
+                            @php 
+                                $catSubcategories = collect($subcategories)->where('category_id', $selectedCategory->id);
+                                $subcatFilter = request('subcategory', []);
+                            @endphp
+                            
+                            @if($catSubcategories->count() > 0)
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    @foreach($catSubcategories as $subcat)
+                                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #555;">
+                                        <input type="checkbox" name="subcategory[]" value="{{ $subcat->id }}"  {{ in_array($subcat->id, $subcatFilter) ? 'checked' : '' }} style="accent-color: #e32636; width: 18px; height: 18px; flex-shrink: 0;" onchange="document.getElementById('filter-form').submit();"> 
+                                        <span>{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $subcat->name_ar : $subcat->name }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p style="font-size: 13px; color: #888; margin: 0;">لا توجد أقسام فرعية</p>
+                            @endif
                         </div>
-                    </div>
+                    @else
+                        <!-- Categories -->
+                        <div style="margin-bottom: 25px;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_layout.nav_categories')</h3>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                @foreach($categories as $category)
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #555;">
+                                    <input type="checkbox" name="category[]" value="{{ $category->id }}" class="category-checkbox" {{ in_array($category->id, $catFilter) ? 'checked' : '' }} style="accent-color: #e32636; width: 18px; height: 18px; flex-shrink: 0;"> 
+                                    <span>{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $category->fr_Category_Name : $category->en_Category_Name }}</span>
+                                </label>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
                     <hr style="border: none; border-top: 1px solid #eee; margin: 0 0 25px 0;">
 
@@ -188,19 +222,21 @@
 
                     <hr style="border: none; border-top: 1px solid #eee; margin: 0 0 25px 0;">
 
-                    <!-- Cut Style (نمط القص) - Using Subcategories -->
-                    <div style="margin-bottom: 10px;">
-                        <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_store.cut_style')</h3>
-                        @php $subcatFilter = request('subcategory', []); @endphp
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            @foreach($subcategories as $subcat)
-                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #555; white-space: nowrap;">
-                                <input type="checkbox" name="subcategory[]" value="{{ $subcat->id }}"  {{ in_array($subcat->id, $subcatFilter) ? 'checked' : '' }} style="accent-color: #e32636; width: 16px; height: 16px; flex-shrink: 0;"> 
-                                <span>{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $subcat->name_ar : $subcat->name }}</span>
-                            </label>
-                            @endforeach
+                    @if(!$selectedCategory)
+                        <!-- Cut Style (نمط القص) - Using Subcategories -->
+                        <div style="margin-bottom: 10px;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 700; color: #333;">@lang('v2_store.cut_style')</h3>
+                            @php $subcatFilter = request('subcategory', []); @endphp
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                @foreach($subcategories as $subcat)
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #555; white-space: nowrap;">
+                                    <input type="checkbox" name="subcategory[]" value="{{ $subcat->id }}"  {{ in_array($subcat->id, $subcatFilter) ? 'checked' : '' }} style="accent-color: #e32636; width: 16px; height: 16px; flex-shrink: 0;"> 
+                                    <span>{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $subcat->name_ar : $subcat->name }}</span>
+                                </label>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                 </div>
             </aside>
@@ -341,6 +377,11 @@
 
         // Listen for changes on the form inputs
         $('#filter-form').on('change', 'input, select', function(e) {
+            if ($(this).hasClass('category-checkbox')) {
+                // For categories, we want a full page reload to re-render the sidebar
+                $('#filter-form').submit();
+                return;
+            }
             e.preventDefault();
             clearTimeout(fetchTimer);
             fetchTimer = setTimeout(fetchProducts, 300); // Debounce

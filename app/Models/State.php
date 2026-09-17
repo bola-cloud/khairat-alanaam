@@ -23,13 +23,4 @@ class State extends Model
         return $this->hasMany(City::class);
     }
 
-    public function getNameArAttribute()
-    {
-        return $this->name_fr;
-    }
-
-    public function setNameArAttribute($value)
-    {
-        $this->attributes['name_fr'] = $value;
-    }
 }

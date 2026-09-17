@@ -409,7 +409,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:admin', 'is_admin'], '
     Route::post('/order-status-edit', [OrderController::class, 'orderStatusEdit'])->name('order_status_edit')->middleware(['permission:order-edit', 'isDemo']);
     Route::post('/order-status-change/{id}', [OrderController::class, 'orderStatusChange'])->name('order_status_change')->middleware(['permission:order-edit', 'isDemo']);
     Route::get('/order-delete/{id}', [OrderController::class, 'orderDelete'])->name('order_delete')->middleware(['permission:order-delete', 'isDemo']);
-    Route::get('/order-send-to-whatsapp/{id}', [OrderController::class, 'orderSendToWhatsapp'])->name('order_send_to_whatsapp')->middleware(['permission:order-delete', 'isDemo']);
+    Route::get('/order-send-to-sms/{id}', [OrderController::class, 'orderSendToSms'])->name('order_send_to_sms')->middleware(['permission:order-delete', 'isDemo']);
     Route::get('/order/digital-products/{id}', [OrderController::class, 'digitalProductSend'])->name('digital_product_send')->middleware(['permission:order-edit']);
     Route::post('/order/digital-products-mail', [OrderController::class, 'digitalProductMail'])->name('digital_product_mail')->middleware(['permission:order-edit', 'isDemo']);
     Route::post('/admin/orders/bulk-status-update', [OrderController::class, 'bulkStatusUpdate'])->name('orders.bulk_status_update');
