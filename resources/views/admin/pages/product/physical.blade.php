@@ -49,7 +49,7 @@
                                                 <label for="en-product-slug">{{ __('Product Slug') }} *</label>
                                                 <input type="text" class="form-control" id="en-product-slug"
                                                     name="en_product_slug" value="{{ old('en_product_slug') }}"
-                                                    placeholder="Slug">
+                                                    placeholder="Slug" readonly>
                                                 @error('en_product_slug')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -135,7 +135,7 @@
                                                 @error('color')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @enderror
-                                            </div>
+                                            </div> --}}
 
                                             <div class="input__group mb-25">
                                                 <label for="select2Multiple">{{ __('Product Options') }}</label>
@@ -148,6 +148,8 @@
                                                 @error('size')
                                                 <span class="text-danger">{{ $message }}</span>
                                                 @enderror
+                                            </div>
+
                                             <div class="input__group mb-25">
                                                 <label>{{ __('Product Option') }}</label>
                                                 <div id="size-container">
@@ -324,7 +326,7 @@
                                                 <label for="fr-product-slug">{{ __('Product Slug') }} *</label>
                                                 <input type="text" class="form-control" id="fr-product-slug"
                                                     name="fr_product_slug" value="{{ old('fr_product_slug') }}"
-                                                    placeholder="{{ __('Slug') }}">
+                                                    placeholder="{{ __('Slug') }}" readonly>
                                                 @error('fr_product_slug')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
