@@ -48,7 +48,7 @@
 
                     <!-- 6 inputs for OTP -->
                     <div dir="ltr" style="display: flex; gap: 10px; justify-content: space-between; margin-bottom: 25px;">
-                        @for($i=1; $i<=6; $i++)
+                        @for($i=1; $i<=5; $i++)
                             <input type="text" maxlength="1" class="otp-input" style="width: 100%; height: 50px; border: 1px solid var(--border-color); border-radius: 8px; text-align: center; font-size: 20px; font-weight: 700; color: var(--text-color); outline: none;">
                         @endfor
                     </div>
@@ -99,14 +99,14 @@
                 
                 input.addEventListener('paste', (e) => {
                     e.preventDefault();
-                    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+                    const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 5);
                     if (pastedData) {
                         for (let i = 0; i < pastedData.length; i++) {
                             if (inputs[i]) {
                                 inputs[i].value = pastedData[i];
                             }
                         }
-                        const focusIndex = Math.min(pastedData.length - 1, 5);
+                        const focusIndex = Math.min(pastedData.length - 1, 4);
                         inputs[focusIndex].focus();
                         updateFinalOtp();
                     }
