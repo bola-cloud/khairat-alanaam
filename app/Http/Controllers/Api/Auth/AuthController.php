@@ -24,12 +24,14 @@ class AuthController extends Controller
         $phone_without_plus = ltrim($full_phone, '+');
         
         $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
-        $refNo = $muscatOtpService->sendOtp($phone_without_plus);
+        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $message = "{$otp} is your verification code for Khairat Alanaam";
+        $success = $muscatOtpService->sendSms($phone_without_plus, $message);
 
-        if ($refNo) {
+        if ($success) {
             Otp::create([
                 'phone_number' => $full_phone,
-                'otp' => $refNo,
+                'otp' => $otp,
             ]);
             return response()->json(['message' => 'OTP sent successfully'], 200);
         } else {
@@ -54,9 +56,7 @@ class AuthController extends Controller
         
         $isValid = false;
         if ($otp_record) {
-            $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
-            $phone_without_plus = ltrim($full_phone, '+');
-            $isValid = $muscatOtpService->verifyOtp($phone_without_plus, $otp_record->otp, $entered_otp);
+            $isValid = ($otp_record->otp === $entered_otp);
         }
 
         if ($isValid) {

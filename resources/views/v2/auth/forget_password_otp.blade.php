@@ -45,7 +45,7 @@
 
             <!-- OTP Inputs -->
             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; direction: ltr;">
-                @for($i=1; $i<=5; $i++)
+                @for($i=1; $i<=6; $i++)
                 <input type="text" maxlength="1" class="otp-input" required
                     style="width: 45px; height: 50px; text-align: center; font-size: 20px; font-weight: 700; border: 1px solid #ddd; border-radius: 8px; outline: none; transition: 0.3s; color: #333;"
                     onfocus="this.style.borderColor='#e32636'" onblur="this.style.borderColor='#ddd'"
@@ -114,6 +114,10 @@
             document.getElementById('resendLink').style.display = 'inline-block';
         }
     }, 1000);
+    
+    document.getElementById('otpForm').addEventListener('submit', function() {
+        combineOtp();
+    });
 </script>
 
 @endsection
