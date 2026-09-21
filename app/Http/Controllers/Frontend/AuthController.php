@@ -185,7 +185,7 @@ class AuthController extends Controller
     public function verifyEmailPost(Request $request)
     {
         $request->validate([
-            'otp' => 'required|digits:6',
+            'otp' => 'required|digits:5',
         ]);
 
         $target = session('verify_target');
@@ -249,7 +249,7 @@ class AuthController extends Controller
         try {
             $appName = config('app.name', 'HiSpeed');
             if ($method == 'email') {
-                $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                $otp = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
                 $user->code = $otp;
                 $user->save();
                 
@@ -319,7 +319,7 @@ class AuthController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
 
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $otp = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
 
         // Delete old tokens for this email to prevent multiple valid links
         DB::table('password_resets')->where('email', $request->email)->delete();
@@ -358,7 +358,7 @@ class AuthController extends Controller
     public function userForgetPasswordOtpVerify(Request $request)
     {
         $request->validate([
-            'otp' => 'required|digits:6',
+            'otp' => 'required|digits:5',
         ]);
 
         $email = session('reset_email');
@@ -501,7 +501,7 @@ class AuthController extends Controller
 
 
         // Generate a random 6-digit OTP
-        $otp = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $otp = str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT);
 
         // Store OTP in session for later verification
         session(['whatsapp_otp' => $otp]);
@@ -545,7 +545,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'phone_number' => 'required',
-            'otp' => 'required|digits:6',
+            'otp' => 'required|digits:5',
             'name' => 'required',
         ]);
 

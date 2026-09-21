@@ -31,7 +31,7 @@ class MuscatAppsOtpService
     {
         if ($this->testMode) {
             $refNo = 'TEST_REF_' . rand(100000, 999999);
-            Log::info("Muscat Apps OTP (TEST MODE) sent to {$phone}. Use OTP: 123456", ['ref_no' => $refNo]);
+            Log::info("Muscat Apps OTP (TEST MODE) sent to {$phone}. Use OTP: 12345", ['ref_no' => $refNo]);
             return $refNo;
         }
 
@@ -44,7 +44,7 @@ class MuscatAppsOtpService
                 'Phoneno' => $phone,
                 'Username' => $this->username,
                 'Password' => $this->password,
-                'MsgTemplate' => '{OTP} is your verification code for Khairat Alan3am',
+                'MsgTemplate' => '{OTP} is your verification code for Khairat Alanaam',
             ];
 
             $response = Http::post("{$this->url}/api/GenOTP", $payload);
@@ -124,8 +124,8 @@ class MuscatAppsOtpService
     public function verifyOtp($phone, $refNo, $otp)
     {
         if ($this->testMode) {
-            // In test mode, only OTP '123456' is considered valid
-            $isValid = ($otp === '123456');
+            // In test mode, only OTP '12345' is considered valid
+            $isValid = ($otp === '12345');
             Log::info("Muscat Apps Verify OTP (TEST MODE) for {$phone} with OTP {$otp}. Result: " . ($isValid ? 'Success' : 'Failed'));
             return $isValid;
         }
