@@ -55,7 +55,14 @@
                             </p>
 
                             <div style="display: flex; gap: 15px;">
-                                <a href="{{ !empty($ad->link) && $ad->link !== '#' ? $ad->link : route('front.store') }}" class="btn-primary" style="padding: 12px 30px; font-size: 16px;">@lang('v2_home.shop_now')</a>
+                                @php
+                                    $finalLink = route('front.store');
+                                    if (!empty($ad->link) && $ad->link !== '#') {
+                                        // Replace localhost links with the actual domain if it was hardcoded during local testing
+                                        $finalLink = str_replace(['http://127.0.0.1:8000', 'http://localhost:8000', 'https://127.0.0.1:8000', 'https://localhost:8000'], url('/'), $ad->link);
+                                    }
+                                @endphp
+                                <a href="{{ $finalLink }}" class="btn-primary" style="padding: 12px 30px; font-size: 16px;">@lang('v2_home.shop_now')</a>
                                 <a href="{{ route('about.us') }}" class="btn-outline-white" style="padding: 12px 30px; font-size: 16px;">@lang('v2_home.our_story')</a>
                             </div>
                         </div>
