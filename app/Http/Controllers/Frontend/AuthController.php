@@ -40,39 +40,50 @@ class AuthController extends Controller
         $rules = [
             'country_code' => 'required',
             'phone' => 'required',
+            'name' => 'required',
         ];
         $request->validate($rules);
 
         $login_id = $request->input('country_code') . $request->input('phone');
         
         // Search for user by Number (Phone)
-        // Ensure the number is formatted correctly if needed, but assuming login_id is the full number
         $user = User::where('Number', $login_id)->where('is_admin', 0)->first();
 
-        if ($user) {
-            if ($user->status == INACTIVE) {
-                return redirect()->route('front')->with('error', __('User is blocked by admin.'));
-            }
-
-            // Send OTP via Muscat Apps SMS
-            $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
-            $refNo = $muscatOtpService->sendOtp($user->Number);
-
-            if ($refNo) {
-                // Store the reference number in the code column
-                $user->code = $refNo;
-                $user->save();
-                
-                session(['verify_target' => $user->Number]);
-                session(['verification_method' => 'sms']); // Changed to sms
-                
-                return redirect()->route('user.verify.email')->with('success', __('Please verify your account with the OTP sent to your phone.'));
-            } else {
-                return redirect()->back()->with('error', __('Failed to send OTP. Please try again later.'));
-            }
+        if (!$user) {
+            // Auto register the user if they don't exist
+            $user = User::create([
+                'name' => $request->input('name'),
+                'Number' => $login_id,
+                'email' => $login_id . '@example.com', // Dummy email if required
+                'password' => Hash::make(Str::random(16)),
+                'status' => ACTIVE,
+            ]);
+        } else {
+            // Update name if changed
+            $user->name = $request->input('name');
+            $user->save();
         }
 
-        return redirect()->back()->with('error', __('Phone number not found. Please sign up.'));
+        if ($user->status == INACTIVE) {
+            return redirect()->route('front')->with('error', __('User is blocked by admin.'));
+        }
+
+        // Send OTP via Muscat Apps SMS
+        $muscatOtpService = new \App\Http\Services\MuscatAppsOtpService();
+        $refNo = $muscatOtpService->sendOtp($user->Number);
+
+        if ($refNo) {
+            // Store the reference number in the code column
+            $user->code = $refNo;
+            $user->save();
+            
+            session(['verify_target' => $user->Number]);
+            session(['verification_method' => 'sms']); // Changed to sms
+            
+            return redirect()->route('user.verify.email')->with('success', __('Please verify your account with the OTP sent to your phone.'));
+        } else {
+            return redirect()->back()->with('error', __('Failed to send OTP. Please try again later.'));
+        }
     }
 
     public function userSignUp()

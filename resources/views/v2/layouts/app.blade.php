@@ -115,7 +115,7 @@
             <!-- Logo -->
             <div class="logo">
                 <a href="{{ route('front') }}">
-                    <img src="{{ asset($siteLogo) }}" alt="Khairat Al An'aam" style="max-height: 50px;">
+                    <img src="{{ asset($siteLogo) }}" alt="Khairat Al An'aam" style="max-height: 100px;">
                 </a>
             </div>
 
@@ -184,7 +184,22 @@
             </div>
 
             <!-- Auth Buttons -->
-            <div class="header-auth">
+            <div class="header-auth" style="display: flex; align-items: center; gap: 15px;">
+                <!-- Wishlist -->
+                <a href="{{ route('front.v2.favorites') }}" class="action-btn" style="position: relative; display: flex; align-items: center; justify-content: center; text-decoration: none;">
+                    <i class="far fa-heart" style="font-size: 24px; color: var(--text-color);"></i>
+                    @php $wishlistCount = Auth::check() ? \App\Models\Front\Wishlist::where('User_Id', auth()->id())->count() : 0; @endphp
+                    <span class="fav-badge badge" style="position: absolute; top: -5px; right: -8px; background: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 10px; font-weight: bold; {{ $wishlistCount == 0 ? 'display: none;' : '' }}">{{ $wishlistCount }}</span>
+                </a>
+                
+                <!-- Cart -->
+                <a href="{{ route('front.cart') }}" class="action-btn has-badge" style="position: relative; display: flex; align-items: center; gap: 5px; color: var(--text-color); font-weight: 600; text-decoration: none;">
+                    <i class="fas fa-shopping-cart" style="font-size: 24px;"></i>
+                    <span style="font-size: 16px;">سلتي</span>
+                    @php $cartCount = \Cart::count(); @endphp
+                    <span class="cart-badge badge" style="position: absolute; top: -5px; right: -8px; background: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 10px; font-weight: bold; {{ $cartCount == 0 ? 'display: none;' : '' }}">{{ $cartCount }}</span>
+                </a>
+
                 @auth
                     <div class="user-dropdown" style="position: relative; display: inline-block;">
                         <div onclick="const m = document.getElementById('user-menu'); m.style.display = m.style.display === 'none' ? 'block' : 'none'; m.classList.toggle('show-user-menu');" style="cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-color);">
@@ -210,51 +225,44 @@
                         });
                     </script>
                 @else
-                    <a href="{{ route('login') }}" class="btn-primary">@lang('v2_layout.login')</a>
-                    <a href="{{ route('user.sign.up') }}" class="btn-outline">@lang('v2_layout.register')</a>
+                    <a href="{{ route('login') }}" class="btn-primary" style="font-weight: bold; padding: 8px 20px; border-radius: 20px; text-decoration: none;">@lang('v2_layout.login')</a>
+                    <a href="{{ route('user.sign.up') }}" class="btn-outline" style="font-weight: bold; padding: 8px 20px; border-radius: 20px; text-decoration: none;">انضم الينا</a>
                 @endauth
             </div>
         </div>
 
         <!-- Lower Nav Menu -->
+        <!-- Lower Nav Menu -->
         <div class="lower-nav">
-            <div class="v2-container nav-inner">
-                <ul class="nav-links">
-                    <li><a href="{{ route('front') }}" class="{{ request()->routeIs('front') ? 'active' : '' }}">@lang('v2_layout.nav_home')</a></li>
+            <div class="v2-container nav-inner" style="justify-content: center;">
+                <ul class="nav-links" style="width: 100%; display: flex; justify-content: center; gap: 30px; margin: 0; padding: 15px 0;">
+                    <li><a href="{{ route('front') }}" class="{{ request()->routeIs('front') ? 'active' : '' }}" style="font-size: 18px; font-weight: bold;">@lang('v2_layout.nav_home')</a></li>
+                    
+                    @php $navCategories = \App\Models\Admin\Category::where('Status', 1)->orderBy('order')->get(); @endphp
+                    @foreach($navCategories as $cat)
                     <li class="nav-item-dropdown">
-                        <a href="{{ route('front.store') }}" class="{{ request()->routeIs('front.store') ? 'active' : '' }}">@lang('v2_layout.nav_categories') <i class="fas fa-chevron-down"></i></a>
-                        @php $navCategories = \App\Models\Admin\Category::where('Status', 1)->get(); @endphp
-                        @if($navCategories->count() > 0)
-                        <ul class="nav-dropdown-menu">
-                            @foreach($navCategories as $cat)
+                        <a href="{{ route('front.store', ['category[]' => $cat->id]) }}" style="font-size: 18px; font-weight: bold;" class="{{ request('category') && in_array($cat->id, request('category')) ? 'active' : '' }}">
+                            {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $cat->fr_Category_Name : $cat->en_Category_Name }} 
+                            @if($cat->subCategories && $cat->subCategories->count() > 0)
+                            <i class="fas fa-chevron-down" style="font-size: 12px; margin-inline-start: 5px;"></i>
+                            @endif
+                        </a>
+                        
+                        @if($cat->subCategories && $cat->subCategories->count() > 0)
+                        <ul class="nav-dropdown-menu" style="min-width: 200px; text-align: right;">
+                            @foreach($cat->subCategories as $subCat)
                             <li>
-                                <a href="{{ route('front.store', ['category[]' => $cat->id]) }}">
-                                    {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $cat->fr_Category_Name : $cat->en_Category_Name }}
+                                <a href="{{ route('front.store', ['subcategory[]' => $subCat->id]) }}" style="font-size: 16px; font-weight: 500;">
+                                    {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $subCat->name_ar : $subCat->name }}
                                 </a>
                             </li>
                             @endforeach
                         </ul>
                         @endif
                     </li>
-                    <li><a href="{{ route('about.us') }}" class="{{ request()->routeIs('about.us') ? 'active' : '' }}">@lang('v2_layout.nav_about')</a></li>
-                    <li><a href="{{ route('contact.us') }}" class="{{ request()->routeIs('contact.us') ? 'active' : '' }}">@lang('v2_layout.nav_contact')</a></li>
+                    @endforeach
+                    
                 </ul>
-                <div class="nav-icons">
-                    <a href="{{ route('front.v2.favorites') }}" class="action-btn" style="position: relative;">
-                        <i class="far fa-heart"></i>
-                        @php
-                            $wishlistCount = Auth::check() ? \App\Models\Front\Wishlist::where('User_Id', auth()->id())->count() : 0;
-                        @endphp
-                        <span class="fav-badge badge" style="position: absolute; top: -5px; right: -8px; background: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 10px; font-weight: bold; {{ $wishlistCount == 0 ? 'display: none;' : '' }}">{{ $wishlistCount }}</span>
-                    </a>
-                    <a href="{{ route('front.cart') }}" class="action-btn has-badge" style="position: relative;">
-                        <i class="fas fa-shopping-cart"></i>
-                        @php
-                            $cartCount = \Cart::count();
-                        @endphp
-                        <span class="cart-badge badge" style="position: absolute; top: -5px; right: -8px; background: var(--primary-color); color: #fff; border-radius: 50%; padding: 2px 5px; font-size: 10px; font-weight: bold; {{ $cartCount == 0 ? 'display: none;' : '' }}">{{ $cartCount }}</span>
-                    </a>
-                </div>
             </div>
         </div>
     </header>

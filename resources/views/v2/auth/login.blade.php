@@ -38,6 +38,14 @@
                 <form action="{{ route('user.sign.in.post') }}" method="POST">
                     @csrf
                     <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size:14px; color: var(--text-light);">{{ __('v2_auth.name', ['default' => 'الاسم']) }}</label>
+                        <input type="text" name="name" required placeholder="أدخل اسمك"
+                            style="width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 14px; text-align:start; margin-bottom: 15px;"
+                            value="{{ old('name') }}">
+                        @error('name')
+                            <div style="color: #c00; font-size: 12px; margin-top: -10px; margin-bottom: 15px;">{{ $message }}</div>
+                        @enderror
+
                         <label
                             style="display: block; margin-bottom: 8px; font-weight: 600; font-size:14px; color: var(--text-light);">{{ __('v2_auth.phone_number') }}</label>
                         <div style="display: flex; gap: 10px;">
