@@ -232,19 +232,18 @@
         </div>
 
         <!-- Lower Nav Menu -->
-        <!-- Lower Nav Menu -->
         <div class="lower-nav">
             <div class="v2-container nav-inner" style="justify-content: center;">
-                <ul class="nav-links" style="width: 100%; display: flex; justify-content: center; gap: 30px; margin: 0; padding: 15px 0;">
-                    <li><a href="{{ route('front') }}" class="{{ request()->routeIs('front') ? 'active' : '' }}" style="font-size: 18px; font-weight: bold;">@lang('v2_layout.nav_home')</a></li>
+                <ul class="nav-links" style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin: 0; padding: 15px 0;">
+                    <li><a href="{{ route('front') }}" class="{{ request()->routeIs('front') ? 'active' : '' }}" style="font-size: 15px; font-weight: bold; white-space: nowrap;">@lang('v2_layout.nav_home')</a></li>
                     
                     @php $navCategories = \App\Models\Admin\Category::where('Status', 1)->orderBy('order')->get(); @endphp
                     @foreach($navCategories as $cat)
                     <li class="nav-item-dropdown">
-                        <a href="{{ route('front.store', ['category[]' => $cat->id]) }}" style="font-size: 18px; font-weight: bold;" class="{{ request('category') && in_array($cat->id, request('category')) ? 'active' : '' }}">
+                        <a href="{{ route('front.store', ['category[]' => $cat->id]) }}" style="font-size: 15px; font-weight: bold; display: flex; align-items: center; white-space: nowrap; gap: 4px;" class="{{ request('category') && in_array($cat->id, request('category')) ? 'active' : '' }}">
                             {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $cat->fr_Category_Name : $cat->en_Category_Name }} 
                             @if($cat->subCategories && $cat->subCategories->count() > 0)
-                            <i class="fas fa-chevron-down" style="font-size: 12px; margin-inline-start: 5px;"></i>
+                            <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
                             @endif
                         </a>
                         
@@ -252,7 +251,7 @@
                         <ul class="nav-dropdown-menu" style="min-width: 200px; text-align: right;">
                             @foreach($cat->subCategories as $subCat)
                             <li>
-                                <a href="{{ route('front.store', ['subcategory[]' => $subCat->id]) }}" style="font-size: 16px; font-weight: 500;">
+                                <a href="{{ route('front.store', ['subcategory[]' => $subCat->id]) }}" style="font-size: 14px; font-weight: 500;">
                                     {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $subCat->name_ar : $subCat->name }}
                                 </a>
                             </li>
