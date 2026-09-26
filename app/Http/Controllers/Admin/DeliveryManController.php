@@ -50,7 +50,7 @@ class DeliveryManController extends Controller
 
         DeliveryMan::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->email ?? $request->phone . '@delivery.local',
             'password' => Hash::make($request->password),
             'phone' => $request->phone,
             'status' => $request->has('status'),
@@ -81,7 +81,7 @@ class DeliveryManController extends Controller
 
         $data = [
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->email ?? $request->phone . '@delivery.local',
             'phone' => $request->phone,
             'status' => $request->has('status'),
         ];
