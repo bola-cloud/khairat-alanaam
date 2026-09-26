@@ -530,6 +530,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:admin', 'is_admin'], '
         Route::post('/store', [\App\Http\Controllers\Admin\DeliveryManController::class, 'store'])->name('delivery_man.store');
         Route::get('/edit/{id}', [\App\Http\Controllers\Admin\DeliveryManController::class, 'edit'])->name('delivery_man.edit');
         Route::post('/update/{id}', [\App\Http\Controllers\Admin\DeliveryManController::class, 'update'])->name('delivery_man.update');
+        Route::get('/delete/{id}', [\App\Http\Controllers\Admin\DeliveryManController::class, 'delete'])->name('delivery_man.delete');
     });
     
     // CSR Initiatives routes
