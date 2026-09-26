@@ -234,7 +234,7 @@
         <!-- Lower Nav Menu -->
         <div class="lower-nav">
             <div class="v2-container nav-inner" style="justify-content: center;">
-                <ul class="nav-links" style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin: 0; padding: 15px 0;">
+                <ul class="nav-links" style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap; gap: 22px; margin: 0; padding: 15px 0;">
                     <li><a href="{{ route('front') }}" class="{{ request()->routeIs('front') ? 'active' : '' }}" style="font-size: 15px; font-weight: bold; white-space: nowrap;">@lang('v2_layout.nav_home')</a></li>
                     
                     @php $navCategories = \App\Models\Admin\Category::where('Status', 1)->orderBy('order')->get(); @endphp
