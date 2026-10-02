@@ -190,12 +190,21 @@
         <!-- Category Swiper -->
     <section class="home-categories" style="padding: 40px 0; background: var(--bg-color); overflow: hidden;">
         <div class="v2-container" style="position: relative;">
+            
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 30px; gap: 15px;">
+                <div style="height: 1px; background: #e0e0e0; flex: 1; max-width: 200px;"></div>
+                <h2 style="margin: 0; font-size: 24px; font-weight: 800; color: #e32636;">{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'أقسامنا' : 'Our Categories' }}</h2>
+                <div style="height: 1px; background: #e0e0e0; flex: 1; max-width: 200px;"></div>
+            </div>
+
             <div class="swiper category-swiper">
                 <div class="swiper-wrapper">
                     @foreach($allCategories as $category)
                     <div class="swiper-slide">
                         <a href="{{ route('front.store', ['category[]' => $category->id]) }}" style="text-align: center; cursor: pointer; transition: 0.3s; text-decoration: none; display: block;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <img src="{{ $category->Category_Icon ? asset('uploaded_files/category_image/' . $category->Category_Icon) : asset('assets/images/placeholder.png') }}" alt="{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $category->fr_Category_Name : $category->en_Category_Name }}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <div style="background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; aspect-ratio: 1/1;">
+                                <img src="{{ $category->Category_Icon ? asset('uploaded_files/category_image/' . $category->Category_Icon) : asset('assets/images/placeholder.png') }}" alt="{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $category->fr_Category_Name : $category->en_Category_Name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                            </div>
                             <h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #333;">{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? $category->fr_Category_Name : $category->en_Category_Name }}</h3>
                         </a>
                     </div>
@@ -205,8 +214,8 @@
             
             <!-- Custom Swiper Navigation -->
             @if($allCategories->count() > 5)
-            <div class="category-button-next" style="position: absolute; {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'left' : 'right' }}: -20px; top: 40%; transform: translateY(-50%); width: 40px; height: 40px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: var(--primary-color);"><i class="fas fa-chevron-{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'left' : 'right' }}"></i></div>
-            <div class="category-button-prev" style="position: absolute; {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'right' : 'left' }}: -20px; top: 40%; transform: translateY(-50%); width: 40px; height: 40px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: var(--primary-color);"><i class="fas fa-chevron-{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'right' : 'left' }}"></i></div>
+            <div class="category-button-next" style="position: absolute; {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'left' : 'right' }}: -20px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: var(--primary-color);"><i class="fas fa-chevron-{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'left' : 'right' }}"></i></div>
+            <div class="category-button-prev" style="position: absolute; {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'right' : 'left' }}: -20px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; background: #fff; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; color: var(--primary-color);"><i class="fas fa-chevron-{{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'right' : 'left' }}"></i></div>
             @endif
         </div>
     </section>
@@ -735,6 +744,11 @@
                 new Swiper('.category-swiper', {
                     slidesPerView: 2,
                     spaceBetween: 15,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    },
+                    loop: true,
                     navigation: {
                         nextEl: '.category-button-next',
                         prevEl: '.category-button-prev',
