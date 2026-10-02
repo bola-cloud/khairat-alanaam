@@ -109,7 +109,7 @@
             </p>
 
             <div style="display: flex; align-items: baseline; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);">
-                <div style="font-size: 32px; font-weight: 800; color: var(--primary-color);">
+                <div id="display_price" style="font-size: 32px; font-weight: 800; color: var(--primary-color);">
                     {{ number_format($finalPrice, 3) }} @lang('v2_layout.currency_omr')
                 </div>
                 @if($hasDiscount)
@@ -139,10 +139,16 @@
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         @foreach($validSizes as $index => $size)
+                        @php
+                            $sizePrice = $size->pivot->price > 0 ? $size->pivot->price : ($product->Discount_Price ?: $product->Price);
+                        @endphp
                         <label style="cursor: pointer;">
-                            <input type="radio" name="size" value="{{ $size->id }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
+                            <input type="radio" name="size" value="{{ $size->id }}" data-price="{{ $sizePrice }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
                             <div class="option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }};">
                                 {{ $lang == 'fr' ? $size->name_ar : $size->name }}
+                                @if($size->pivot->price > 0)
+                                    ({{ number_format($size->pivot->price, 3) }})
+                                @endif
                             </div>
                         </label>
                         @endforeach
@@ -159,11 +165,11 @@
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         @foreach($product->additions as $index => $addition)
                         <label style="cursor: pointer;">
-                            <input type="radio" name="addition" value="{{ $addition->id }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
+                            <input type="radio" name="addition" value="{{ $addition->id }}" data-price="{{ $addition->price ?? 0 }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
                             <div class="option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }};">
                                 {{ $lang == 'fr' ? $addition->name_ar : $addition->name }}
                                 @if($addition->price > 0)
-                                    (+{{ $addition->price }})
+                                    (+{{ number_format($addition->price, 3) }})
                                 @endif
                             </div>
                         </label>
@@ -171,6 +177,11 @@
                     </div>
                 </div>
                 @endif
+
+                <div style="margin-bottom: 25px;">
+                    <strong style="font-size: 15px; color: #333; display: block; margin-bottom: 8px;">{{ $lang == 'fr' || $lang == 'ar' ? 'ملاحظة على الطلب (اختياري)' : 'Order Note (Optional)' }}</strong>
+                    <textarea name="note" rows="2" style="width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; resize: none;" placeholder="{{ $lang == 'fr' || $lang == 'ar' ? 'اكتب ملاحظتك هنا...' : 'Write your note here...' }}"></textarea>
+                </div>
 
                 <div style="margin-bottom: 30px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; height: 50px;">
@@ -223,6 +234,23 @@
                     activeBox.style.border = '2px solid var(--primary-color)';
                     activeBox.style.color = 'var(--primary-color)';
                     activeBox.style.background = '#fff5f5';
+
+                    // Calculate price
+                    let basePrice = parseFloat("{{ $finalPrice }}"); // Default base price
+                    
+                    let sizeInput = document.querySelector('input[name="size"]:checked');
+                    if (sizeInput && sizeInput.dataset.price && parseFloat(sizeInput.dataset.price) > 0) {
+                        basePrice = parseFloat(sizeInput.dataset.price);
+                    }
+
+                    let additionInput = document.querySelector('input[name="addition"]:checked');
+                    if (additionInput && additionInput.dataset.price) {
+                        basePrice += parseFloat(additionInput.dataset.price);
+                    }
+
+                    document.querySelector('input[name="price"]').value = basePrice;
+                    let currency = "{{ app()->getLocale() == 'ar' ? 'ر.ع' : 'OMR' }}";
+                    document.getElementById('display_price').innerText = basePrice.toFixed(3) + " " + currency;
                 }
 
                 function updateQty(change) {

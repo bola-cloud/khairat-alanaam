@@ -1198,6 +1198,9 @@ class CheckoutController extends Controller
                     if (isset($item->options->custom_box_details) && !empty($item->options->custom_box_details)) {
                         $prodName .= ' (' . $item->options->custom_box_details . ')';
                     }
+                    if (isset($item->options->note) && !empty($item->options->note)) {
+                        $prodName .= ' [ملاحظة: ' . $item->options->note . ']';
+                    }
 
                     OrderDetails::create([
                         'Order_Id' => $order->id,

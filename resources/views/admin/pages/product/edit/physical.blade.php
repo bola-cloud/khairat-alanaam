@@ -166,10 +166,10 @@
 
 
 
-                                            <div class="input__group mb-25">
+                                            <div class="input__group mb-25" style="display: none;">
                                                 <label for="exampleInputEmail1">{{ __('Points To Add') }}</label>
                                                 <input type="text" class="form-control" id="points"
-                                                    name="points" value="{{ $product->points }}"
+                                                    name="points" value="{{ $product->points ?? 0 }}"
                                                     placeholder="{{ __('Points to add') }}">
                                             </div>
 

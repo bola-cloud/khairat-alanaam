@@ -110,6 +110,7 @@ class CartController extends Controller
                         'item_tag' => $product->ItemTag,
                         'discount_parcent' => $product->Discount,
                         'voucher' => $product->Voucher,
+                        'note' => $request->note ?? null,
                     ]
             ]);
 

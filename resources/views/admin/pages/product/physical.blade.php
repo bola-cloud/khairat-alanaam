@@ -197,10 +197,10 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="input__group mb-25">
+                                            <div class="input__group mb-25" style="display: none;">
                                                 <label for="discount_price">{{ __('Points to add') }}</label>
                                                 <input type="number" class="form-control" id="points" name="points"
-                                                    value="{{ old('points') }}" placeholder="Points">
+                                                    value="0" placeholder="Points">
                                                 @error('points')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror

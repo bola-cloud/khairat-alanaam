@@ -1071,5 +1071,12 @@ class NewDesignController extends Controller
 
         return $coupon;
     }
+
+    public function getProductOptionsModal($id)
+    {
+        $product = \App\Models\Admin\Product::with(['sizes', 'additions'])->findOrFail($id);
+        $lang = app()->getLocale();
+        return view('v2.home.partials.product_options_modal', compact('product', 'lang'));
+    }
 }
 

@@ -25,11 +25,17 @@
                             <strong style="font-size: 15px; color: #333;">{{ $lang == 'fr' || $lang == 'ar' ? 'الخيارات' : 'Options' }}</strong>
                         </div>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            @foreach($validSizes as $index => $size)
+                        @foreach($validSizes as $index => $size)
+                            @php
+                                $sizePrice = $size->pivot->price > 0 ? $size->pivot->price : ($product->Discount_Price ?: $product->Price);
+                            @endphp
                             <label style="cursor: pointer;">
-                                <input type="radio" name="size" value="{{ $size->id }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
+                                <input type="radio" name="size" value="{{ $size->id }}" data-price="{{ $sizePrice }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
                                 <div class="option-box modal-option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }}; transition: 0.2s;">
                                     {{ $lang == 'fr' || $lang == 'ar' ? $size->name_ar : $size->name }}
+                                    @if($size->pivot->price > 0)
+                                        ({{ number_format($size->pivot->price, 3) }})
+                                    @endif
                                 </div>
                             </label>
                             @endforeach
@@ -46,11 +52,11 @@
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             @foreach($product->additions as $index => $addition)
                             <label style="cursor: pointer;">
-                                <input type="radio" name="addition" value="{{ $addition->id }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
+                                <input type="radio" name="addition" value="{{ $addition->id }}" data-price="{{ $addition->price ?? 0 }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
                                 <div class="option-box modal-option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }}; transition: 0.2s;">
                                     {{ $lang == 'fr' || $lang == 'ar' ? $addition->name_ar : $addition->name }}
                                     @if($addition->price > 0)
-                                        (+{{ $addition->price }})
+                                        (+{{ number_format($addition->price, 3) }})
                                     @endif
                                 </div>
                             </label>
@@ -60,13 +66,19 @@
                     @endif
 
                     <!-- Quantity -->
-                    <div style="margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
                         <strong style="font-size: 15px; color: #333;">{{ $lang == 'fr' || $lang == 'ar' ? 'الكمية' : 'Quantity' }}</strong>
                         <div style="display: flex; align-items: center; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; height: 40px;">
                             <button type="button" onclick="updateModalQty(1)" style="background: #f5f5f5; border: none; padding: 0 15px; height: 100%; cursor: pointer; font-size: 18px; color: #333;">+</button>
                             <input type="number" id="modal-qty-input" name="quantity" value="1" min="1" style="width: 50px; text-align: center; border: none; font-size: 16px; outline: none; height: 100%; -moz-appearance: textfield;">
                             <button type="button" onclick="updateModalQty(-1)" style="background: #f5f5f5; border: none; padding: 0 15px; height: 100%; cursor: pointer; font-size: 18px; color: #333;">-</button>
                         </div>
+                    </div>
+
+                    <!-- Customer Note -->
+                    <div style="margin-bottom: 25px;">
+                        <strong style="font-size: 15px; color: #333; display: block; margin-bottom: 8px;">{{ $lang == 'fr' || $lang == 'ar' ? 'ملاحظة على الطلب (اختياري)' : 'Order Note (Optional)' }}</strong>
+                        <textarea name="note" rows="2" style="width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 14px; outline: none; resize: none;" placeholder="{{ $lang == 'fr' || $lang == 'ar' ? 'اكتب ملاحظتك هنا...' : 'Write your note here...' }}"></textarea>
                     </div>
                     
                     <button type="button" onclick="submitModalAddToCart()" class="btn-primary" style="width: 100%; padding: 15px; font-size: 16px; border-radius: 8px; border: none; font-weight: bold;">
@@ -95,6 +107,21 @@
         selectedBox.style.border = '2px solid var(--primary-color)';
         selectedBox.style.color = 'var(--primary-color)';
         selectedBox.style.background = '#fff5f5';
+
+        // Calculate price
+        let basePrice = parseFloat("{{ $product->Discount_Price ?: $product->Price }}");
+        
+        let sizeInput = document.querySelector('input[name="size"]:checked');
+        if (sizeInput && sizeInput.dataset.price && parseFloat(sizeInput.dataset.price) > 0) {
+            basePrice = parseFloat(sizeInput.dataset.price);
+        }
+
+        let additionInput = document.querySelector('input[name="addition"]:checked');
+        if (additionInput && additionInput.dataset.price) {
+            basePrice += parseFloat(additionInput.dataset.price);
+        }
+
+        document.querySelector('input[name="price"]').value = basePrice;
     }
 
     function updateModalQty(change) {
