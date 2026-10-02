@@ -456,38 +456,14 @@
         }
         
         function addToCart(productId, price, hasOptions = false) {
-            if (hasOptions) {
-                // Fetch modal and show it
-                $.get('{{ url("/product") }}/' + productId + '/options-modal', function(html) {
-                    $('#productOptionsModalContainer').remove();
-                    $('body').append('<div id="productOptionsModalContainer">' + html + '</div>');
-                    var myModal = new bootstrap.Modal(document.getElementById('productOptionsModal'));
-                    myModal.show();
-                }).fail(function(xhr) {
-                    toastr.error('حدث خطأ، يرجى المحاولة مرة أخرى');
-                });
-                return;
-            }
-
-            $.ajax({
-                url: "{{ route('add.to.cart') }}",
-                type: "POST",
-                data: {
-                    product_id: productId,
-                    quantity: 1,
-                    price: price,
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(data) {
-                    openCartModal(data[0]);
-                },
-                error: function(xhr) {
-                    if(xhr.responseJSON && xhr.responseJSON.error) {
-                        alert(xhr.responseJSON.error);
-                    } else {
-                        alert("{{ __('v2_home.error_try_again') }}");
-                    }
-                }
+            // Always fetch modal so user can add notes and quantity
+            $.get('{{ url("/product") }}/' + productId + '/options-modal', function(html) {
+                $('#productOptionsModalContainer').remove();
+                $('body').append('<div id="productOptionsModalContainer">' + html + '</div>');
+                var myModal = new bootstrap.Modal(document.getElementById('productOptionsModal'));
+                myModal.show();
+            }).fail(function(xhr) {
+                alert("{{ __('v2_home.error_try_again') }}");
             });
         }
     </script>
@@ -633,3 +609,5 @@
 </body>
 
 </html>
+
+
