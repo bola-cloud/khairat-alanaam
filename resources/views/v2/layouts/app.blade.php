@@ -455,7 +455,20 @@
             document.getElementById('cartSuccessModal').style.display = 'none';
         }
         
-        function addToCart(productId, price) {
+        function addToCart(productId, price, hasOptions = false) {
+            if (hasOptions) {
+                // Fetch modal and show it
+                $.get('{{ url("/product") }}/' + productId + '/options-modal', function(html) {
+                    $('#productOptionsModalContainer').remove();
+                    $('body').append('<div id="productOptionsModalContainer">' + html + '</div>');
+                    var myModal = new bootstrap.Modal(document.getElementById('productOptionsModal'));
+                    myModal.show();
+                }).fail(function(xhr) {
+                    toastr.error('حدث خطأ، يرجى المحاولة مرة أخرى');
+                });
+                return;
+            }
+
             $.ajax({
                 url: "{{ route('add.to.cart') }}",
                 type: "POST",
@@ -612,6 +625,11 @@
 
     @yield('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/96895569830" target="_blank" class="whatsapp-float" style="position: fixed; bottom: 30px; {{ app()->getLocale() == 'ar' || app()->getLocale() == 'fr' ? 'right: 30px;' : 'left: 30px;' }} background-color: #25d366; color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); z-index: 1000; text-decoration: none; transition: transform 0.3s ease;">
+        <i class="fab fa-whatsapp" style="margin-top: -2px;"></i>
+    </a>
 </body>
 
 </html>

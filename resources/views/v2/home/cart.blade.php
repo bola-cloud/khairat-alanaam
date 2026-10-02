@@ -272,7 +272,10 @@
                                 </div>
                                 @endif
                             </div>
-                            <button type="button" onclick="addToCart('{{ $relProduct->id }}', '{{ $relFinalPrice }}')" class="add-to-cart-btn" style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">@lang('v2_home.add_to_cart')</button>
+                            @php
+                                $hasOptions = ($relProduct->sizes && $relProduct->sizes->count() > 0) || ($relProduct->additions && $relProduct->additions->count() > 0);
+                            @endphp
+                            <button type="button" onclick="addToCart('{{ $relProduct->id }}', '{{ $relFinalPrice }}', {{ $hasOptions ? 'true' : 'false' }})" class="add-to-cart-btn" style="width: 100%; padding: 12px; background: #e32636; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.3s;">@lang('v2_home.add_to_cart')</button>
                         </div>
                     </div>
                 </div>

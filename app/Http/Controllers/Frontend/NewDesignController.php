@@ -1072,3 +1072,4 @@ class NewDesignController extends Controller
         return $coupon;
     }
 }
+

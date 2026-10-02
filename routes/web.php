@@ -41,6 +41,7 @@ Route::group(['middleware' => ['is_user']], function () {
     Route::get('/olddesign', [HomeController::class, 'index'])->name('front.olddesign');
     Route::get('/', [NewDesignController::class, 'index'])->name('front');
     Route::get('/store', [NewDesignController::class, 'store'])->name('front.store');
+    Route::get('/product/{id}/options-modal', [NewDesignController::class, 'getProductOptionsModal'])->name('front.product.options_modal');
     Route::get('/wholesale-orders', [NewDesignController::class, 'wholesale'])->name('wholesale.orders');
     Route::post('/wholesale-orders', [NewDesignController::class, 'storeWholesaleRequest'])->name('wholesale.orders.store');
     Route::get('/become-partner', [NewDesignController::class, 'become_partner'])->name('become.partner');

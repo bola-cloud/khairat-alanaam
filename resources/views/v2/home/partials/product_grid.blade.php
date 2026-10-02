@@ -90,7 +90,10 @@
                 @endif
             </div>
 
-            <button type="button" onclick="event.preventDefault(); event.stopPropagation(); addToCart('{{$product->id}}', '{{ $product->Discount_Price > 0 ? $product->Discount_Price : $product->Price }}')" style="width:100%; background-color: var(--primary-color); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: inherit;">
+            @php
+                $hasOptions = ($product->sizes && $product->sizes->count() > 0) || ($product->additions && $product->additions->count() > 0);
+            @endphp
+            <button type="button" onclick="event.preventDefault(); event.stopPropagation(); addToCart('{{$product->id}}', '{{ $product->Discount_Price > 0 ? $product->Discount_Price : $product->Price }}', {{ $hasOptions ? 'true' : 'false' }})" style="width:100%; background-color: var(--primary-color); color: white; border: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: inherit;">
                 @lang('v2_home.add_to_cart')
             </button>
         </div>
