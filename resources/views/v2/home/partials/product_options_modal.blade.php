@@ -9,18 +9,27 @@
                 <form action="{{ route('add.to.cart') }}" method="POST" id="modal-add-to-cart-form">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    <input type="hidden" name="price" value="{{ $product->Discount_Price ?: $product->Price }}">
                     
                     @php
                         $validSizes = $product->sizes ? $product->sizes->filter(function($s) use ($lang) {
-                            $name = $lang == 'fr' || $lang == 'ar' ? $s->name_ar : $s->name;
+                            $name = $lang == 'fr' || $lang == 'ar' ? $s->Size_ar : $s->Size;
                             return !empty(trim($name));
                         })->values() : collect();
+
+                        $initialPrice = $product->Discount_Price ?: $product->Price;
+                        if ($validSizes->count() > 0) {
+                            $firstSize = $validSizes->first();
+                            if ($firstSize->pivot->price > 0) {
+                                $initialPrice = $firstSize->pivot->price;
+                            }
+                        }
                     @endphp
+
+                    <input type="hidden" name="price" value="{{ $initialPrice }}">
 
                     @if($validSizes->count() > 0)
                     <!-- Sizes -->
-                    <div style="margin-bottom: 20px;">
+                    <div style="margin-bottom: 25px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <strong style="font-size: 15px; color: #333;">{{ $lang == 'fr' || $lang == 'ar' ? 'الخيارات' : 'Options' }}</strong>
                         </div>
@@ -30,9 +39,9 @@
                                 $sizePrice = $size->pivot->price > 0 ? $size->pivot->price : ($product->Discount_Price ?: $product->Price);
                             @endphp
                             <label style="cursor: pointer;">
-                                <input type="radio" name="size" value="{{ $size->id }}" data-price="{{ $sizePrice }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
+                                <input type="radio" name="size_id" value="{{ $size->id }}" data-price="{{ $sizePrice }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
                                 <div class="option-box modal-option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }}; transition: 0.2s;">
-                                    {{ $lang == 'fr' || $lang == 'ar' ? $size->name_ar : $size->name }}
+                                    {{ $lang == 'fr' || $lang == 'ar' ? $size->Size_ar : $size->Size }}
                                     @if($size->pivot->price > 0)
                                         ({{ number_format($size->pivot->price, 3) }})
                                     @endif
@@ -52,8 +61,8 @@
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                             @foreach($product->additions as $index => $addition)
                             <label style="cursor: pointer;">
-                                <input type="radio" name="addition" value="{{ $addition->id }}" data-price="{{ $addition->price ?? 0 }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateModalOptions(this)">
-                                <div class="option-box modal-option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }}; transition: 0.2s;">
+                                <input type="checkbox" name="additions[]" value="{{ $addition->id }}" data-price="{{ $addition->price ?? 0 }}" style="display: none;" onchange="updateModalOptions(this)">
+                                <div class="option-box modal-option-box" style="padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-light); font-size: 14px; font-weight: 600; background: transparent; transition: 0.2s;">
                                     {{ $lang == 'fr' || $lang == 'ar' ? $addition->name_ar : $addition->name }}
                                     @if($addition->price > 0)
                                         (+{{ number_format($addition->price, 3) }})
@@ -93,35 +102,50 @@
 
 <script>
     function updateModalOptions(input) {
-        // Reset all siblings
-        const name = input.name;
-        document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
-            let box = el.nextElementSibling;
-            box.style.border = '1px solid var(--border-color)';
-            box.style.color = 'var(--text-light)';
-            box.style.background = 'transparent';
-        });
-        
-        // Highlight selected
-        let selectedBox = input.nextElementSibling;
-        selectedBox.style.border = '2px solid var(--primary-color)';
-        selectedBox.style.color = 'var(--primary-color)';
-        selectedBox.style.background = '#fff5f5';
+        // Reset all siblings for radio
+        if (input.type === 'radio') {
+            const name = input.name;
+            document.querySelectorAll(`#modal-add-to-cart-form input[name="${name}"]`).forEach(el => {
+                let box = el.nextElementSibling;
+                box.style.border = '1px solid var(--border-color)';
+                box.style.color = 'var(--text-light)';
+                box.style.background = 'transparent';
+            });
+            
+            // Highlight selected
+            let selectedBox = input.nextElementSibling;
+            selectedBox.style.border = '2px solid var(--primary-color)';
+            selectedBox.style.color = 'var(--primary-color)';
+            selectedBox.style.background = '#fff5f5';
+        } else if (input.type === 'checkbox') {
+            let activeBox = input.nextElementSibling;
+            if (input.checked) {
+                activeBox.style.border = '2px solid var(--primary-color)';
+                activeBox.style.color = 'var(--primary-color)';
+                activeBox.style.background = '#fff5f5';
+            } else {
+                activeBox.style.border = '1px solid var(--border-color)';
+                activeBox.style.color = 'var(--text-light)';
+                activeBox.style.background = 'transparent';
+            }
+        }
 
         // Calculate price
         let basePrice = parseFloat("{{ $product->Discount_Price ?: $product->Price }}");
         
-        let sizeInput = document.querySelector('input[name="size"]:checked');
+        let sizeInput = document.querySelector('#modal-add-to-cart-form input[name="size_id"]:checked');
         if (sizeInput && sizeInput.dataset.price && parseFloat(sizeInput.dataset.price) > 0) {
             basePrice = parseFloat(sizeInput.dataset.price);
         }
 
-        let additionInput = document.querySelector('input[name="addition"]:checked');
-        if (additionInput && additionInput.dataset.price) {
-            basePrice += parseFloat(additionInput.dataset.price);
-        }
+        let additionInputs = document.querySelectorAll('#modal-add-to-cart-form input[name="additions[]"]:checked');
+        additionInputs.forEach(additionInput => {
+            if (additionInput.dataset.price) {
+                basePrice += parseFloat(additionInput.dataset.price);
+            }
+        });
 
-        document.querySelector('input[name="price"]').value = basePrice;
+        document.querySelector('#modal-add-to-cart-form input[name="price"]').value = basePrice;
     }
 
     function updateModalQty(change) {

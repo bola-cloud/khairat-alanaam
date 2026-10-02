@@ -122,20 +122,29 @@
             <form action="{{ route('add.to.cart') }}" method="POST" id="add-to-cart-form">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="price" value="{{ $product->Discount_Price ?: $product->Price }}">
                 
                 @php
                     $validSizes = $product->sizes ? $product->sizes->filter(function($s) use ($lang) {
-                        $name = $lang == 'fr' ? $s->name_ar : $s->name;
+                        $name = $lang == 'fr' || $lang == 'ar' ? $s->Size_ar : $s->Size;
                         return !empty(trim($name));
                     })->values() : collect();
+
+                    $initialPrice = $product->Discount_Price ?: $product->Price;
+                    if ($validSizes->count() > 0) {
+                        $firstSize = $validSizes->first();
+                        if ($firstSize->pivot->price > 0) {
+                            $initialPrice = $firstSize->pivot->price;
+                        }
+                    }
                 @endphp
+
+                <input type="hidden" name="price" value="{{ $initialPrice }}">
 
                 @if($validSizes->count() > 0)
                 <!-- Sizes -->
                 <div style="margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <strong style="font-size: 15px; color: #333;">{{ $lang == 'fr' ? 'الخيارات' : 'Options' }}</strong>
+                        <strong style="font-size: 15px; color: #333;">{{ $lang == 'fr' || $lang == 'ar' ? 'الخيارات' : 'Options' }}</strong>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         @foreach($validSizes as $index => $size)
@@ -143,9 +152,9 @@
                             $sizePrice = $size->pivot->price > 0 ? $size->pivot->price : ($product->Discount_Price ?: $product->Price);
                         @endphp
                         <label style="cursor: pointer;">
-                            <input type="radio" name="size" value="{{ $size->id }}" data-price="{{ $sizePrice }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
+                            <input type="radio" name="size_id" value="{{ $size->id }}" data-price="{{ $sizePrice }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
                             <div class="option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }};">
-                                {{ $lang == 'fr' ? $size->name_ar : $size->name }}
+                                {{ $lang == 'fr' || $lang == 'ar' ? $size->Size_ar : $size->Size }}
                                 @if($size->pivot->price > 0)
                                     ({{ number_format($size->pivot->price, 3) }})
                                 @endif
@@ -165,9 +174,9 @@
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         @foreach($product->additions as $index => $addition)
                         <label style="cursor: pointer;">
-                            <input type="radio" name="addition" value="{{ $addition->id }}" data-price="{{ $addition->price ?? 0 }}" style="display: none;" {{ $index == 0 ? 'checked' : '' }} onchange="updateOptions(this)">
-                            <div class="option-box" style="padding: 10px 20px; border: {{ $index == 0 ? '2px solid var(--primary-color)' : '1px solid var(--border-color)' }}; border-radius: 8px; color: {{ $index == 0 ? 'var(--primary-color)' : 'var(--text-light)' }}; font-size: 14px; font-weight: 600; background: {{ $index == 0 ? '#fff5f5' : 'transparent' }};">
-                                {{ $lang == 'fr' ? $addition->name_ar : $addition->name }}
+                            <input type="checkbox" name="additions[]" value="{{ $addition->id }}" data-price="{{ $addition->price ?? 0 }}" style="display: none;" onchange="updateOptions(this)">
+                            <div class="option-box" style="padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-light); font-size: 14px; font-weight: 600; background: transparent;">
+                                {{ $lang == 'fr' || $lang == 'ar' ? $addition->name_ar : $addition->name }}
                                 @if($addition->price > 0)
                                     (+{{ number_format($addition->price, 3) }})
                                 @endif
@@ -221,37 +230,60 @@
                 }
             
                 function updateOptions(input) {
-                    // Reset all siblings
-                    const name = input.name;
-                    document.querySelectorAll('input[name="'+name+'"]').forEach(el => {
-                        const box = el.nextElementSibling;
-                        box.style.border = '1px solid var(--border-color)';
-                        box.style.color = 'var(--text-light)';
-                        box.style.background = 'transparent';
-                    });
-                    // Set active
-                    const activeBox = input.nextElementSibling;
-                    activeBox.style.border = '2px solid var(--primary-color)';
-                    activeBox.style.color = 'var(--primary-color)';
-                    activeBox.style.background = '#fff5f5';
+                    // Reset all siblings if it's a radio button (size_id)
+                    if (input.type === 'radio') {
+                        const name = input.name;
+                        document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+                            const box = el.nextElementSibling;
+                            box.style.border = '1px solid var(--border-color)';
+                            box.style.color = 'var(--text-light)';
+                            box.style.background = 'transparent';
+                        });
+                        // Set active
+                        const activeBox = input.nextElementSibling;
+                        activeBox.style.border = '2px solid var(--primary-color)';
+                        activeBox.style.color = 'var(--primary-color)';
+                        activeBox.style.background = '#fff5f5';
+                    } else if (input.type === 'checkbox') {
+                        // Toggle for checkbox
+                        const activeBox = input.nextElementSibling;
+                        if (input.checked) {
+                            activeBox.style.border = '2px solid var(--primary-color)';
+                            activeBox.style.color = 'var(--primary-color)';
+                            activeBox.style.background = '#fff5f5';
+                        } else {
+                            activeBox.style.border = '1px solid var(--border-color)';
+                            activeBox.style.color = 'var(--text-light)';
+                            activeBox.style.background = 'transparent';
+                        }
+                    }
 
                     // Calculate price
                     let basePrice = parseFloat("{{ $finalPrice }}"); // Default base price
                     
-                    let sizeInput = document.querySelector('input[name="size"]:checked');
+                    let sizeInput = document.querySelector('input[name="size_id"]:checked');
                     if (sizeInput && sizeInput.dataset.price && parseFloat(sizeInput.dataset.price) > 0) {
                         basePrice = parseFloat(sizeInput.dataset.price);
                     }
 
-                    let additionInput = document.querySelector('input[name="addition"]:checked');
-                    if (additionInput && additionInput.dataset.price) {
-                        basePrice += parseFloat(additionInput.dataset.price);
-                    }
+                    let additionInputs = document.querySelectorAll('input[name="additions[]"]:checked');
+                    additionInputs.forEach(additionInput => {
+                        if (additionInput.dataset.price) {
+                            basePrice += parseFloat(additionInput.dataset.price);
+                        }
+                    });
 
                     document.querySelector('input[name="price"]').value = basePrice;
                     let currency = "{{ app()->getLocale() == 'ar' ? 'ر.ع' : 'OMR' }}";
                     document.getElementById('display_price').innerText = basePrice.toFixed(3) + " " + currency;
                 }
+
+                window.addEventListener('DOMContentLoaded', (event) => {
+                    let defaultSize = document.querySelector('input[name="size_id"]:checked');
+                    if (defaultSize) {
+                        updateOptions(defaultSize);
+                    }
+                });
 
                 function updateQty(change) {
                     const input = document.getElementById('qty-input');
